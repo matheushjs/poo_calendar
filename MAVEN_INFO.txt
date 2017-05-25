@@ -1,0 +1,23 @@
+For compiling all .java files into .class files, in Eclipse:
+	package-explorer
+	left-click the project
+	Run As
+	Run Configurations
+	Set 'goals' as 'compile'
+
+	package-explorer
+	left-click the project
+	Run As
+	Maven Build
+
+After compiling, can execute by running:
+	java -cp target/classes/ poo.calendar.view.MainWindow
+
+
+For packaging everything in a .jar file, repeat the steps above, but set 'goals' as 'package'
+
+After packaging, can execute by running
+	java -cp target/calendar-0.0.1-SNAPSHOT.jar poo.calendar.view.MainWindow
+
+
+Compiling is faster, so just stick to it.
