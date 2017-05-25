@@ -1,8 +1,22 @@
 # POO Project Calendar
 
 ## Code Style Guidelines
-- Code in (portuguese/english)
-- Comments in (portuguese/english)
+- Code in english
+- Comments in english
+
+## Java Version
+(7/8)
+
+If it's 8, developing the GUI would be much easier.
+
+## Build Tool
+(None / Maven / Gradle)
+
+## Project Management
+(todo.txt / trello)
+
+## First GUI Example Image
+[Example Image](./example.png)
 
 ## Initial Project Tree
 ```
@@ -28,6 +42,9 @@
 ## Libraries
 ### JavaFX
 Seems to be the most suitable for implementing the sophisticated UI envisioned for the final product (see javafx.scene.canvas and javaFX Scene Builder)
+
+### Swing
+Part of the JDK, but it's simple.
 
 ### javax.xml.parsers.SAXParsers
 XML handling
