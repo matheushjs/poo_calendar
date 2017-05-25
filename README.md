@@ -23,20 +23,18 @@ If it's 8, developing the GUI would be much easier.
 . poo
  \. calendar
    \
-   |. frontend
-   | \
-   | |. MainApplication # Connects frontend and backend
-   | |. MainWindow      # Global parent window
-   | |. CalendarWindow  # Displays the calendar
-   | |. TaskWindow      # Displays the tasks
-   |
-   |. backend
-   | \
-   | |. Manager        # Wraps user-session initialization and provides onEvent() methods to connect to GUI events
-   | |. Schedule       # Manages appointments and tasks, and relations among them
+   |. model
    | |. Appointment    # Represents an appointment (title, init date, final date)
    | |. Task           # Represents a task (title, date)
    | |. XMLBuilder     # Read/Write tasks, appointments and other information to a .xml file
+   |. view
+   | |. MainWindow      # Global parent window
+   | |. CalendarWindow  # Displays the calendar
+   | |. TaskWindow      # Displays the tasks
+   |. controller
+   | |. MainApplication # Connects frontend and backend
+   | |. Manager         # Wraps user-session initialization and provides onEvent() methods to connect to GUI events
+   | |. Schedule        # Manages appointments and tasks, and relations among them
 ```
 
 ## Libraries
