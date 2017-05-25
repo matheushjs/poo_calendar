@@ -1,0 +1,14 @@
+For adding JavaFX library to the project:
+	1) Make sure the project is set up for java version 8
+	2) In linux, install javafx package "sudo apt install openjfx"
+	3) In Eclipse, download plugin E(fx)clipse plugin
+	4) In Eclipse:
+		package explorer
+		right click the project
+		properties
+		java build path
+		tab 'libraries' -> 'add library ...'
+		select javaFX SDK
+
+
+Note: Since we set java 8 as the version for our project, the JavaFX SDK pluging might not be needed (TODO: check this).
