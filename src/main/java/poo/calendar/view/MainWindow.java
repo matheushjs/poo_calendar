@@ -1,34 +1,27 @@
 package poo.calendar.view;
 
-import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
+import java.awt.EventQueue;
+import javax.swing.JFrame;
 
-public class MainWindow extends Application {
-	public static void main(String[] args) {
-        launch(args);
+public class MainWindow extends JFrame {
+    /** Eclipse force this variable to exist. */
+	private static final long serialVersionUID = 9110319843067855971L;
+
+	public MainWindow(){
+    	initUI();
     }
-    
-    @Override
-    public void start(Stage primaryStage) {
-        primaryStage.setTitle("Hello World!");
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
- 
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
-            }
+	
+	private void initUI() {
+        setTitle("Simple example");
+        setSize(300, 200);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+    }
+
+    public static void main(String[] args) {
+        EventQueue.invokeLater(() -> {
+            MainWindow ex = new MainWindow();
+            ex.setVisible(true);
         });
-        
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
-        primaryStage.setScene(new Scene(root, 300, 250));
-        primaryStage.show();
     }
 }
