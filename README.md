@@ -5,12 +5,10 @@
 - Comments in english
 
 ## Java Version
-(7/8)
-
-If it's 8, developing the GUI would be much easier.
+8
 
 ## Build Tool
-(None / Maven / Gradle)
+Maven
 
 ## Project Management
 (todo.txt / trello)
