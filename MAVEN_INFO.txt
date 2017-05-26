@@ -1,12 +1,12 @@
 For compiling all .java files into .class files, in Eclipse:
 	package-explorer
-	left-click the project
+	right-click the project
 	Run As
 	Run Configurations
 	Set 'goals' as 'compile'
 
 	package-explorer
-	left-click the project
+	right-click the project
 	Run As
 	Maven Build
 
