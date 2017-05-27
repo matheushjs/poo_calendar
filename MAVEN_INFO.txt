@@ -36,6 +36,8 @@ Creating new project:
 	- Group id: 'poo'
 	- Artifact id: 'calendar'
 	- Press 'Finish'
+	- Do a Maven Build using goal 'compile'
+	- Do a Maven Build using goal 'build'
 	- Erase the files App.java and AppTest.java
 
 Go to the project directory, run the commands:
