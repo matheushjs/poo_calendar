@@ -21,3 +21,27 @@ After packaging, can execute by running
 
 
 Compiling is faster, so just stick to it.
+
+
+
+
+
+
+Creating new project:
+	- Go to Eclipse
+	- 'File' -> 'New'
+	- 'Maven Project' press 'Next'
+	- Press 'Next' again
+	- Make sure 'maven-archetype-quickstart' is chosen, then press 'Next'
+	- Group id: 'poo'
+	- Artifact id: 'calendar'
+	- Press 'Finish'
+	- Erase the files App.java and AppTest.java
+
+Go to the project directory, run the commands:
+	git init
+	git remote add origin https://github.com/matheushjs/poo_calendar
+	rm pom.xml
+	git pull origin maven_project:maven_project
+
+Then try to do a 'Maven Build' as explained on top of this text file, with goal 'compile'
