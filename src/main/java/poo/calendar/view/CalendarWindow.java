@@ -5,8 +5,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.layout.Priority;
+
 
 /**
  * Widget class that displays the calendar window.
@@ -14,13 +14,13 @@ import javafx.scene.shape.Rectangle;
  */
 public class CalendarWindow extends VBox {
 	Button mAddButton, mDeleteButton;
+	AppointmentListView mALV;
 	
 	public CalendarWindow(){
-		this.setAlignment(Pos.BASELINE_CENTER);
+		this.setAlignment(Pos.TOP_CENTER);
 		this.setSpacing(20);
-		
-		Rectangle r1 = new Rectangle(0, 0, 200, 600);
-		r1.setFill(Color.ALICEBLUE);
+		this.setPrefHeight(800);
+		this.setPrefWidth(250);
 		
 		mAddButton = new Button("Add");
 		mDeleteButton = new Button("Delete");
@@ -33,13 +33,17 @@ public class CalendarWindow extends VBox {
 		box.setAlignment(Pos.BASELINE_CENTER);
 		box.setSpacing(10);
 		
-		this.getChildren().addAll(r1, box);
+		mALV = new AppointmentListView();
+		VBox.setVgrow(mALV, Priority.ALWAYS);
+		
+		this.getChildren().addAll(mALV, box);
 	}
 	
 	private void onAddClick(ActionEvent a){
 		// Open auxiliary window (or change scene) for adding appointments
 		// Send User input to the controller
 		// Repeat steps above
+		mALV.add();
 	}
 	
 	private void onDeleteClick(ActionEvent a){
