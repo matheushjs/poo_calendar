@@ -6,6 +6,9 @@ import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.geometry.Pos;
 
+/**
+ * Widget class that represents the main window of the application.
+ */
 public class MainWindow extends Application {
 	private CalendarWindow mCalendarWindow;
 	private TaskWindow mTaskWindow;

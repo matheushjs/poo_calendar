@@ -8,6 +8,10 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 
+/**
+ * Widget class that displays the tasks window.
+ * It's a vertical box containing a list of tasks and 2 buttons.
+ */
 public class TaskWindow extends VBox {
 	private Button mAddButton, mDeleteButton;
 	

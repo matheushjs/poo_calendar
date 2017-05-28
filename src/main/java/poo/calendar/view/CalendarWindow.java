@@ -8,6 +8,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+/**
+ * Widget class that displays the calendar window.
+ * It's a vertical box containing a list of appointments and 2 buttons.
+ */
 public class CalendarWindow extends VBox {
 	Button mAddButton, mDeleteButton;
 	
