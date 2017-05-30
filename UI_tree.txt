@@ -1,0 +1,62 @@
+vim: expandtab
+
+-- MainWindow
+   |
+   `-- HBox
+       | Alignment: CENTER
+       | Spacing: 20
+       | Padding: (10, 10, 10, 10)
+       |
+       `-- CalendarWindow
+       |   | Alignment: TOP_CENTER
+       |   | Spacing: 20
+       |   | PrefHeight: 800
+       |   | PrefWidth: 250
+       |   |
+       |   `-- AppointmentListView
+       |   |   | VGrow: ALWAYS
+       |   |   | Alignment: TOP_CENTER
+       |   |   |
+       |   |   |`-- AppointmentView
+       |   |        | Alignment: CENTER
+       |   |        |
+       |   |        `-- Label
+       |   |            | Alignment: CENTER / CENTER_LEFT
+       |   |            | PrefWidth: 125
+       |   |        `-- Label
+       |   |            | Alignment: CENTER_RIGHT
+       |   |            | PrefWidth: 125
+       |   `-- HBox
+       |       | Alignment: BASELINE_CENTER
+       |       | Spacing: 10
+       |       | 
+       |       `-- Button
+       |       `-- Button
+       |
+       `-- TaskWindow
+           | Alignment: BASELINE_CENTER
+           | Spacing: 20
+           | PrefHeight: 800
+           | PrefWidth: 500
+           |
+           `-- TaskListView
+           |   | VGrow: ALWAYS
+           |   | Alignment: TOP_CENTER
+           |   |
+           |   `-- TaskView
+           |   |   | Alignment: CENTER
+           |   |   |
+           |   |   `-- Label
+           |   |       | Alignment: CENTER / CENTER_LEFT
+           |   |       | PrefWidth: 250 / 125
+           |   | 
+           |   |   `-- Label
+           |   |       | Alignment: CENTER_RIGHT
+           |   |       | PrefWidth: 125
+           |
+           `--HBox
+              | Alignment: BASELINE_CENTER
+              | Spacing: 10
+              |
+              `-- Button
+              `-- Button
