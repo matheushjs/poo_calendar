@@ -1,8 +1,9 @@
 package poo.calendar.model;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
-public class Appointment {
+public class Appointment implements Serializable {
 	// The Appointment's title
 	private String mTitle;
 	

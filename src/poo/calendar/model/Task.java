@@ -1,5 +1,6 @@
 package poo.calendar.model;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
 /* Deadline can have the forms:
@@ -26,7 +27,7 @@ import java.util.Calendar;
  * @author neves
  *
  */
-public class Task {
+public class Task implements Serializable {
 
 	/** The task's title. */
 	private String mTitle;
