@@ -1,5 +1,7 @@
 package poo.calendar.view;
 
+import java.util.Optional;
+
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -41,7 +43,9 @@ public class TaskWindow extends VBox {
 		// Open auxiliary window (or change scene) for adding appointments
 		// Send User input to the controller
 		// Repeat steps above
-		mTLV.add();
+		
+		Optional<String> result = new DateChooserDialog("Teste").showAndWait();
+		result.ifPresent(name -> mTLV.add(name));
 	}
 	
 	private void onDeleteClick(ActionEvent a){

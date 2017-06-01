@@ -12,11 +12,11 @@ class TaskListView extends VBox {
 	}
 	
 	private static int count = 0;
-	public void add(){
+	public void add(String text){
 		count++;
 		if(count % 5 == 0)
-			this.getChildren().add(new TaskView("Task"));
+			this.getChildren().add(new TaskView(text));
 		else
-			this.getChildren().add(new TaskView("Task", "" + count));
+			this.getChildren().add(new TaskView(text, "" + count));
 	}
 }
