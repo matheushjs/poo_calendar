@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 
 import poo.calendar.model.Appointment;
 import poo.calendar.model.Task;
-import poo.calendar.view.MainWindow;
+import poo.calendar.view.MainScene;
 
 public class MainApplication extends Application {
 	private ArrayList<Appointment> mAppointments;
@@ -17,7 +17,7 @@ public class MainApplication extends Application {
 	
 	@Override 
     public void start(Stage stage) {
-    	Scene scene = new Scene(new MainWindow());
+    	Scene scene = new Scene(new MainScene());
 		
 		// Read from disk
 		

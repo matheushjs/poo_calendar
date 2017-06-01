@@ -24,7 +24,7 @@ public class AppointmentView extends HBox {
 		Label l2 = new Label(right);
 		l2.setAlignment(Pos.CENTER_RIGHT);
 		l2.setPrefWidth(125);
-		
+
 		l1.setBackground(mainBG);
 		l2.setBackground(mainBG);
 		this.getChildren().addAll(l1, l2);
