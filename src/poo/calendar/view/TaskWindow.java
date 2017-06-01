@@ -1,5 +1,6 @@
 package poo.calendar.view;
 
+import java.util.Map;
 import java.util.Optional;
 
 import javafx.event.ActionEvent;
@@ -44,8 +45,8 @@ public class TaskWindow extends VBox {
 		// Send User input to the controller
 		// Repeat steps above
 		
-		Optional<String> result = new DateChooserDialog("Teste").showAndWait();
-		result.ifPresent(name -> mTLV.add(name));
+		Optional<Map<String,String>> result = new DateChooserDialog("Teste", DateChooserDialog.TASK_DIALOG).showAndWait();
+		result.ifPresent(name -> mTLV.add(name.get("title")));
 	}
 	
 	private void onDeleteClick(ActionEvent a){

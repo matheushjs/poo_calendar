@@ -20,11 +20,8 @@ import java.util.Calendar;
  */
 
 /**
- *
  * A model class that represents a Task. A task has a title(required) and a
  * deadline date(optional).
- *
- * @author neves
  *
  */
 public class Task implements Serializable {
