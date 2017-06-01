@@ -28,7 +28,6 @@ import java.util.Calendar;
  */
 public class Task {
 
-
 	/** The task's title. */
 	private String mTitle;
 
@@ -76,8 +75,7 @@ public class Task {
 	/**
 	 * @param mDeadlineDate the task's deadline date to set
 	 */
-	public void setD_date(Calendar deadlineDate) {
+	public void setDeadlineDate(Calendar deadlineDate) {
 		mDeadlineDate = deadlineDate;
 	}
-
 }

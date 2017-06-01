@@ -13,4 +13,5 @@ public class Appointment {
 		d_endDate = endDate;
 		//TODO: Validade dates
 	}
+
 }
