@@ -3,22 +3,6 @@ package poo.calendar.model;
 import java.io.Serializable;
 import java.util.Calendar;
 
-/* Deadline can have the forms:
- * 
- * (Y)
- * (Y, M)
- * (Y, M, D)
- * (Y, M, D, H)
- * (Y, M, D, H, Mi)
- * 
- * We could allow Task construction by giving any of these YMDHMi.
- * The ones not given could be assumed to be the same as current date.
- * The user of the class could provide an enum to indicate what level of granularity the task must have (Y, or maybe YMDH).
- * 
- * Maybe create a class wrapping the Calendar class, that can handle these granularity levels.
- * 
- */
-
 /**
  * A model class that represents a Task. A task has a title(required) and a
  * deadline date(optional).

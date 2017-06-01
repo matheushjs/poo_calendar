@@ -11,9 +11,7 @@ public class AppointmentListView extends VBox {
 		this.setAlignment(Pos.TOP_CENTER);
 	}
 	
-	private static int count = 0;
-	public void add(){
-		count++;
-		this.getChildren().add(new AppointmentView("Appointment", "" + count));
+	public void add(String str1, String str2){
+		this.getChildren().add(new AppointmentView(str1, str2));
 	}
 }

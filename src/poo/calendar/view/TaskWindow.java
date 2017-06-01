@@ -45,7 +45,7 @@ public class TaskWindow extends VBox {
 		// Send User input to the controller
 		// Repeat steps above
 		
-		Optional<Map<String,String>> result = new DateChooserDialog("Teste", DateChooserDialog.TASK_DIALOG).showAndWait();
+		Optional<Map<String,String>> result = new DateChooserDialog("New Task", "Set up your new task", DateChooserDialog.TASK_DIALOG).showAndWait();
 		result.ifPresent(name -> mTLV.add(name.get("title")));
 	}
 	

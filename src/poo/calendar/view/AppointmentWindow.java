@@ -1,5 +1,8 @@
 package poo.calendar.view;
 
+import java.util.Map;
+import java.util.Optional;
+
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -43,7 +46,9 @@ public class AppointmentWindow extends VBox {
 		// Open auxiliary window (or change scene) for adding appointments
 		// Send User input to the controller
 		// Repeat steps above
-		mALV.add();
+		
+		Optional<Map<String,String>> result = new DateChooserDialog("New Appointment", "Set up your new appointment", DateChooserDialog.APPOINTMENT_DIALOG).showAndWait();
+		result.ifPresent(name -> mALV.add(name.get("title"), name.get("hour1") + ":" + name.get("minute1")));
 	}
 	
 	private void onDeleteClick(ActionEvent a){

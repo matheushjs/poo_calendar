@@ -101,14 +101,14 @@ public class DateChooserDialog extends Dialog<Map<String,String>> {
 		dateFields.get(0).setText("" + calendar.get(Calendar.YEAR));
 		dateFields.get(1).setText("" + calendar.get(Calendar.MONTH));
 		dateFields.get(2).setText("" + calendar.get(Calendar.DAY_OF_MONTH));
-		dateFields.get(3).setText("" + calendar.get(Calendar.HOUR));
+		dateFields.get(3).setText("" + calendar.get(Calendar.HOUR_OF_DAY));
 		dateFields.get(4).setText("" + calendar.get(Calendar.MINUTE));
 		
 		calendar.add(Calendar.MINUTE, 30);
 		dateFields2.get(0).setText("" + calendar.get(Calendar.YEAR));
 		dateFields2.get(1).setText("" + calendar.get(Calendar.MONTH));
 		dateFields2.get(2).setText("" + calendar.get(Calendar.DAY_OF_MONTH));
-		dateFields2.get(3).setText("" + calendar.get(Calendar.HOUR));
+		dateFields2.get(3).setText("" + calendar.get(Calendar.HOUR_OF_DAY));
 		dateFields2.get(4).setText("" + calendar.get(Calendar.MINUTE));
 	}
 	
@@ -119,19 +119,19 @@ public class DateChooserDialog extends Dialog<Map<String,String>> {
 	 * @param dialogType Use the static variables TASK_DIALOG and APPOINTMENT_DIALOG to indicate
 	 * the purpose of the instantiated Dialog.
 	 */
-	public DateChooserDialog(String windowTitle, int dialogType){
+	public DateChooserDialog(String windowTitle, String headerString, int dialogType){
 		setTitle(windowTitle);
-		setHeaderText("Teste");
-		setContentText("Teste");
+		setHeaderText(headerString);
 		this.setResultConverter(bt -> convertResult(bt));
 		
 		titleField = new TextField();
-		titleField.setPromptText("Untitled Task");
 		
 		if(dialogType == TASK_DIALOG){
+			titleField.setPromptText("Untitled Task");
 			dateLabel = new Label("Deadline (HM DMY):");
 			dateLabel2 = new Label("");
 		} else if(dialogType == APPOINTMENT_DIALOG){
+			titleField.setPromptText("Untitled Appointment");
 			dateLabel = new Label("Initial Date:");
 			dateLabel2 = new Label("End Date:");
 		} else {
@@ -144,7 +144,7 @@ public class DateChooserDialog extends Dialog<Map<String,String>> {
 		hbox.getChildren().addAll(dateFields);
 		
 		HBox hbox2 = new HBox(5);
-		hbox.getChildren().addAll(dateFields2);
+		hbox2.getChildren().addAll(dateFields2);
 		
 		GridPane grid = new GridPane();
 		grid.setVgap(5);
@@ -159,7 +159,7 @@ public class DateChooserDialog extends Dialog<Map<String,String>> {
 		grid.getChildren().addAll(titleField, dateLabel, hbox);
 		
 		if(dialogType == APPOINTMENT_DIALOG)
-			grid.getChildren().add(hbox2);
+			grid.getChildren().addAll(dateLabel2, hbox2);
 		
 		getDialogPane().setContent(grid);
 		getDialogPane().getButtonTypes().add(new ButtonType("Close", ButtonData.CANCEL_CLOSE));
