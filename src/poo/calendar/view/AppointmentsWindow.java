@@ -12,11 +12,11 @@ import javafx.scene.layout.Priority;
  * Widget class that displays the calendar window.
  * It's a vertical box containing a list of appointments and 2 buttons.
  */
-public class CalendarWindow extends VBox {
+public class AppointmentsWindow extends VBox {
 	Button mAddButton, mDeleteButton;
 	AppointmentListView mALV;
 	
-	public CalendarWindow(){
+	public AppointmentsWindow(){
 		this.setAlignment(Pos.TOP_CENTER);
 		this.setSpacing(20);
 		this.setPrefHeight(800);
