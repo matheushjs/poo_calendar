@@ -12,9 +12,6 @@ public class Appointment {
 	// The time when the Appointment ends
 	private Calendar mEndDate;
 	
-	// Counter for assigning IDs to Appointments
-	private static long mCounter = 0;
-	
 	// The Appointment's Identification Number
 	private long mID;
 	
@@ -30,8 +27,7 @@ public class Appointment {
 		mInitDate = initDate;
 		mEndDate = endDate;
 
-		mID = mCounter;
-		mCounter++;
+		mID = IDGenerator.getID();
 		
 		//TODO: Validade dates
 	}
