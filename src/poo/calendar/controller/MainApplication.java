@@ -3,14 +3,22 @@ package poo.calendar.controller;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
 import poo.calendar.model.Appointment;
 import poo.calendar.model.Task;
+import poo.calendar.view.MainWindow;
 
-public class MainApplication {
+public class MainApplication extends Application {
 	private ArrayList<Appointment> mAppointments;
 	private ArrayList<Task> mTasks;
 	
-	public MainApplication(){
+	@Override 
+    public void start(Stage stage) {
+    	Scene scene = new Scene(new MainWindow());
+		
 		// Read from disk
 		
 		// onAddTask(title, calendar, *taskid*) -> mTasks.add(new Task(title, calendar, taskid))
@@ -20,6 +28,14 @@ public class MainApplication {
 		// onDeleteTask(title, appointmentID) -> mAppointments.remove(appointmentId)
 		
 		// Write to disk
+    	
+		stage.setTitle("Calendar");
+    	stage.setScene(scene);
+    	stage.show();
+	}
+	
+	public static void main(String[] args){
+		Application.launch(args);
 	}
 	
 	/**
