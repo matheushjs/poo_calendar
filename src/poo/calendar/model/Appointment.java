@@ -3,15 +3,64 @@ package poo.calendar.model;
 import java.util.Calendar;
 
 public class Appointment {
-	private String d_title;
-	private Calendar d_initDate;
-	private Calendar d_endDate;
+	// The Appointment's title
+	private String mTitle;
 	
+	// The time when the Appointment begins
+	private Calendar mInitDate;
+	
+	// The time when the Appointment ends
+	private Calendar mEndDate;
+	
+	// Counter for assigning IDs to Appointments
+	private static long mCounter = 0;
+	
+	// The Appointment's Identification Number
+	private long mID;
+	
+	/**
+	 * Appointment's default constructor.
+	 * 
+	 * @param title A Title for the Appointment
+	 * @param initDate Initial Date
+	 * @param endDate End Date
+	 */
 	public Appointment(String title, Calendar initDate, Calendar endDate){
-		title = d_title;
-		d_initDate = initDate;
-		d_endDate = endDate;
+		mTitle = title;
+		mInitDate = initDate;
+		mEndDate = endDate;
+
+		mID = mCounter;
+		mCounter++;
+		
 		//TODO: Validade dates
 	}
 
+	/**
+	 * @return The Appointment's title
+	 */
+	public String getTitle() {
+		return mTitle;
+	}
+
+	/**
+	 * @return The Appointment's initial date
+	 */
+	public Calendar getInitDate() {
+		return mInitDate;
+	}
+
+	/**
+	 * @return The Appointment's end date
+	 */
+	public Calendar getEndDate() {
+		return mEndDate;
+	}
+
+	/**
+	 * @return The Appointment's ID
+	 */
+	public long getID() {
+		return mID;
+	}
 }

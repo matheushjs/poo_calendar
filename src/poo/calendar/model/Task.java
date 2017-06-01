@@ -34,8 +34,13 @@ public class Task {
 	/** The task's deadline date. */
 	private Calendar mDeadlineDate;
 
+	/** Counter for assigning ID numbers to Tasks. */
+	private static long mCounter = 0;
+	
+	/** The task's identification number */
+	private long mID;
+	
 	/**
-	 *
 	 * The task's default constructor.
 	 *
 	 * @param title required
@@ -47,8 +52,11 @@ public class Task {
 			throw new IllegalArgumentException("A task must provide a non-null non-empty title string.");
 		}
 
+		mID = mCounter;
 		mTitle = title;
 		mDeadlineDate = deadlineDate;
+		
+		mCounter++;
 	}
 
 	/**
@@ -77,5 +85,12 @@ public class Task {
 	 */
 	public void setDeadlineDate(Calendar deadlineDate) {
 		mDeadlineDate = deadlineDate;
+	}
+	
+	/**
+	 * @return The task's ID
+	 */
+	public long getID(){
+		return mID;
 	}
 }
