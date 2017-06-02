@@ -3,15 +3,20 @@ package poo.calendar.model;
 import java.io.Serializable;
 import java.util.Calendar;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 public class Appointment implements Serializable {
 	// The Appointment's title
-	private String mTitle;
+	private StringProperty mTitle;
 	
 	// The time when the Appointment begins
-	private Calendar mInitDate;
+	private ObjectProperty<Calendar> mInitDate;
 	
 	// The time when the Appointment ends
-	private Calendar mEndDate;
+	private ObjectProperty<Calendar> mEndDate;
 	
 	// The Appointment's Identification Number
 	private long mID;
@@ -24,9 +29,9 @@ public class Appointment implements Serializable {
 	 * @param endDate End Date
 	 */
 	public Appointment(String title, Calendar initDate, Calendar endDate){
-		mTitle = title;
-		mInitDate = initDate;
-		mEndDate = endDate;
+		mTitle = new SimpleStringProperty(title);
+		mInitDate = new SimpleObjectProperty<Calendar>(initDate);
+		mEndDate = new SimpleObjectProperty<Calendar>(endDate);
 
 		mID = IDGenerator.getID();
 		
@@ -34,23 +39,37 @@ public class Appointment implements Serializable {
 	}
 
 	/**
-	 * @return The Appointment's title
+	 * @return The Appointment's title value
 	 */
-	public String getTitle() {
-		return mTitle;
+	public final String getTitle() {
+		return mTitle.get();
 	}
 
 	/**
 	 * @return The Appointment's initial date
 	 */
-	public Calendar getInitDate() {
-		return mInitDate;
+	public final Calendar getInitDate() {
+		return mInitDate.get();
 	}
 
 	/**
-	 * @return The Appointment's end date
+	 * @return The Appointment's initial date property
 	 */
-	public Calendar getEndDate() {
+	public ObjectProperty<Calendar> InitDateProperty(){
+		return mInitDate;
+	}
+	
+	/**
+	 * @return The Appointment's end date value
+	 */
+	public final Calendar getEndDate() {
+		return mEndDate.get();
+	}
+	
+	/**
+	 * @return The Appointment's end date property
+	 */
+	public ObjectProperty<Calendar> EndDateProperty(){
 		return mEndDate;
 	}
 

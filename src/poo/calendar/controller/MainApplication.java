@@ -24,8 +24,8 @@ public class MainApplication extends Application {
 	private ArrayList<Task> mTasks;
 
 	@Override
-		public void start(Stage stage) {
-			Scene scene = new Scene(new MainScene());
+	public void start(Stage stage) {
+		Scene scene = new Scene(new MainScene());
 
 		// Read from disk
 
@@ -41,8 +41,8 @@ public class MainApplication extends Application {
 		mTasks = deserializeTasks();
 
 		stage.setTitle("Calendar");
-			stage.setScene(scene);
-			stage.show();
+		stage.setScene(scene);
+		stage.show();
 	}
 
 	public static void main(String[] args){

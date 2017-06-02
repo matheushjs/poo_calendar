@@ -3,6 +3,11 @@ package poo.calendar.model;
 import java.io.Serializable;
 import java.util.Calendar;
 
+import javafx.beans.property.StringProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+
 /**
  * A model class that represents a Task. A task has a title(required) and a
  * deadline date(optional).
@@ -11,10 +16,10 @@ import java.util.Calendar;
 public class Task implements Serializable {
 
 	/** The task's title. */
-	private String mTitle;
+	private StringProperty mTitle;
 
 	/** The task's deadline date. */
-	private Calendar mDeadlineDate;
+	private ObjectProperty<Calendar> mDeadlineDate;
 	
 	/** The task's identification number */
 	private long mID;
@@ -32,42 +37,56 @@ public class Task implements Serializable {
 		}
 
 		mID = IDGenerator.getID();
-		mTitle = title;
-		mDeadlineDate = deadlineDate;
+		mTitle = new SimpleStringProperty(title);
+		mDeadlineDate = new SimpleObjectProperty<Calendar>(deadlineDate);
 	}
 
 	/**
-	 * @return the task's title
+	 * @return The Task's Title value
 	 */
-	public String getTitle() {
-		return mTitle;
+	public final String getTitle() {
+		return mTitle.get();
 	}
 
 	/**
 	 * @param mTitle the task's title to set
 	 */
-	public void setTitle(String title) {
-		mTitle = title;
+	public final void setTitle(String title) {
+		mTitle.set(title);
+	}
+	
+	/**
+	 * @return The Task's Title property
+	 */
+	public StringProperty TitleProperty(){
+		return mTitle;
 	}
 
 	/**
 	 * @return the task's deadline date
 	 */
-	public Calendar getDeadlineDate() {
-		return mDeadlineDate;
+	public final Calendar getDeadlineDate() {
+		return mDeadlineDate.get();
 	}
 
 	/**
 	 * @param mDeadlineDate the task's deadline date to set
 	 */
-	public void setDeadlineDate(Calendar deadlineDate) {
-		mDeadlineDate = deadlineDate;
+	public final void setDeadlineDate(Calendar deadlineDate) {
+		mDeadlineDate.set(deadlineDate);
+	}
+	
+	/**
+	 * @return The Task's Deadline Date property
+	 */
+	public ObjectProperty<Calendar> DeadlineDateProperty(){
+		return mDeadlineDate;
 	}
 	
 	/**
 	 * @return The task's ID
 	 */
-	public long getID(){
+	public final long getID(){
 		return mID;
 	}
 }
