@@ -26,7 +26,6 @@ public class MainApplication extends Application {
 
 	@Override
 	public void start(Stage stage) {
-		Scene scene = new Scene(new MainScene());
 		// onAddTask(title, calendar, *taskid*) -> mTasks.add(new Task(title, calendar, taskid))
 		// onAddTask(title, calendar, calendar, *appointmentId*) -> mAppointments.add(new Task(title, calendar, appointmentId))
 
@@ -36,6 +35,10 @@ public class MainApplication extends Application {
 		mAppointments = deserializeAppointments();
 		mTasks = deserializeTasks();
 
+		AppointmentController.getInstance().initializeModel(mAppointments);
+		
+		Scene scene = new Scene(new MainScene());
+		
 		stage.setTitle("Calendar");
 		stage.setScene(scene);
 		stage.show();

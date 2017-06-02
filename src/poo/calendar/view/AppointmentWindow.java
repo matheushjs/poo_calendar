@@ -28,9 +28,6 @@ public class AppointmentWindow extends VBox {
 		mAddButton = new Button("Add");
 		mDeleteButton = new Button("Delete");
 		
-		mAddButton.setOnAction(a -> onAddClick(a));
-		mDeleteButton.setOnAction(a -> onDeleteClick(a));
-		
 		HBox box = new HBox();
 		box.getChildren().addAll(mAddButton, mDeleteButton);
 		box.setAlignment(Pos.BASELINE_CENTER);
@@ -42,18 +39,15 @@ public class AppointmentWindow extends VBox {
 		this.getChildren().addAll(mALV, box);
 	}
 	
-	private void onAddClick(ActionEvent a){
-		// Open auxiliary window (or change scene) for adding appointments
-		// Send User input to the controller
-		// Repeat steps above
-		
-		Optional<Map<String,String>> result = new DateChooserDialog("New Appointment", "Set up your new appointment", DateChooserDialog.APPOINTMENT_DIALOG).showAndWait();
-		result.ifPresent(name -> mALV.add(name.get("title"), name.get("hour1") + ":" + name.get("minute1")));
+	public Button getAddButton(){
+		return mAddButton;
 	}
 	
-	private void onDeleteClick(ActionEvent a){
-		// Open auxiliary window (or change scene) for removing appointments
-		// Send User input to the controller
-		// Repeat steps above
+	public Button getDeleteButton(){
+		return mDeleteButton;
+	}
+	
+	public AppointmentListView getAppointmentListView(){
+		return mALV;
 	}
 }
