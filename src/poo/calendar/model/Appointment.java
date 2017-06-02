@@ -76,7 +76,7 @@ public class Appointment implements Serializable {
 	/**
 	 * @return The Appointment's ID
 	 */
-	public long getID() {
+	public final long getID() {
 		return mID;
 	}
 }

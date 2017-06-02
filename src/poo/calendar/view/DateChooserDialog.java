@@ -31,10 +31,10 @@ public class DateChooserDialog extends Dialog<Map<String,String>> {
 	private List<TextField> dateFields, dateFields2;
 	
 	/** Pass this static value to this class' constructor if the Dialog should create a Task */
-	public static int TASK_DIALOG = 0;
+	public static final int TASK_DIALOG = 0;
 	
 	/** Pass this static value to this class' constructor if the Dialog should create an Appointment */
-	public static int APPOINTMENT_DIALOG = 1;
+	public static final int APPOINTMENT_DIALOG = 1;
 	
 	/**
 	 * Function required for extending the Dialog class.

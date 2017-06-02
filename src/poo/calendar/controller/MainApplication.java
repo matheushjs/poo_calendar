@@ -6,10 +6,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 import java.util.Calendar;
 
 import javafx.application.Application;
+import javafx.collections.ObservableList;
+import javafx.collections.FXCollections;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import poo.calendar.model.Appointment;
@@ -20,22 +21,17 @@ public class MainApplication extends Application {
 	private static final String APPOINTMENTS_SER = "appointments.ser";
 	private static final String TASKS_SER = "tasks.ser";
 
-	private ArrayList<Appointment> mAppointments;
-	private ArrayList<Task> mTasks;
+	private ObservableList<Appointment> mAppointments;
+	private ObservableList<Task> mTasks;
 
 	@Override
 	public void start(Stage stage) {
 		Scene scene = new Scene(new MainScene());
-
-		// Read from disk
-
 		// onAddTask(title, calendar, *taskid*) -> mTasks.add(new Task(title, calendar, taskid))
 		// onAddTask(title, calendar, calendar, *appointmentId*) -> mAppointments.add(new Task(title, calendar, appointmentId))
 
 		// onDeleteTask(title, taskID) -> mTasks.remove(taskid)
 		// onDeleteTask(title, appointmentID) -> mAppointments.remove(appointmentId)
-
-		// Write to disk
 
 		mAppointments = deserializeAppointments();
 		mTasks = deserializeTasks();
@@ -59,11 +55,11 @@ public class MainApplication extends Application {
 		}
 	}
 
-	private ArrayList<Appointment> deserializeAppointments() {
-		ArrayList<Appointment> appointments = new ArrayList<>();
+	private ObservableList<Appointment> deserializeAppointments() {
+		ObservableList<Appointment> appointments = FXCollections.observableArrayList();
 		try {
 			ObjectInputStream in = new ObjectInputStream(new FileInputStream(APPOINTMENTS_SER));
-			appointments = (ArrayList<Appointment>) in.readObject();
+			appointments = (ObservableList<Appointment>) in.readObject();
 			in.close();
 		} catch (FileNotFoundException e) {
 		} catch(IOException | ClassNotFoundException  e) {
@@ -83,11 +79,11 @@ public class MainApplication extends Application {
 		}
 	}
 
-	private ArrayList<Task> deserializeTasks() {
-		ArrayList<Task> tasks = new ArrayList<>();
+	private ObservableList<Task> deserializeTasks() {
+		ObservableList<Task> tasks = FXCollections.observableArrayList();
 		try {
 			ObjectInputStream in = new ObjectInputStream(new FileInputStream(TASKS_SER));
-			tasks = (ArrayList<Task>) in.readObject();
+			tasks = (ObservableList<Task>) in.readObject();
 			in.close();
 		} catch (FileNotFoundException e) {
 		} catch(IOException | ClassNotFoundException  e) {
