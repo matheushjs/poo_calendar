@@ -13,7 +13,7 @@ import javafx.scene.paint.Color;
 
 //TODO: Might make TaskView and AppointmentView a single class.
 
-class TaskView extends HBox {
+public class TaskView extends HBox {
 	private Background mainBG =
 			new Background(new BackgroundFill(Color.BURLYWOOD, null, null));
 	

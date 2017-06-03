@@ -7,6 +7,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import poo.calendar.controller.AppointmentController;
+import poo.calendar.controller.TaskController;
 
 /**
  * Widget class that represents the main window of the application.
@@ -23,7 +24,7 @@ public class MainScene extends HBox {
     	this.setBackground(mainBG);
     	
     	mAppointmentWindow = AppointmentController.getInstance().getAppointmentWindow();
-    	mTaskWindow = new TaskWindow();
+    	mTaskWindow = TaskController.getInstance().getTaskWindow();
     	this.getChildren().addAll(mAppointmentWindow, mTaskWindow);
     	this.setPadding(new Insets(10, 10, 10, 10));
     }

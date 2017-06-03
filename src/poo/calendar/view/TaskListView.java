@@ -6,7 +6,7 @@ import javafx.scene.layout.VBox;
 /**
  * Widget class that displays an unordered list of TaskView.
  */
-class TaskListView extends VBox {
+public class TaskListView extends VBox {
 	public TaskListView(){
 		this.setAlignment(Pos.TOP_CENTER);
 	}

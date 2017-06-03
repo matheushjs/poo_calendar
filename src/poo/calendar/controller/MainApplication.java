@@ -36,6 +36,7 @@ public class MainApplication extends Application {
 		mTasks = deserializeTasks();
 
 		AppointmentController.getInstance().initializeModel(mAppointments);
+		TaskController.getInstance().initializeModel(mTasks);
 		
 		Scene scene = new Scene(new MainScene());
 		
@@ -102,6 +103,7 @@ public class MainApplication extends Application {
 	 */
 	private void addTask(String title, Calendar date){
 		//TODO: Validate arguments
+		//TODO: Serialize using Listeners
 		mTasks.add(new Task(title, date));
 		serializeTasks();
 	}
@@ -113,6 +115,7 @@ public class MainApplication extends Application {
 	 */
 	private void addAppointment(String title, Calendar init, Calendar end){
 		//TODO: Validate arguments
+		//TODO: Serialize using Listeners
 		mAppointments.add(new Appointment(title, init, end));
 		serializeAppointments();
 	}
@@ -121,6 +124,7 @@ public class MainApplication extends Application {
 	 * @param id The ID of the Task to remove
 	 */
 	private void removeTask(long id){
+		//TODO: Serialize using Listeners
 		for(Task t: mTasks){
 			if(t.getID() == id){
 				mTasks.remove(t);
@@ -138,6 +142,7 @@ public class MainApplication extends Application {
 	 * @param id The ID of the Appointment to remove
 	 */
 	private void removeAppointment(long id){
+		//TODO: Serialize using Listeners
 		for(Appointment a: mAppointments){
 			if(a.getID() == id){
 				mAppointments.remove(a);

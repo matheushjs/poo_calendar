@@ -1,9 +1,5 @@
 package poo.calendar.view;
 
-import java.util.Map;
-import java.util.Optional;
-
-import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;

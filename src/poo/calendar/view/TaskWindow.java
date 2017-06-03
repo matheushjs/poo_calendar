@@ -1,9 +1,5 @@
 package poo.calendar.view;
 
-import java.util.Map;
-import java.util.Optional;
-
-import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
@@ -26,8 +22,6 @@ public class TaskWindow extends VBox {
 		
 		mAddButton = new Button("Add");
 		mDeleteButton = new Button("Delete");
-		mAddButton.setOnAction(a -> onAddClick(a));
-		mDeleteButton.setOnAction(a -> onDeleteClick(a));
 
 		HBox box = new HBox();
 		box.getChildren().addAll(mAddButton, mDeleteButton);
@@ -40,18 +34,23 @@ public class TaskWindow extends VBox {
 		this.getChildren().addAll(mTLV, box);
 	}
 	
-	private void onAddClick(ActionEvent a){
-		// Open auxiliary window (or change scene) for adding appointments
-		// Send User input to the controller
-		// Repeat steps above
-		
-		Optional<Map<String,String>> result = new DateChooserDialog("New Task", "Set up your new task", DateChooserDialog.TASK_DIALOG).showAndWait();
-		result.ifPresent(name -> mTLV.add(name.get("title")));
+	/**
+	 * @return The TaskListView within this widget
+	 */
+	public TaskListView getTaskListView(){
+		return mTLV;
+	}
+	/**
+	 * @return The "Add" Button within this widget
+	 */
+	public Button getAddButton(){
+		return mAddButton;
 	}
 	
-	private void onDeleteClick(ActionEvent a){
-		// Open auxiliary window (or change scene) for removing appointments
-		// Send User input to the controller
-		// Repeat steps above
+	/**
+	 * @return The "Delete" button within this widget
+	 */
+	public Button getDeleteButton(){
+		return mDeleteButton;
 	}
 }
