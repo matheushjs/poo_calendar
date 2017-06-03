@@ -16,14 +16,30 @@ import poo.calendar.view.DateChooserDialog;
 /**
  * Singleton Class for controlling the Appointments Window.
  * Should not call any method whose purpose is stylization of the GUI (e.g. setAlignment etc).
+ *
+ * Regarding the decision on how to handle views and controllers.
+ * Controlled widgets - ones that have function associated with interacting with them - will have a
+ * controller class associated with them. These widgets should be manufactured by the controller class,
+ * where their events are connected to due listeners, and then they are stylized within the view class that
+ * instantiates this controlled widget (AppointmentWindow instantiates AppointmentListView, so AppointmentWindow
+ * should instantiate an AppointmentListView through a call to whatever class is the controller for
+ * AppointmentListView,for example).
+ * 
+ * The controller should have its model data initialized before any widget is instantiated through it.
+ * 
+ * If a widget is expected to have only 1 live instance, the controller may hold a 'lock' boolean variable to prevent
+ * multiple instantiations. The controller may hold references to the widgets it controls.
  */
 public final class AppointmentController {
 	private static AppointmentController mInstance = null;
 	
+	// Widgets
 	private AppointmentWindow mAW = null;
+	
+	// Model data
 	private ObservableList<Appointment> mAppointmentList = null;
 	
-	//Prevent construction
+	// Prevent construction
 	private AppointmentController(){}
 	
 	/**
@@ -37,40 +53,43 @@ public final class AppointmentController {
 	}
 	
 	/**
+	 * Connects listeners for modifications on the the data model, so that the UI is updated
+	 * accordingly.
+	 * 
 	 * @param list List of appointments that should be controlled by this Class
 	 */
 	public void initializeModel(ObservableList<Appointment> list){
-		 if(mAppointmentList == null){
-			 mAppointmentList = list;
+		if(mAppointmentList != null){
+			//TODO: Verify logging / exception
+			System.err.println(this.getClass().getName() + ": Can only initialize model once.");
+			System.exit(1);
+		}
+			 
+		mAppointmentList = list;
 
-			 mAppointmentList.addListener(new ListChangeListener<Appointment>() {
-				 @Override
-				 public void onChanged(ListChangeListener.Change change) {
-					 while(change.next()){
-						 //TODO: Handle updated appointments
-						 
-						 System.out.println("Removed:");
-						 for(Object a: change.getRemoved()){
-							 System.out.println( ((Appointment) a).getTitle());
-						 }
-						 for(Object a: change.getAddedSubList()){
-							 System.out.println("Added:");
-							 System.out.println( ((Appointment) a).getTitle());
-							 
-							 // Puta que pariu
-							 AppointmentController.getInstance().addAppointmentView((Appointment) a);
-						 }
-					 }
-				 }
-			 });
-				 
-		 } else {
-			 //TODO: Verify logging / exception
-			 System.err.println(this.getClass().getName() + ": Can only initialize model once.");
-			 System.exit(1);
-		 }
+		mAppointmentList.addListener((ListChangeListener.Change<? extends Appointment> change) -> {
+			while(change.next()){
+				//TODO: Handle updated/permuted appointments
+				
+				for(Object a: change.getRemoved()){
+					//TODO: Handle removal
+					System.out.println("Removed:");
+					System.out.println( ((Appointment) a).getTitle());
+				}
+				for(Object a: change.getAddedSubList()){
+					System.out.println("Added:");
+					System.out.println( ((Appointment) a).getTitle());
+					 
+					this.addAppointmentView((Appointment) a);
+				}
+			}
+		});
 	}
 	
+	/**
+	 * Adds an appointment to the UI.
+	 * @param appointment Appointment to be added.
+	 */
 	private void addAppointmentView(Appointment appointment){
 		ObservableList<Node> nodes = mAW.getAppointmentListView().getChildren();
 		Calendar calendar = appointment.getInitDate();
@@ -103,10 +122,18 @@ public final class AppointmentController {
 		return mAW;
 	}
 	
+	/**
+	 * Function to run whenever the 'Add' button in the appointments window is clicked.
+	 * @param a
+	 */
 	private void onAddClick(ActionEvent a){
 		Optional<Map<String,String>> result =
-				new DateChooserDialog("New Appointment", "Set up your new appointment", DateChooserDialog.APPOINTMENT_DIALOG).showAndWait();
-		
+				new DateChooserDialog(
+						"New Appointment", 
+						"Set up your new appointment",
+						DateChooserDialog.APPOINTMENT_DIALOG
+				).showAndWait();
+
 		result.ifPresent(name -> {
 			Calendar c1 = Calendar.getInstance();
 			Calendar c2 = Calendar.getInstance();
@@ -130,6 +157,10 @@ public final class AppointmentController {
 		});
 	}
 	
+	/**
+	 * Function to run whenever the 'Delete' button in the appointments window is clicked
+	 * @param a
+	 */
 	private void onDeleteClick(ActionEvent a){
 		// Open auxiliary window (or change scene) for removing appointments
 		// Send User input to the controller
