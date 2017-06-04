@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.Map;
 import java.util.Optional;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -61,6 +62,7 @@ public final class AppointmentController {
 	 * 
 	 * @param list List of appointments that should be controlled by this Class
 	 */
+	//TODO: Case when list given is not null (must add them to the view class)
 	public void initializeModel(ObservableList<Appointment> list){
 		if(mAppointmentList != null){
 			//TODO: Verify logging / exception
@@ -97,14 +99,10 @@ public final class AppointmentController {
 	 */
 	private void addAppointmentView(Appointment appointment){
 		ObservableList<Node> nodes = mAW.getAppointmentListView().getChildren();
-		Calendar calendar = appointment.getInitDate();
-		String format = String.format("%02d/%02d %02d:%02d",
-				calendar.get(Calendar.MONTH),
-				calendar.get(Calendar.DAY_OF_MONTH),
-				calendar.get(Calendar.HOUR),
-				calendar.get(Calendar.MINUTE));
 		
-		AppointmentView view = new AppointmentView(appointment.getTitle(), format, appointment.getID());
+		AppointmentView view = new AppointmentView(
+				appointment.getTitle(), appointment.getInitDate(), appointment.getID()
+				);
 		view.setOnMouseClicked(click -> {
 			AppointmentView source = (AppointmentView) click.getSource();
 			if(mDeleteButton.isSelected() && click.getButton() == MouseButton.PRIMARY){
@@ -112,6 +110,7 @@ public final class AppointmentController {
 			}
 		});
 		nodes.add(view);
+		FXCollections.sort(nodes, null);
 	}
 	
 	/**

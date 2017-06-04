@@ -50,6 +50,7 @@ public class TaskController {
 	 * 
 	 * @param list List of tasks that should be controlled by this Class
 	 */
+	//TODO: Case when list given is not null (must add them to the view class)
 	public void initializeModel(ObservableList<Task> list){
 		if(mTaskList != null){
 			//TODO: Verify logging / exception
@@ -82,14 +83,8 @@ public class TaskController {
 	 */
 	private void addTaskView(Task task){
 		ObservableList<Node> nodes = mTW.getTaskListView().getChildren();
-		Calendar calendar = task.getDeadlineDate();
-		String format = String.format("%02d/%02d %02d:%02d",
-				calendar.get(Calendar.MONTH),
-				calendar.get(Calendar.DAY_OF_MONTH),
-				calendar.get(Calendar.HOUR),
-				calendar.get(Calendar.MINUTE));
 
-		TaskView view = new TaskView(task.getTitle(), format, task.getID());
+		TaskView view = new TaskView(task.getTitle(), task.getDeadlineDate(), task.getID());
 		view.setOnMouseClicked(click -> {
 			TaskView source = (TaskView) click.getSource();
 			if(mDeleteButton.isSelected() && click.getButton() == MouseButton.PRIMARY){
