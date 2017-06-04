@@ -26,6 +26,7 @@ public class AppointmentView extends HBox implements Comparable<AppointmentView>
 		mInitDate = initDate;
 		
 		this.setAlignment(Pos.CENTER);
+		this.setBackground(mainBG);
 		
 		Label l1 = new Label(title);
 		l1.setAlignment(Pos.CENTER_LEFT);
@@ -41,8 +42,6 @@ public class AppointmentView extends HBox implements Comparable<AppointmentView>
 		l2.setAlignment(Pos.CENTER_RIGHT);
 		l2.setPrefWidth(125);
 
-		l1.setBackground(mainBG);
-		l2.setBackground(mainBG);
 		this.getChildren().addAll(l1, l2);
 	}
 	

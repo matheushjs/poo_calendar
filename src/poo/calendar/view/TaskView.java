@@ -26,9 +26,9 @@ public class TaskView extends HBox {
 		mDeadlineDate = deadline;
 		
 		this.setAlignment(Pos.CENTER);
+		this.setBackground(mainBG);
 		
 		Label l1 = new Label(title);
-		l1.setBackground(mainBG);
 		
 		if(deadline == null){
 			l1.setAlignment(Pos.CENTER);
@@ -47,7 +47,6 @@ public class TaskView extends HBox {
 			Label l2 = new Label(format);
 			l2.setAlignment(Pos.CENTER_RIGHT);
 			l2.setPrefWidth(125);
-			l2.setBackground(mainBG);
 			
 			this.getChildren().addAll(l1, l2);
 		}
