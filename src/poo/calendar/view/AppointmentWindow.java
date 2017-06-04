@@ -18,10 +18,10 @@ public class AppointmentWindow extends VBox {
 	AppointmentListView mALV;
 	
 	public AppointmentWindow(){
-		this.setAlignment(Pos.TOP_CENTER);
+		this.setAlignment(Pos.BASELINE_CENTER);
 		this.setSpacing(20);
 		this.setPrefHeight(800);
-		this.setPrefWidth(250);
+		this.setPrefWidth(500);
 		
 		mAddButton = new Button("Add");
 		mDeleteButton = new ToggleButton("Delete");

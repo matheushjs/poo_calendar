@@ -14,7 +14,7 @@ import javafx.scene.paint.Color;
  */
 public class AppointmentView extends HBox implements Comparable<AppointmentView> {
 	private Background mainBG =
-			new Background(new BackgroundFill(Color.ALICEBLUE, null, null));
+			new Background(new BackgroundFill(Color.WHITESMOKE, null, null));
 	
 	//TODO: Implement as an ObjectProperty bound to the original appointment's initDate.
 	private Calendar mInitDate;

@@ -9,5 +9,6 @@ import javafx.scene.layout.VBox;
 public class TaskListView extends VBox {
 	public TaskListView(){
 		this.setAlignment(Pos.TOP_CENTER);
+		this.setStyle("-fx-border-style: solid; -fx-border-width: 5;");
 	}
 }

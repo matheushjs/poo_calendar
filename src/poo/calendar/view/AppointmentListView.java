@@ -9,5 +9,6 @@ import javafx.scene.layout.VBox;
 public class AppointmentListView extends VBox {
 	public AppointmentListView(){
 		this.setAlignment(Pos.TOP_CENTER);
+		this.setStyle("-fx-border-style: solid; -fx-border-width: 5;");
 	}
 }

@@ -14,7 +14,7 @@ import javafx.scene.paint.Color;
  */
 public class TaskView extends HBox {
 	private Background mainBG =
-			new Background(new BackgroundFill(Color.BURLYWOOD, null, null));
+			new Background(new BackgroundFill(Color.WHITESMOKE, null, null));
 	
 	//TODO: Implement as an ObjectProperty, bound to the original task's property
 	private Calendar mDeadlineDate;
