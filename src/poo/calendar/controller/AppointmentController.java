@@ -8,6 +8,7 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseButton;
 import poo.calendar.model.Appointment;
 import poo.calendar.view.AppointmentView;
@@ -36,6 +37,7 @@ public final class AppointmentController {
 	
 	// Widgets
 	private AppointmentWindow mAW = null;
+	private ToggleButton mDeleteButton;
 	
 	// Model data
 	private ObservableList<Appointment> mAppointmentList = null;
@@ -105,7 +107,7 @@ public final class AppointmentController {
 		AppointmentView view = new AppointmentView(appointment.getTitle(), format, appointment.getID());
 		view.setOnMouseClicked(click -> {
 			AppointmentView source = (AppointmentView) click.getSource();
-			if(click.getButton() == MouseButton.PRIMARY){
+			if(mDeleteButton.isSelected() && click.getButton() == MouseButton.PRIMARY){
 				this.removeAppointment(source.getID());
 			}
 		});
@@ -152,7 +154,7 @@ public final class AppointmentController {
 		}
 		
 		mAW.getAddButton().setOnAction(a -> onAddClick(a));
-		mAW.getDeleteButton().setOnAction(a -> onDeleteClick(a));
+		mDeleteButton = mAW.getDeleteButton();
 		
 		return mAW;
 	}
@@ -190,15 +192,5 @@ public final class AppointmentController {
 			Appointment appointment = new Appointment(name.get("title"), c1, c2);
 			mAppointmentList.add(appointment);
 		});
-	}
-	
-	/**
-	 * Function to run whenever the 'Delete' button in the appointments window is clicked
-	 * @param a
-	 */
-	private void onDeleteClick(ActionEvent a){
-		// Open auxiliary window (or change scene) for removing appointments
-		// Send User input to the controller
-		// Repeat steps above
 	}
 }

@@ -2,9 +2,10 @@ package poo.calendar.view;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 
 
 /**
@@ -12,7 +13,8 @@ import javafx.scene.layout.Priority;
  * It's a vertical box containing a list of appointments and 2 buttons.
  */
 public class AppointmentWindow extends VBox {
-	Button mAddButton, mDeleteButton;
+	Button mAddButton;
+	ToggleButton mDeleteButton;
 	AppointmentListView mALV;
 	
 	public AppointmentWindow(){
@@ -22,7 +24,7 @@ public class AppointmentWindow extends VBox {
 		this.setPrefWidth(250);
 		
 		mAddButton = new Button("Add");
-		mDeleteButton = new Button("Delete");
+		mDeleteButton = new ToggleButton("Delete");
 		
 		HBox box = new HBox();
 		box.getChildren().addAll(mAddButton, mDeleteButton);
@@ -39,7 +41,7 @@ public class AppointmentWindow extends VBox {
 		return mAddButton;
 	}
 	
-	public Button getDeleteButton(){
+	public ToggleButton getDeleteButton(){
 		return mDeleteButton;
 	}
 	
