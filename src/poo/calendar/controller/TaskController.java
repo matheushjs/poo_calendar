@@ -13,6 +13,12 @@ import poo.calendar.view.DateChooserDialog;
 import poo.calendar.view.TaskView;
 import poo.calendar.view.TaskWindow;
 
+/**
+ * Singleton Class for controlling the Tasks Window.
+ * Should not call any method whose purpose is stylization of the GUI (e.g. setAlignment etc).
+ * 
+ * See AppointmentController for discussion on this decisions.
+ */
 public class TaskController {
 	private static TaskController mInstance = null;
 	

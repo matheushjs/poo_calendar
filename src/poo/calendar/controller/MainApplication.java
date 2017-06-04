@@ -26,12 +26,6 @@ public class MainApplication extends Application {
 
 	@Override
 	public void start(Stage stage) {
-		// onAddTask(title, calendar, *taskid*) -> mTasks.add(new Task(title, calendar, taskid))
-		// onAddTask(title, calendar, calendar, *appointmentId*) -> mAppointments.add(new Task(title, calendar, appointmentId))
-
-		// onDeleteTask(title, taskID) -> mTasks.remove(taskid)
-		// onDeleteTask(title, appointmentID) -> mAppointments.remove(appointmentId)
-
 		mAppointments = deserializeAppointments();
 		mTasks = deserializeTasks();
 

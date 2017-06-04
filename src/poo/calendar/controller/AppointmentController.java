@@ -8,6 +8,7 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
+import javafx.scene.input.MouseButton;
 import poo.calendar.model.Appointment;
 import poo.calendar.view.AppointmentView;
 import poo.calendar.view.AppointmentWindow;
@@ -75,6 +76,8 @@ public final class AppointmentController {
 					//TODO: Handle removal
 					System.out.println("Removed:");
 					System.out.println( ((Appointment) a).getTitle());
+					
+					this.removeAppointmentView(((Appointment)a).getID());
 				}
 				for(Object a: change.getAddedSubList()){
 					System.out.println("Added:");
@@ -99,7 +102,39 @@ public final class AppointmentController {
 				calendar.get(Calendar.HOUR),
 				calendar.get(Calendar.MINUTE));
 		
-		nodes.add(new AppointmentView(appointment.getTitle(), format));
+		AppointmentView view = new AppointmentView(appointment.getTitle(), format, appointment.getID());
+		view.setOnMouseClicked(click -> {
+			AppointmentView source = (AppointmentView) click.getSource();
+			if(click.getButton() == MouseButton.PRIMARY){
+				this.removeAppointment(source.getID());
+			}
+		});
+		nodes.add(view);
+	}
+	
+	/**
+	 * Removes an appointment from the UI.
+	 * @param id ID of the appointment to remove.
+	 */
+	private void removeAppointmentView(long id){
+		ObservableList<Node> nodes = mAW.getAppointmentListView().getChildren();
+		nodes.removeIf(view -> {
+			return ((AppointmentView)view).getID() == id;
+		});
+	}
+	
+	/**
+	 * Removes an appointment from the list of appointments
+	 * @param id the ID of the appointment to be removed
+	 */
+	private void removeAppointment(long id){
+		//Maybe make a model class that should handle remove/add operations
+		for(Appointment a: mAppointmentList){
+			if(a.getID() == id){
+				mAppointmentList.remove(a);
+				break;
+			}
+		}
 	}
 	
 	/**

@@ -10,8 +10,4 @@ public class AppointmentListView extends VBox {
 	public AppointmentListView(){
 		this.setAlignment(Pos.TOP_CENTER);
 	}
-	
-	public void add(String str1, String str2){
-		this.getChildren().add(new AppointmentView(str1, str2));
-	}
 }

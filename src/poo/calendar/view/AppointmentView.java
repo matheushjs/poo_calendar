@@ -14,7 +14,11 @@ public class AppointmentView extends HBox {
 	private Background mainBG =
 			new Background(new BackgroundFill(Color.ALICEBLUE, null, null));
 	
-	public AppointmentView(String left, String right){
+	private long mID;
+	
+	public AppointmentView(String left, String right, long id){
+		mID = id;
+		
 		this.setAlignment(Pos.CENTER);
 		
 		Label l1 = new Label(left);
@@ -28,5 +32,9 @@ public class AppointmentView extends HBox {
 		l1.setBackground(mainBG);
 		l2.setBackground(mainBG);
 		this.getChildren().addAll(l1, l2);
+	}
+	
+	public long getID(){
+		return mID;
 	}
 }
