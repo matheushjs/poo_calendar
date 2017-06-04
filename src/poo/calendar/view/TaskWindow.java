@@ -2,6 +2,7 @@ package poo.calendar.view;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -11,7 +12,8 @@ import javafx.scene.layout.VBox;
  * It's a vertical box containing a list of tasks and 2 buttons.
  */
 public class TaskWindow extends VBox {
-	private Button mAddButton, mDeleteButton;
+	private Button mAddButton;
+	private ToggleButton mDeleteButton;
 	private TaskListView mTLV;
 	
 	public TaskWindow(){
@@ -21,7 +23,7 @@ public class TaskWindow extends VBox {
 		this.setPrefWidth(500);
 		
 		mAddButton = new Button("Add");
-		mDeleteButton = new Button("Delete");
+		mDeleteButton = new ToggleButton("Delete");
 
 		HBox box = new HBox();
 		box.getChildren().addAll(mAddButton, mDeleteButton);
@@ -50,7 +52,7 @@ public class TaskWindow extends VBox {
 	/**
 	 * @return The "Delete" button within this widget
 	 */
-	public Button getDeleteButton(){
+	public ToggleButton getDeleteButton(){
 		return mDeleteButton;
 	}
 }

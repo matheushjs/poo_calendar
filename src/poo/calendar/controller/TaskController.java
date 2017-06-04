@@ -8,6 +8,8 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.input.MouseButton;
 import poo.calendar.model.Task;
 import poo.calendar.view.DateChooserDialog;
 import poo.calendar.view.TaskView;
@@ -24,6 +26,7 @@ public class TaskController {
 	
 	//Widgets
 	private TaskWindow mTW = null;
+	private ToggleButton mDeleteButton;
 	
 	//Model Data
 	private ObservableList<Task> mTaskList = null;
@@ -62,7 +65,7 @@ public class TaskController {
 				
 				for(Object a: change.getRemoved()){
 					//TODO: Handle removal
-					System.out.println( ((Task) a).getTitle());
+					this.removeTaskView(((Task)a).getID());
 				}
 				for(Object a: change.getAddedSubList()){
 					System.out.println( ((Task) a).getTitle());
@@ -86,7 +89,38 @@ public class TaskController {
 				calendar.get(Calendar.HOUR),
 				calendar.get(Calendar.MINUTE));
 
-		nodes.add(new TaskView(task.getTitle(), format));
+		TaskView view = new TaskView(task.getTitle(), format, task.getID());
+		view.setOnMouseClicked(click -> {
+			TaskView source = (TaskView) click.getSource();
+			if(mDeleteButton.isSelected() && click.getButton() == MouseButton.PRIMARY){
+				this.removeTask(source.getID());
+			}
+		});
+		nodes.add(view);
+	}
+	
+	/**
+	 * Removes a task from the UI
+	 * @param id ID of the task to remove
+	 */
+	private void removeTaskView(long id){
+		ObservableList<Node> nodes = mTW.getTaskListView().getChildren();
+		nodes.removeIf(view -> {
+			return ((TaskView)view).getID() == id;
+		});
+	}
+	
+	/**
+	 * Removes a task from the task list
+	 * @param id
+	 */
+	private void removeTask(long id){
+		for(Task a: mTaskList){
+			if(a.getID() == id){
+				mTaskList.remove(a);
+				break;
+			}
+		}
 	}
 	
 	/**
@@ -104,7 +138,7 @@ public class TaskController {
 		}
 		
 		mTW.getAddButton().setOnAction(a -> onAddClick(a));
-		mTW.getDeleteButton().setOnAction(a -> onDeleteClick(a));
+		mDeleteButton = mTW.getDeleteButton();
 		
 		return mTW;
 	}
@@ -135,15 +169,5 @@ public class TaskController {
 			Task task = new Task(name.get("title"), c1);
 			mTaskList.add(task);
 		});
-	}
-
-	/**
-	 * Function to run whenever the 'Delete' button in the tasks window is clicked
-	 * @param a
-	 */
-	private void onDeleteClick(ActionEvent a){
-		// Open auxiliary window (or change scene) for removing tasks
-		// Send User input to the controller
-		// Repeat steps above
 	}
 }

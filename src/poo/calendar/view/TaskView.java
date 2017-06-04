@@ -17,7 +17,11 @@ public class TaskView extends HBox {
 	private Background mainBG =
 			new Background(new BackgroundFill(Color.BURLYWOOD, null, null));
 	
-	public TaskView(String left, String right){
+	private long mID;
+	
+	public TaskView(String left, String right, long id){
+		mID = id;
+		
 		this.setAlignment(Pos.CENTER);
 		
 		Label l1 = new Label(left);
@@ -40,7 +44,11 @@ public class TaskView extends HBox {
 		}
 	}
 	
-	public TaskView(String left){
-		this(left, null);
+	public TaskView(String left, long id){
+		this(left, null, id);
+	}
+	
+	public long getID(){
+		return mID;
 	}
 }
