@@ -6,11 +6,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Arrays;
 import java.util.Calendar;
 
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import poo.calendar.model.Appointment;
@@ -26,9 +28,21 @@ public class MainApplication extends Application {
 
 	@Override
 	public void start(Stage stage) {
-		mAppointments = deserializeAppointments();
-		mTasks = deserializeTasks();
-
+		//mAppointments = deserializeAppointments();
+		//mTasks = deserializeTasks();
+		
+		/* TODO: javafx properties are not serializable, so serialization will not work.
+		
+		mTasks.addListener((ListChangeListener.Change<? extends Task> change) -> {
+			this.serializeTasks();
+		});
+		mAppointments.addListener((ListChangeListener.Change<? extends Appointment> change) -> {
+			this.serializeAppointments();
+		});
+		*/
+		mAppointments = FXCollections.observableArrayList();
+		mTasks = FXCollections.observableArrayList();
+		
 		AppointmentController.getInstance().initializeModel(mAppointments);
 		TaskController.getInstance().initializeModel(mTasks);
 		
@@ -46,7 +60,7 @@ public class MainApplication extends Application {
 	private void serializeAppointments() {
 		try {
 			ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(APPOINTMENTS_SER));
-			out.writeObject(mAppointments);
+			out.writeObject(mAppointments.toArray());
 			out.close();
 		} catch(IOException e) {
 			e.printStackTrace();
@@ -57,7 +71,7 @@ public class MainApplication extends Application {
 		ObservableList<Appointment> appointments = FXCollections.observableArrayList();
 		try {
 			ObjectInputStream in = new ObjectInputStream(new FileInputStream(APPOINTMENTS_SER));
-			appointments = (ObservableList<Appointment>) in.readObject();
+			appointments.addAll(Arrays.asList( (Appointment[]) in.readObject()));
 			in.close();
 		} catch (FileNotFoundException e) {
 		} catch(IOException | ClassNotFoundException  e) {
@@ -70,7 +84,7 @@ public class MainApplication extends Application {
 	private void serializeTasks() {
 		try {
 			ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(TASKS_SER));
-			out.writeObject(mTasks);
+			out.writeObject(mTasks.toArray());
 			out.close();
 		} catch(IOException e) {
 			e.printStackTrace();
@@ -81,7 +95,7 @@ public class MainApplication extends Application {
 		ObservableList<Task> tasks = FXCollections.observableArrayList();
 		try {
 			ObjectInputStream in = new ObjectInputStream(new FileInputStream(TASKS_SER));
-			tasks = (ObservableList<Task>) in.readObject();
+			tasks.addAll(Arrays.asList( (Task[]) in.readObject()));
 			in.close();
 		} catch (FileNotFoundException e) {
 		} catch(IOException | ClassNotFoundException  e) {
