@@ -13,17 +13,17 @@ import javafx.beans.property.SimpleObjectProperty;
  * deadline date(optional).
  *
  */
-public class Task implements Serializable {
+public class Task {
 
 	/** The task's title. */
 	private StringProperty mTitle;
 
 	/** The task's deadline date. */
 	private ObjectProperty<Calendar> mDeadlineDate;
-	
+
 	/** The task's identification number */
 	private long mID;
-	
+
 	/**
 	 * The task's default constructor.
 	 *
@@ -54,7 +54,7 @@ public class Task implements Serializable {
 	public final void setTitle(String title) {
 		mTitle.set(title);
 	}
-	
+
 	/**
 	 * @return The Task's Title property
 	 */
@@ -75,14 +75,14 @@ public class Task implements Serializable {
 	public final void setDeadlineDate(Calendar deadlineDate) {
 		mDeadlineDate.set(deadlineDate);
 	}
-	
+
 	/**
 	 * @return The Task's Deadline Date property
 	 */
 	public ObjectProperty<Calendar> DeadlineDateProperty(){
 		return mDeadlineDate;
 	}
-	
+
 	/**
 	 * @return The task's ID
 	 */

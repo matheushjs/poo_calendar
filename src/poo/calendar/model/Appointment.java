@@ -8,22 +8,22 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class Appointment implements Serializable {
+public class Appointment {
 	// The Appointment's title
 	private StringProperty mTitle;
-	
+
 	// The time when the Appointment begins
 	private ObjectProperty<Calendar> mInitDate;
-	
+
 	// The time when the Appointment ends
 	private ObjectProperty<Calendar> mEndDate;
-	
+
 	// The Appointment's Identification Number
 	private long mID;
-	
+
 	/**
 	 * Appointment's default constructor.
-	 * 
+	 *
 	 * @param title A Title for the Appointment
 	 * @param initDate Initial Date
 	 * @param endDate End Date
@@ -34,7 +34,7 @@ public class Appointment implements Serializable {
 		mEndDate = new SimpleObjectProperty<Calendar>(endDate);
 
 		mID = IDGenerator.getID();
-		
+
 		//TODO: Validade dates
 	}
 
@@ -58,14 +58,14 @@ public class Appointment implements Serializable {
 	public ObjectProperty<Calendar> InitDateProperty(){
 		return mInitDate;
 	}
-	
+
 	/**
 	 * @return The Appointment's end date value
 	 */
 	public final Calendar getEndDate() {
 		return mEndDate.get();
 	}
-	
+
 	/**
 	 * @return The Appointment's end date property
 	 */
