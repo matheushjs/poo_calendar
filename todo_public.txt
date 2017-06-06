@@ -1,0 +1,19 @@
+1) Create interfaces Singleton.
+	- Singleton for controller classes
+
+2) Add groups to the calendar. There must be a class Group (or something like that)
+   that holds information relative to each group: Color for example. Later in the
+   project we might add a 'Defaults' attribute so that each group holds some default
+   values.
+
+3) Add to Task and Appointment the attributes (as properties):
+	- Description
+	- Group (Task and Appointment points to groups or groups point to them?)
+
+4) Add a menu bar to the application, with items:
+	- help: shows credits, short description and collaborators
+	- about: shows the documentation (to be done later)
+
+5) Save/load tasks, appointments and groups to XML file
+
+6) Add date parser in the DateChooserDialog, so that user can write 10/06/2017
