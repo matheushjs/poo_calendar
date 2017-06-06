@@ -1,4 +1,4 @@
-package poo.calendar.model;
+package poo.calendar;
 
 /**
  * Class for handling generation of unique IDs along the program
