@@ -11,7 +11,6 @@ import javafx.beans.property.SimpleObjectProperty;
 /**
  * A model class that represents a Task. A task has a title(required) and a
  * deadline date(optional).
- *
  */
 public class Task {
 
@@ -29,16 +28,15 @@ public class Task {
 	 *
 	 * @param title required
 	 * @param deadlineDate optional
-	 * @throws IllegalArgumentException
+	 * @throws NullArgumentException if 'title' argument is null.
 	 */
-	public Task(String title, Calendar deadlineDate) throws IllegalArgumentException {
-		if (title == null || title.equals("")) {
-			throw new IllegalArgumentException("A task must provide a non-null non-empty title string.");
-		}
-
+	public Task(String title, Calendar deadlineDate) throws NullPointerException {
 		mID = IDGenerator.getID();
-		mTitle = new SimpleStringProperty(title);
-		mDeadlineDate = new SimpleObjectProperty<Calendar>(deadlineDate);
+		mTitle = new SimpleStringProperty();
+		mDeadlineDate = new SimpleObjectProperty<Calendar>();
+		
+		this.setTitle(title);
+		this.setDeadlineDate(deadlineDate);
 	}
 
 	/**
@@ -49,9 +47,12 @@ public class Task {
 	}
 
 	/**
-	 * @param mTitle the task's title to set
+	 * @param mTitle the task's title to set.
+	 * @throws NullPointerException if title is null
 	 */
-	public final void setTitle(String title) {
+	public final void setTitle(String title) throws NullPointerException {
+		if(title == null)
+			throw new NullPointerException("Task title cannot be null");
 		mTitle.set(title);
 	}
 
@@ -70,7 +71,8 @@ public class Task {
 	}
 
 	/**
-	 * @param mDeadlineDate the task's deadline date to set
+	 * @param mDeadlineDate the task's deadline date to set. Must be null if Task
+	 * doesn't have a deadline.
 	 */
 	public final void setDeadlineDate(Calendar deadlineDate) {
 		mDeadlineDate.set(deadlineDate);

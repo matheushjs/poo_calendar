@@ -21,6 +21,12 @@ public class AppointmentView extends HBox implements Comparable<AppointmentView>
 	
 	private long mID;
 	
+	/**
+	 * Default constructor
+	 * @param title Appointment title
+	 * @param initDate Appointment initial date
+	 * @param id Source appointment's ID
+	 */
 	public AppointmentView(String title, Calendar initDate, long id){
 		mID = id;
 		mInitDate = initDate;
@@ -45,10 +51,16 @@ public class AppointmentView extends HBox implements Comparable<AppointmentView>
 		this.getChildren().addAll(l1, l2);
 	}
 	
+	/**
+	 * @return The ID of the appointment view, which should be equal its source Appointment
+	 */
 	public long getID(){
 		return mID;
 	}
 	
+	/**
+	 * Comparison function.
+	 */
 	public int compareTo(AppointmentView other){
 		return this.mInitDate.compareTo(other.mInitDate);
 	}

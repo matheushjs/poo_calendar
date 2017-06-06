@@ -62,14 +62,13 @@ public final class AppointmentController {
 	 * 
 	 * @param list List of appointments that should be controlled by this Class
 	 */
-	//TODO: Case when list given is not null (must add them to the view class)
 	public void initializeModel(ObservableList<Appointment> list){
 		if(mAppointmentList != null){
 			//TODO: Verify logging / exception
 			System.err.println(this.getClass().getName() + ": Can only initialize model once.");
 			System.exit(1);
 		}
-			 
+		
 		mAppointmentList = list;
 
 		mAppointmentList.addListener((ListChangeListener.Change<? extends Appointment> change) -> {
@@ -77,7 +76,6 @@ public final class AppointmentController {
 				//TODO: Handle updated/permuted appointments
 				
 				for(Object a: change.getRemoved()){
-					//TODO: Handle removal
 					System.out.println("Removed:");
 					System.out.println( ((Appointment) a).getTitle());
 					
@@ -102,7 +100,7 @@ public final class AppointmentController {
 		
 		AppointmentView view = new AppointmentView(
 				appointment.getTitle(), appointment.getInitDate(), appointment.getID()
-				);
+			);
 		view.setOnMouseClicked(click -> {
 			AppointmentView source = (AppointmentView) click.getSource();
 			if(mDeleteButton.isSelected() && click.getButton() == MouseButton.PRIMARY){
@@ -150,6 +148,13 @@ public final class AppointmentController {
 		
 		if(mAW == null){
 			mAW = new AppointmentWindow();
+			
+			//First time initializing the window, so the model list might have
+			//appointments that haven't been added to the UI (appointments that were
+			//save to a file)
+			for(Appointment a: mAppointmentList){
+				this.addAppointmentView(a);
+			}
 		}
 		
 		mAW.getAddButton().setOnAction(a -> onAddClick(a));
@@ -169,7 +174,7 @@ public final class AppointmentController {
 						"Set up your new appointment",
 						DateChooserDialog.APPOINTMENT_DIALOG
 				).showAndWait();
-
+		
 		result.ifPresent(name -> {
 			Calendar c1 = Calendar.getInstance();
 			Calendar c2 = Calendar.getInstance();
@@ -188,7 +193,7 @@ public final class AppointmentController {
 					Integer.parseInt(name.get("hour2")),
 					Integer.parseInt(name.get("minute2")) );
 			
-			Appointment appointment = new Appointment(name.get("title"), c1, c2);
+			Appointment appointment = new Appointment(name.get("title"), c1, c2);	
 			mAppointmentList.add(appointment);
 		});
 	}

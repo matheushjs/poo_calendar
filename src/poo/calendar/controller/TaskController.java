@@ -50,7 +50,6 @@ public class TaskController {
 	 * 
 	 * @param list List of tasks that should be controlled by this Class
 	 */
-	//TODO: Case when list given is not null (must add them to the view class)
 	public void initializeModel(ObservableList<Task> list){
 		if(mTaskList != null){
 			//TODO: Verify logging / exception
@@ -65,7 +64,6 @@ public class TaskController {
 				//TODO: Handle updated/permuted appointments
 				
 				for(Object a: change.getRemoved()){
-					//TODO: Handle removal
 					this.removeTaskView(((Task)a).getID());
 				}
 				for(Object a: change.getAddedSubList()){
@@ -130,6 +128,13 @@ public class TaskController {
 		
 		if(mTW == null){
 			mTW = new TaskWindow();
+			
+			//First time initializing the window, so the model list might have
+			//appointments that haven't been added to the UI (appointments that were
+			//save to a file)
+			for(Task t: mTaskList){
+				this.addTaskView(t);
+			}
 		}
 		
 		mTW.getAddButton().setOnAction(a -> onAddClick(a));

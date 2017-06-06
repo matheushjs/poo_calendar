@@ -26,6 +26,9 @@ public class MainScene extends VBox {
 	private Background mainBG =
 			new Background(new BackgroundFill(Color.DARKGRAY, null, null));
 	
+	/**
+	 * Default constructor.
+	 */
     public MainScene() { 
     	this.setBackground(mainBG);
     	this.setAlignment(Pos.CENTER);

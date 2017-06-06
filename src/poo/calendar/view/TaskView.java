@@ -21,6 +21,12 @@ public class TaskView extends HBox {
 	
 	private long mID;
 	
+	/**
+	 * Default constructor.
+	 * @param title The source Task's title
+	 * @param deadline The source Task's deadline date
+	 * @param id The source Task's ID
+	 */
 	public TaskView(String title, Calendar deadline, long id){
 		mID = id;
 		mDeadlineDate = deadline;
@@ -52,10 +58,18 @@ public class TaskView extends HBox {
 		}
 	}
 	
-	public TaskView(String left, long id){
-		this(left, null, id);
+	/**
+	 * Constructs a task without a deadline date.
+	 * @param title The Task's title
+	 * @param id The source Tasks's ID
+	 */
+	public TaskView(String title, long id){
+		this(title, null, id);
 	}
 	
+	/**
+	 * @return The TaskView's ID, which must be equal its source Task's ID.
+	 */
 	public long getID(){
 		return mID;
 	}

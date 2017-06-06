@@ -16,6 +16,9 @@ public class TaskWindow extends VBox {
 	private ToggleButton mDeleteButton;
 	private TaskListView mTLV;
 	
+	/**
+	 * Default constructor.
+	 */
 	public TaskWindow(){
 		this.setAlignment(Pos.BASELINE_CENTER);
 		this.setSpacing(20);

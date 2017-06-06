@@ -17,6 +17,9 @@ public class AppointmentWindow extends VBox {
 	ToggleButton mDeleteButton;
 	AppointmentListView mALV;
 	
+	/**
+	 * Default constructor
+	 */
 	public AppointmentWindow(){
 		this.setAlignment(Pos.BASELINE_CENTER);
 		this.setSpacing(20);
@@ -37,14 +40,23 @@ public class AppointmentWindow extends VBox {
 		this.getChildren().addAll(mALV, box);
 	}
 	
+	/**
+	 * @return The "Add" button widget within this window.
+	 */
 	public Button getAddButton(){
 		return mAddButton;
 	}
 	
+	/**
+	 * @return The "Delete" button widget within this window.
+	 */
 	public ToggleButton getDeleteButton(){
 		return mDeleteButton;
 	}
 	
+	/**
+	 * @return The AppointmentListView widget within this window.
+	 */
 	public AppointmentListView getAppointmentListView(){
 		return mALV;
 	}
