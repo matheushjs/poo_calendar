@@ -1,6 +1,5 @@
 package poo.calendar.model;
 
-import java.io.Serializable;
 import java.util.Calendar;
 
 import javafx.beans.property.StringProperty;
