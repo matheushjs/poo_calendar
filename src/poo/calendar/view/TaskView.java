@@ -1,6 +1,7 @@
 package poo.calendar.view;
 
 import java.util.Calendar;
+import java.util.UUID;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -19,7 +20,7 @@ public class TaskView extends HBox {
 	//TODO: Implement as an ObjectProperty, bound to the original task's property
 	private Calendar mDeadlineDate;
 	
-	private long mID;
+	private UUID mID;
 	
 	/**
 	 * Default constructor.
@@ -27,7 +28,7 @@ public class TaskView extends HBox {
 	 * @param deadline The source Task's deadline date
 	 * @param id The source Task's ID
 	 */
-	public TaskView(String title, Calendar deadline, long id){
+	public TaskView(String title, Calendar deadline, UUID id){
 		mID = id;
 		mDeadlineDate = deadline;
 		
@@ -63,14 +64,14 @@ public class TaskView extends HBox {
 	 * @param title The Task's title
 	 * @param id The source Tasks's ID
 	 */
-	public TaskView(String title, long id){
+	public TaskView(String title, UUID id){
 		this(title, null, id);
 	}
 	
 	/**
 	 * @return The TaskView's ID, which must be equal its source Task's ID.
 	 */
-	public long getID(){
+	public UUID getID(){
 		return mID;
 	}
 }

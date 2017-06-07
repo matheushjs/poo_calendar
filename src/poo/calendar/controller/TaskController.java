@@ -2,6 +2,7 @@ package poo.calendar.controller;
 
 import java.util.Calendar;
 import java.util.Map;
+import java.util.UUID;
 
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -97,10 +98,10 @@ public class TaskController {
 	 * Removes a task from the UI
 	 * @param id ID of the task to remove
 	 */
-	private void removeTaskView(long id){
+	private void removeTaskView(UUID id){
 		ObservableList<Node> nodes = mTW.getTaskListView().getChildren();
 		nodes.removeIf(view -> {
-			return ((TaskView)view).getID() == id;
+			return 0 == ((TaskView)view).getID().compareTo(id);
 		});
 	}
 	
@@ -108,9 +109,9 @@ public class TaskController {
 	 * Removes a task from the task list
 	 * @param id
 	 */
-	private void removeTask(long id){
+	private void removeTask(UUID id){
 		for(Task a: mTaskList){
-			if(a.getID() == id){
+			if(a.getID().compareTo(id) == 0){
 				mTaskList.remove(a);
 				break;
 			}

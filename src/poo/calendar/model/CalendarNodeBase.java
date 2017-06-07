@@ -1,10 +1,11 @@
 package poo.calendar.model;
 
+import java.util.UUID;
+
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import poo.calendar.IDGenerator;
 
 /**
  * A model abstract class that contains the common attributes of all nodes
@@ -21,7 +22,7 @@ public abstract class CalendarNodeBase {
 	private IntegerProperty mGroupID;
 	
 	// The Node's ID
-	private int mID;
+	private UUID mID;
 	
 	/**
 	 * Node's default constructor
@@ -39,7 +40,7 @@ public abstract class CalendarNodeBase {
 		this.setDescription(description);
 		this.setGroupID(groupID);
 		
-		mID = IDGenerator.getID();
+		mID = UUID.randomUUID();
 	}
 
 	/**
@@ -115,7 +116,7 @@ public abstract class CalendarNodeBase {
 	/**
 	 * @return the ID of the node
 	 */
-	public final int getID(){
+	public final UUID getID(){
 		return mID;
 	}
 }

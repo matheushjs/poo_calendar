@@ -2,6 +2,7 @@ package poo.calendar.controller;
 
 import java.util.Calendar;
 import java.util.Map;
+import java.util.UUID;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -116,10 +117,10 @@ public final class AppointmentController {
 	 * Removes an appointment from the UI.
 	 * @param id ID of the appointment to remove.
 	 */
-	private void removeAppointmentView(long id){
+	private void removeAppointmentView(UUID id){
 		ObservableList<Node> nodes = mAW.getAppointmentListView().getChildren();
 		nodes.removeIf(view -> {
-			return ((AppointmentView)view).getID() == id;
+			return ((AppointmentView)view).getID().compareTo(id) == 0;
 		});
 	}
 	
@@ -127,10 +128,10 @@ public final class AppointmentController {
 	 * Removes an appointment from the list of appointments
 	 * @param id the ID of the appointment to be removed
 	 */
-	private void removeAppointment(long id){
+	private void removeAppointment(UUID id){
 		//Maybe make a model class that should handle remove/add operations
 		for(Appointment a: mAppointmentList){
-			if(a.getID() == id){
+			if(a.getID().compareTo(id) == 0){
 				mAppointmentList.remove(a);
 				break;
 			}

@@ -1,6 +1,7 @@
 package poo.calendar.view;
 
 import java.util.Calendar;
+import java.util.UUID;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -19,7 +20,7 @@ public class AppointmentView extends HBox implements Comparable<AppointmentView>
 	//TODO: Implement as an ObjectProperty bound to the original appointment's initDate.
 	private Calendar mInitDate;
 	
-	private long mID;
+	private UUID mID;
 	
 	/**
 	 * Default constructor
@@ -27,7 +28,7 @@ public class AppointmentView extends HBox implements Comparable<AppointmentView>
 	 * @param initDate Appointment initial date
 	 * @param id Source appointment's ID
 	 */
-	public AppointmentView(String title, Calendar initDate, long id){
+	public AppointmentView(String title, Calendar initDate, UUID id){
 		mID = id;
 		mInitDate = initDate;
 		
@@ -54,7 +55,7 @@ public class AppointmentView extends HBox implements Comparable<AppointmentView>
 	/**
 	 * @return The ID of the appointment view, which should be equal its source Appointment
 	 */
-	public long getID(){
+	public UUID getID(){
 		return mID;
 	}
 	
