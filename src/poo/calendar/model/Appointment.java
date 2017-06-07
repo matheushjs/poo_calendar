@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+
 /**
  * Model class that represents an appointment.
  * An appointment has a title, an initial date (and time), and an end date.
@@ -80,5 +81,7 @@ public class Appointment extends CalendarNodeBase {
 			throw new NullPointerException("Dates cannot be null");
 		if(init.compareTo(end) > 0)
 			throw new IllegalArgumentException("End date cannot be earlier than init date");
+		mInitDate.set(init);
+		mEndDate.set(end);
 	}
 }

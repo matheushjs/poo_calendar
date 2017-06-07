@@ -28,7 +28,7 @@ public abstract class CalendarNodeBase {
 	 * @param title the node's title
 	 * @param description the node's description
 	 * @param groupID the node's group ID
-	 * @throws NullPointerException When any argument is null
+	 * @throws NullPointerException When any argument, but groupID, is null
 	 */
 	public CalendarNodeBase(String title, String description, Integer groupID) throws NullPointerException {
 		mTitle = new SimpleStringProperty();
