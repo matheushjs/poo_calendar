@@ -8,6 +8,7 @@
 
 3) Add to Task and Appointment the attributes (as properties):
 	- Description
+	- UUID (A string, leave it there for future implementation)
 	- Group (Task and Appointment points to groups or groups point to them?)
 
 4) Add a menu bar to the application, with items:
@@ -17,3 +18,26 @@
 5) Save/load tasks, appointments and groups to XML file
 
 6) Add date parser in the DateChooserDialog, so that user can write 10/06/2017
+
+7) Re-implement TaskListView
+	- Should be a grid 3x8 grid:
+		- First line: labels for each week ( mon 01/05 etc)
+		- Second line: Reserved for all-day appointments (future implementation)
+		- Third line: A scrollable widget containing another grid, in which appointments are
+		  displayed.
+		- First column, third line: Labels for each hour/minute
+		- Other columns, third line: correspond to each weekday
+	- There should be a red(or w/e) line crossing the grid showing the current time (use javafx
+	  Animation class, there should be a timed trigger there).
+
+8) Add to the main scene an 'Add' button.
+	- When this button is clicked, we can either change the main scene to
+	  a dialogue scene where the user has many text fields and controls to play with,
+	  or do this in a Dialog window (easier).
+
+9) Add to the main scene a 'Delete' button.
+	- When this button is clicked, the user may enter in 'delete mode', where all
+	  appointments or tasks clicked are deleted.
+	- 'delete mode' must change the background color of the main scene. Can do this using
+	  javafx Effects class in the main Node (use sepia or change background to red?).
+	- The 'Add' button (and whatever else) must be locked when in 'delete mode'.
