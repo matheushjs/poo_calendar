@@ -196,7 +196,7 @@ public final class AppointmentController {
 						Integer.parseInt(map.get("hour2")),
 						Integer.parseInt(map.get("minute2")) );
 
-				new Appointment("", c1, c2);
+				new Appointment("", "", c1, c2);
 			} catch(NumberFormatException e){
 				//Integer.parseInt failed
 				dialog.alertUser("Dates must be given with integer numbers!");
@@ -226,7 +226,7 @@ public final class AppointmentController {
 					Integer.parseInt(name.get("hour2")),
 					Integer.parseInt(name.get("minute2")) );
 			
-			Appointment appointment = new Appointment(name.get("title"), c1, c2);	
+			Appointment appointment = new Appointment(name.get("title"), "", c1, c2);	
 			mAppointmentList.add(appointment);
 		});
 	}

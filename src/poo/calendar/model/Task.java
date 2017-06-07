@@ -2,9 +2,6 @@ package poo.calendar.model;
 
 import java.util.Calendar;
 
-import javafx.beans.property.StringProperty;
-import poo.calendar.IDGenerator;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
@@ -12,57 +9,46 @@ import javafx.beans.property.SimpleObjectProperty;
  * A model class that represents a Task. A task has a title(required) and a
  * deadline date(optional).
  */
-public class Task {
-
-	/** The task's title. */
-	private StringProperty mTitle;
-
+public class Task extends CalendarNodeBase {
 	/** The task's deadline date. */
 	private ObjectProperty<Calendar> mDeadlineDate;
-
-	/** The task's identification number */
-	private long mID;
 
 	/**
 	 * The task's default constructor.
 	 *
-	 * @param title required
-	 * @param deadlineDate optional
-	 * @throws NullArgumentException if 'title' argument is null.
+	 * @param title title for the task
+	 * @param description description for the task
+	 * @param deadlineDate deadline date for the task. If null, the task
+	 * @throws NullArgumentException if title or description are null.
 	 */
-	public Task(String title, Calendar deadlineDate) throws NullPointerException {
-		mID = IDGenerator.getID();
-		mTitle = new SimpleStringProperty();
+	public Task(String title, String description, Calendar deadlineDate, Integer groupID) throws NullPointerException {
+		super(title, description, groupID);
 		mDeadlineDate = new SimpleObjectProperty<Calendar>();
-		
-		this.setTitle(title);
 		this.setDeadlineDate(deadlineDate);
 	}
 
 	/**
-	 * @return The Task's Title value
+	 * Wrapper of default constructor. groupID is set to default group.
 	 */
-	public final String getTitle() {
-		return mTitle.get();
+	public Task(String title, String description, Calendar deadlineDate) throws NullPointerException {
+		this(title, description, deadlineDate, null);
 	}
-
+	
 	/**
-	 * @param mTitle the task's title to set.
-	 * @throws NullPointerException if title is null
+	 * Wrapper of default constructor. Creates a Task without a deadline date.
 	 */
-	public final void setTitle(String title) throws NullPointerException {
-		if(title == null)
-			throw new NullPointerException("Task title cannot be null");
-		mTitle.set(title);
+	public Task(String title, String description, Integer groupID){
+		this(title, description, null, groupID);
 	}
-
+	
 	/**
-	 * @return The Task's Title property
+	 * Wrapper of default constructor. Creates a task without a deadline date, and groupID
+	 * is set to default group.
 	 */
-	public StringProperty TitleProperty(){
-		return mTitle;
+	public Task(String title, String description){
+		this(title, description, null, null);
 	}
-
+	
 	/**
 	 * @return the task's deadline date
 	 */
@@ -81,14 +67,7 @@ public class Task {
 	/**
 	 * @return The Task's Deadline Date property
 	 */
-	public ObjectProperty<Calendar> DeadlineDateProperty(){
+	public ObjectProperty<Calendar> deadlineDateProperty(){
 		return mDeadlineDate;
-	}
-
-	/**
-	 * @return The task's ID
-	 */
-	public final long getID(){
-		return mID;
 	}
 }

@@ -186,7 +186,7 @@ public class TaskController {
 					Integer.parseInt(name.get("hour1")),
 					Integer.parseInt(name.get("minute1")) );
 			
-			Task task = new Task(name.get("title"), c1);
+			Task task = new Task(name.get("title"), "", c1);
 			mTaskList.add(task);
 		});
 	}
