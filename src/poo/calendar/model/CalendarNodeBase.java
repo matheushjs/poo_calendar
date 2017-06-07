@@ -57,6 +57,7 @@ public abstract class CalendarNodeBase {
 	public final void setTitle(String str) throws NullPointerException {
 		if(str == null)
 			throw new NullPointerException("Title for a calendar node cannot be null");
+		mTitle.set(str);
 	}
 	
 	/**
