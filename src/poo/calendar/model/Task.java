@@ -1,6 +1,7 @@
 package poo.calendar.model;
 
 import java.util.Calendar;
+import java.util.UUID;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -21,7 +22,7 @@ public class Task extends CalendarNodeBase {
 	 * @param deadlineDate deadline date for the task. If null, the task
 	 * @throws NullArgumentException if title or description are null.
 	 */
-	public Task(String title, String description, Calendar deadlineDate, Integer groupID) throws NullPointerException {
+	public Task(String title, String description, Calendar deadlineDate, UUID groupID) throws NullPointerException {
 		super(title, description, groupID);
 		mDeadlineDate = new SimpleObjectProperty<Calendar>();
 		this.setDeadlineDate(deadlineDate);
@@ -37,7 +38,7 @@ public class Task extends CalendarNodeBase {
 	/**
 	 * Wrapper of default constructor. Creates a Task without a deadline date.
 	 */
-	public Task(String title, String description, Integer groupID){
+	public Task(String title, String description, UUID groupID){
 		this(title, description, null, groupID);
 	}
 	

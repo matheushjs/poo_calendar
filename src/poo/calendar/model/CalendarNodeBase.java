@@ -2,8 +2,8 @@ package poo.calendar.model;
 
 import java.util.UUID;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -19,7 +19,7 @@ public abstract class CalendarNodeBase {
 	private StringProperty mDescription;
 	
 	// Node's Group ID
-	private IntegerProperty mGroupID;
+	private ObjectProperty<UUID> mGroupID;
 	
 	// The Node's ID
 	private UUID mID;
@@ -31,10 +31,10 @@ public abstract class CalendarNodeBase {
 	 * @param groupID the node's group ID
 	 * @throws NullPointerException When any argument, but groupID, is null
 	 */
-	public CalendarNodeBase(String title, String description, Integer groupID) throws NullPointerException {
+	public CalendarNodeBase(String title, String description, UUID groupID) throws NullPointerException {
 		mTitle = new SimpleStringProperty();
 		mDescription = new SimpleStringProperty();
-		mGroupID = new SimpleIntegerProperty();
+		mGroupID = new SimpleObjectProperty<UUID>();
 		
 		this.setTitle(title);
 		this.setDescription(description);
@@ -94,14 +94,14 @@ public abstract class CalendarNodeBase {
 	/**
 	 * @return the ID for the group to which this node is related
 	 */
-	public final Integer getGroupID(){
+	public final UUID getGroupID(){
 		return mGroupID.get();
 	}
 	
 	/**
 	 * @param id the ID for the new group to which this node should be related to
 	 */
-	public final void setGroupID(Integer id){
+	public final void setGroupID(UUID id){
 		if(id == null)
 			id = CalendarGroup.DEFAULT_ID;
 		mGroupID.set(id);
@@ -110,7 +110,7 @@ public abstract class CalendarNodeBase {
 	/**
 	 * @return ID property of the node
 	 */
-	public IntegerProperty groupIDProperty(){
+	public ObjectProperty<UUID> groupIDProperty(){
 		return mGroupID;
 	}
 	

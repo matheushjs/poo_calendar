@@ -1,6 +1,7 @@
 package poo.calendar.model;
 
 import java.util.Calendar;
+import java.util.UUID;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -27,7 +28,7 @@ public class Appointment extends CalendarNodeBase {
 	 * @throws NullPointerException if any argument, but groupID, is null
 	 * @throws IllegalArgumentException if endDate is earlier than initDate
 	 */
-	public Appointment(String title, String description, Calendar initDate, Calendar endDate, Integer groupID) throws NullPointerException, IllegalArgumentException {
+	public Appointment(String title, String description, Calendar initDate, Calendar endDate, UUID groupID) throws NullPointerException, IllegalArgumentException {
 		super(title, description, groupID);
 		mInitDate = new SimpleObjectProperty<Calendar>();
 		mEndDate = new SimpleObjectProperty<Calendar>();
