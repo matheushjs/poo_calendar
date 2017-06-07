@@ -2,12 +2,13 @@ package poo.calendar.controller;
 
 import java.util.Calendar;
 import java.util.Map;
-import java.util.Optional;
 
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseButton;
 import poo.calendar.model.Task;
@@ -148,14 +149,33 @@ public class TaskController {
 	 * @param a
 	 */
 	private void onAddClick(ActionEvent a){
-		Optional<Map<String,String>> result =
-				new DateChooserDialog(
+		DateChooserDialog dialog = new DateChooserDialog(
 						"New Task", 
 						"Set up your new task",
 						DateChooserDialog.TASK_DIALOG
-				).showAndWait();
+				);
 
-		result.ifPresent(name -> {
+		//createButton has not been overridden in DateChooserDialog, so the return type is a Button.
+		Button bt = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
+
+		bt.addEventFilter(ActionEvent.ACTION, event -> {
+			Map<String,String> map = dialog.getInputMap();
+			Calendar c1 = Calendar.getInstance();
+			
+			try {
+				c1.set( Integer.parseInt(map.get("year1")),
+						Integer.parseInt(map.get("month1")),
+						Integer.parseInt(map.get("day1")),
+						Integer.parseInt(map.get("hour1")),
+						Integer.parseInt(map.get("minute1")) );
+			} catch(NumberFormatException e){
+				//Integer.parseInt failed
+				dialog.alertUser("Date must be given with integer numbers!");
+				event.consume();
+			}
+		});
+		
+		dialog.showAndWait().ifPresent(name -> {
 			Calendar c1 = Calendar.getInstance();
 			
 			//TODO: Validate input. Check 'duration' key in the map

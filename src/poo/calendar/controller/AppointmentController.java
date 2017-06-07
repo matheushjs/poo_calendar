@@ -2,13 +2,14 @@ package poo.calendar.controller;
 
 import java.util.Calendar;
 import java.util.Map;
-import java.util.Optional;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseButton;
 import poo.calendar.model.Appointment;
@@ -168,14 +169,46 @@ public final class AppointmentController {
 	 * @param a
 	 */
 	private void onAddClick(ActionEvent a){
-		Optional<Map<String,String>> result =
-				new DateChooserDialog(
-						"New Appointment", 
-						"Set up your new appointment",
-						DateChooserDialog.APPOINTMENT_DIALOG
-				).showAndWait();
+		DateChooserDialog dialog = new DateChooserDialog(
+				"New Appointment", 
+				"Set up your new appointment",
+				DateChooserDialog.APPOINTMENT_DIALOG
+		);
+
+		//createButton has not been overridden in DateChooserDialog, so the return type is a Button.
+		Button bt = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
+				
+		bt.addEventFilter(ActionEvent.ACTION, event -> {
+			Map<String,String> map = dialog.getInputMap();
+			Calendar c1 = Calendar.getInstance();
+			Calendar c2 = Calendar.getInstance();
+			
+			try {
+				c1.set( Integer.parseInt(map.get("year1")),
+						Integer.parseInt(map.get("month1")),
+						Integer.parseInt(map.get("day1")),
+						Integer.parseInt(map.get("hour1")),
+						Integer.parseInt(map.get("minute1")) );
+				
+				c2.set( Integer.parseInt(map.get("year2")),
+						Integer.parseInt(map.get("month2")),
+						Integer.parseInt(map.get("day2")),
+						Integer.parseInt(map.get("hour2")),
+						Integer.parseInt(map.get("minute2")) );
+
+				new Appointment("", c1, c2);
+			} catch(NumberFormatException e){
+				//Integer.parseInt failed
+				dialog.alertUser("Dates must be given with integer numbers!");
+				event.consume();
+			} catch(IllegalArgumentException e){
+				//Calendar 2 is earlier than the first one.
+				dialog.alertUser("End date cannot be earlier than initial date!");
+				event.consume();
+			}
+		});
 		
-		result.ifPresent(name -> {
+		dialog.showAndWait().ifPresent(name -> {
 			Calendar c1 = Calendar.getInstance();
 			Calendar c2 = Calendar.getInstance();
 			

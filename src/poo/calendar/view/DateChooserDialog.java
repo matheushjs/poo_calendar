@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
@@ -37,6 +38,34 @@ public class DateChooserDialog extends Dialog<Map<String,String>> {
 	public static final int APPOINTMENT_DIALOG = 1;
 	
 	/**
+	 * Returns the (string,string) map representing the input of the user.
+	 * Keys in the map are: title, year1, month1, day1, hour1, minute1,
+	 * year2, month2, day2, hour2, minute2, duration.
+	 */
+	public Map<String,String> getInputMap(){
+		Map<String,String> hash = new HashMap<>();
+		
+		hash.put("title", titleField.getText());
+		
+		hash.put("year1", dateFields.get(0).getText());
+		hash.put("month1", dateFields.get(1).getText());
+		hash.put("day1", dateFields.get(2).getText());
+		hash.put("hour1", dateFields.get(3).getText());
+		hash.put("minute1", dateFields.get(4).getText());
+		
+		hash.put("year2", dateFields2.get(0).getText());
+		hash.put("month2", dateFields2.get(1).getText());
+		hash.put("day2", dateFields2.get(2).getText());
+		hash.put("hour2", dateFields2.get(3).getText());
+		hash.put("minute2", dateFields2.get(4).getText());
+		
+		//TODO: Handle duration
+		hash.put("duration", "0");
+		
+		return hash;
+	}
+	
+	/**
 	 * Function required for extending the Dialog class.
 	 * Converts the values in the TextFields to a returnable structure.
 	 * 
@@ -48,29 +77,7 @@ public class DateChooserDialog extends Dialog<Map<String,String>> {
 			return null;
 		
 		} else if(bt.getButtonData() == ButtonData.OK_DONE){
-			Map<String,String> hash = new HashMap<>();
-			
-			//TODO: Loosely validate input
-			
-			hash.put("title", titleField.getText());
-			
-			hash.put("year1", dateFields.get(0).getText());
-			hash.put("month1", dateFields.get(1).getText());
-			hash.put("day1", dateFields.get(2).getText());
-			hash.put("hour1", dateFields.get(3).getText());
-			hash.put("minute1", dateFields.get(4).getText());
-			
-			hash.put("year2", dateFields2.get(0).getText());
-			hash.put("month2", dateFields2.get(1).getText());
-			hash.put("day2", dateFields2.get(2).getText());
-			hash.put("hour2", dateFields2.get(3).getText());
-			hash.put("minute2", dateFields2.get(4).getText());
-			
-			//TODO: Handle duration
-			hash.put("duration", "0");
-			
-			return hash;
-		
+			return getInputMap();
 		} else {
 			//TODO: Think about Logging errors
 			System.err.println(this.getClass().getName() + ": Function convertResult() received invalid button.");
@@ -142,7 +149,7 @@ public class DateChooserDialog extends Dialog<Map<String,String>> {
 		
 		HBox hbox = new HBox(5);
 		hbox.getChildren().addAll(dateFields);
-		
+
 		HBox hbox2 = new HBox(5);
 		hbox2.getChildren().addAll(dateFields2);
 		
@@ -162,7 +169,15 @@ public class DateChooserDialog extends Dialog<Map<String,String>> {
 			grid.getChildren().addAll(dateLabel2, hbox2);
 		
 		getDialogPane().setContent(grid);
-		getDialogPane().getButtonTypes().add(new ButtonType("Close", ButtonData.CANCEL_CLOSE));
-		getDialogPane().getButtonTypes().add(new ButtonType("OK", ButtonData.OK_DONE));
+		getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
+		getDialogPane().getButtonTypes().add(ButtonType.OK);
+	}
+	
+	/**
+	 * Changes the header text of the dialog.
+	 * @param text Text to place as the header text of the dialog.
+	 */
+	public void alertUser(String text){
+		this.getDialogPane().setHeaderText(text);
 	}
 }
