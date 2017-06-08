@@ -16,9 +16,10 @@ import poo.calendar.model.CalendarGroup;
 import poo.calendar.model.Task;
 import poo.calendar.view.AppointmentWindowController;
 import poo.calendar.view.MainSceneController;
+import poo.calendar.view.TaskWindowController;
 
 public class MainApplication extends Application {
-	private Stage primaryStage;
+	private Stage mStage;
 	
 	private ObservableList<Appointment> mAppointments;
 	private ObservableList<Task> mTasks;
@@ -26,15 +27,12 @@ public class MainApplication extends Application {
 	
 	@Override
 	public void start(Stage stage) {
-		this.primaryStage = stage;
+		this.mStage = stage;
 		
 		// TODO: read application data from a persistent storage.
 		mAppointments = FXCollections.observableArrayList();
 		mTasks = FXCollections.observableArrayList();
 		mGroups = FXCollections.observableHashMap();
-		
-		TaskController.getInstance().initializeModel(mTasks);
-		
 		
 		// Load AppointmentsWindow
 		FXMLLoader loader = new FXMLLoader();
@@ -48,6 +46,19 @@ public class MainApplication extends Application {
 		}
 		AppointmentWindowController appointmentsController = loader.getController();
 		appointmentsController.initializeModel(mAppointments);
+
+		// Load TaskWindow
+		loader = new FXMLLoader();
+		loader.setLocation(this.getClass().getResource("/poo/calendar/view/TaskWindow.fxml"));
+		VBox tasksWidget = null;
+		try {
+			tasksWidget = (VBox) loader.load();
+		} catch(IOException e) {
+			System.out.println(e.getMessage());
+			System.exit(1);
+		}
+		TaskWindowController tasksController = loader.getController();
+		tasksController.initializeModel(mTasks);
 		
 		// Load MainScene
 		loader = new FXMLLoader();
@@ -61,11 +72,12 @@ public class MainApplication extends Application {
 		}
 		MainSceneController mainSceneController = loader.getController();
 		mainSceneController.addAppointmentWidget(appointmentsWidget);
+		mainSceneController.addTaskWidget(tasksWidget);
 		
 		Scene scene = new Scene(mainScene);
-		stage.setTitle("Calendar");
-		stage.setScene(scene);
-		stage.show();
+		mStage.setTitle("Calendar");
+		mStage.setScene(scene);
+		mStage.show();
 	}
 	
 	public static void main(String[] args) {

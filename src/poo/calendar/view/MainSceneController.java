@@ -14,7 +14,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import poo.calendar.controller.TaskController;
 
 /**
  * Widget class that represents the main window of the application.
@@ -51,8 +50,6 @@ public class MainSceneController {
     	ds.setColor(Color.color(0.4f, 0.4f, 0.4f));
     	mTitleText.setEffect(ds);
     	mTitleText.setCache(true);
-    	
-    	addTaskWidget(TaskController.getInstance().getTaskWindow());
     	
     	FXMLLoader loader = new FXMLLoader();
     	loader.setLocation(this.getClass().getResource("/poo/calendar/view/CalendarGroupListView.fxml"));

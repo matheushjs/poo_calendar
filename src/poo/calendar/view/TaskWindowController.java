@@ -1,4 +1,4 @@
-package poo.calendar.controller;
+package poo.calendar.view;
 
 import java.util.Calendar;
 import java.util.Map;
@@ -7,43 +7,53 @@ import java.util.UUID;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import poo.calendar.model.Task;
-import poo.calendar.view.DateChooserDialog;
-import poo.calendar.view.TaskView;
-import poo.calendar.view.TaskWindow;
 
 /**
- * Singleton Class for controlling the Tasks Window.
- * Should not call any method whose purpose is stylization of the GUI (e.g. setAlignment etc).
- * 
- * See AppointmentController for discussion on this decisions.
+ * Widget class that displays the tasks window.
+ * It's a vertical box containing a list of tasks and 2 buttons.
  */
-public class TaskController {
-	private static TaskController mInstance = null;
+public class TaskWindowController {
+	@FXML
+	private VBox mMainBox;
 	
-	//Widgets
-	private TaskWindow mTW = null;
+	@FXML
+	private VBox mTasksBox;
+	
+	@FXML
+	private HBox mButtonBox;
+	
+	@FXML
+	private Button mAddButton;
+	
+	@FXML
 	private ToggleButton mDeleteButton;
-	
-	//Model Data
+
+	//Model data
 	private ObservableList<Task> mTaskList = null;
 	
-	// Prevent construction
-	private TaskController(){}
+	/**
+	 * Default constructor.
+	 */
+	public TaskWindowController(){
+	}
 	
 	/**
-	 * @return The class's singleton instance
+	 * Called by FXML -after- the .fxml is loaded
 	 */
-	public static TaskController getInstance(){
-		if(mInstance == null){
-			mInstance = new TaskController();
-		}
-		return mInstance;
+	@FXML
+	private void initialize(){
+		mTasksBox.setStyle("-fx-border-style: solid; -fx-border-width: 5;");
+		
+		mAddButton.setOnAction(a -> onAddClick(a));
 	}
 	
 	/**
@@ -61,6 +71,10 @@ public class TaskController {
 			 
 		mTaskList = list;
 
+		for(Task t: mTaskList){
+			this.addTaskView(t);
+		}
+		
 		mTaskList.addListener((ListChangeListener.Change<? extends Task> change) -> {
 			while(change.next()){
 				//TODO: Handle updated/permuted appointments
@@ -82,7 +96,7 @@ public class TaskController {
 	 * @param task Task to be added.
 	 */
 	private void addTaskView(Task task){
-		ObservableList<Node> nodes = mTW.getTaskListView().getChildren();
+		ObservableList<Node> nodes = mTasksBox.getChildren();
 
 		TaskView view = new TaskView(task.getTitle(), task.getDeadlineDate(), task.getID());
 		view.setOnMouseClicked(click -> {
@@ -99,7 +113,7 @@ public class TaskController {
 	 * @param id ID of the task to remove
 	 */
 	private void removeTaskView(UUID id){
-		ObservableList<Node> nodes = mTW.getTaskListView().getChildren();
+		ObservableList<Node> nodes = mTasksBox.getChildren();
 		nodes.removeIf(view -> {
 			return 0 == ((TaskView)view).getID().compareTo(id);
 		});
@@ -116,33 +130,6 @@ public class TaskController {
 				break;
 			}
 		}
-	}
-	
-	/**
-	 * @return the TaskWindow controlled by this class
-	 */
-	public TaskWindow getTaskWindow(){
-		if(mTaskList == null){
-			System.err.println(this.getClass().getName()
-					+ ": Cannot instantiate a view class if model"
-					+ " has not been initialized");
-		}
-		
-		if(mTW == null){
-			mTW = new TaskWindow();
-			
-			//First time initializing the window, so the model list might have
-			//appointments that haven't been added to the UI (appointments that were
-			//save to a file)
-			for(Task t: mTaskList){
-				this.addTaskView(t);
-			}
-		}
-		
-		mTW.getAddButton().setOnAction(a -> onAddClick(a));
-		mDeleteButton = mTW.getDeleteButton();
-		
-		return mTW;
 	}
 	
 	/**
