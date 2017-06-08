@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import poo.calendar.model.Appointment;
 import poo.calendar.model.CalendarGroup;
 import poo.calendar.model.Task;
+import poo.calendar.view.AppointmentWindowController;
 import poo.calendar.view.MainSceneController;
 
 public class MainApplication extends Application {
@@ -32,13 +33,25 @@ public class MainApplication extends Application {
 		mTasks = FXCollections.observableArrayList();
 		mGroups = FXCollections.observableHashMap();
 		
-		AppointmentController.getInstance().initializeModel(mAppointments);
 		TaskController.getInstance().initializeModel(mTasks);
-
 		
+		
+		// Load AppointmentsWindow
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(this.getClass().getResource("/poo/calendar/view/MainScene.fxml"));
+		loader.setLocation(this.getClass().getResource("/poo/calendar/view/AppointmentWindow.fxml"));
+		VBox appointmentsWidget = null;
+		try {
+			appointmentsWidget = (VBox) loader.load();
+		} catch(IOException e){
+			System.out.println(e.getMessage());
+			System.exit(1);
+		}
+		AppointmentWindowController appointmentsController = loader.getController();
+		appointmentsController.initializeModel(mAppointments);
 		
+		// Load MainScene
+		loader = new FXMLLoader();
+		loader.setLocation(this.getClass().getResource("/poo/calendar/view/MainScene.fxml"));
 		VBox mainScene = null;
 		try {
 			mainScene = (VBox) loader.load();
@@ -47,16 +60,12 @@ public class MainApplication extends Application {
 			System.exit(1);
 		}
 		MainSceneController mainSceneController = loader.getController();
+		mainSceneController.addAppointmentWidget(appointmentsWidget);
 		
 		Scene scene = new Scene(mainScene);
-		
 		stage.setTitle("Calendar");
 		stage.setScene(scene);
 		stage.show();
-	}
-
-	public void presentMainScene(){
-		
 	}
 	
 	public static void main(String[] args) {

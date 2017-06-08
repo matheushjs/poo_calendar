@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox fx:id="mMainBox" alignment="CENTER" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="poo.calendar.view.MainSceneController">
+   <children>
+      <Text fx:id="mTitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="Calendar" textAlignment="CENTER" textOrigin="CENTER">
+         <font>
+            <Font name="Liberation Serif Italic" size="40.0" />
+         </font>
+         <fill>
+            <LinearGradient endX="0.6875" endY="1.0" startX="0.14423076923076922">
+               <stops>
+                  <Stop color="BLACK" />
+                  <Stop color="#7d7d7d" offset="0.6551851851851851" />
+                  <Stop color="#7d7d7d" offset="1.0" />
+               </stops>
+            </LinearGradient>
+         </fill>
+         <effect>
+            <DropShadow />
+         </effect>
+         <VBox.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </VBox.margin>
+      </Text>
+      <HBox fx:id="mBottomBox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" VBox.vgrow="ALWAYS" />
+   </children>
+</VBox>
