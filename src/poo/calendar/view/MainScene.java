@@ -1,12 +1,16 @@
 package poo.calendar.view;
 
 
+import java.io.IOException;
+
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -55,6 +59,19 @@ public class MainScene extends VBox {
     	title.setFont(Font.font("Liberation Serif", FontPosture.ITALIC, 40));
     	title.setFill(Paint.valueOf("linear-gradient(from 0% 0% to 100% 200%, repeat, lightgrey 0%, white 60%)"));
     	VBox.setMargin(title, new Insets(10, 0, 10, 0));
-    	this.getChildren().addAll(title, hbox);
+    	
+    	FXMLLoader loader = new FXMLLoader();
+    	loader.setLocation(this.getClass().getResource("/poo/calendar/view/CalendarGroupListView.fxml"));
+    	
+    	VBox groupsWidget = null;
+    	try {
+    		groupsWidget = (VBox) loader.load();
+    	} catch(IOException e){
+    		System.out.println(e.getMessage());
+    		System.exit(1);
+    	}
+    	
+    	VBox.setVgrow(groupsWidget, Priority.ALWAYS);
+    	this.getChildren().addAll(title, groupsWidget, hbox);
     }
 }

@@ -1,9 +1,11 @@
 package poo.calendar.controller;
 
+import java.util.UUID;
+
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
+import javafx.collections.ObservableMap;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import poo.calendar.model.Appointment;
@@ -12,16 +14,20 @@ import poo.calendar.model.Task;
 import poo.calendar.view.MainScene;
 
 public class MainApplication extends Application {
+	private Stage primaryStage;
+	
 	private ObservableList<Appointment> mAppointments;
 	private ObservableList<Task> mTasks;
-	private ObservableSet<CalendarGroup> mGroups;
+	private ObservableMap<UUID, CalendarGroup> mGroups;
 	
 	@Override
 	public void start(Stage stage) {
+		this.primaryStage = stage;
+		
 		// TODO: read application data from a persistent storage.
 		mAppointments = FXCollections.observableArrayList();
 		mTasks = FXCollections.observableArrayList();
-		mGroups = FXCollections.observableSet();
+		mGroups = FXCollections.observableHashMap();
 		
 		AppointmentController.getInstance().initializeModel(mAppointments);
 		TaskController.getInstance().initializeModel(mTasks);
