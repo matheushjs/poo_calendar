@@ -15,7 +15,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseButton;
 import poo.calendar.model.Appointment;
 import poo.calendar.view.AppointmentView;
-import poo.calendar.view.AppointmentWindow;
+import poo.calendar.view.AppointmentWindowController;
 import poo.calendar.view.DateChooserDialog;
 
 /**
@@ -39,7 +39,7 @@ public final class AppointmentController {
 	private static AppointmentController mInstance = null;
 	
 	// Widgets
-	private AppointmentWindow mAW = null;
+	private AppointmentWindowController mAW = null;
 	private ToggleButton mDeleteButton;
 	
 	// Model data
@@ -141,7 +141,7 @@ public final class AppointmentController {
 	/**
 	 * @return the AppointmentWindow controlled by this class
 	 */
-	public AppointmentWindow getAppointmentWindow(){
+	public AppointmentWindowController getAppointmentWindow(){
 		if(mAppointmentList == null){
 			System.err.println(this.getClass().getName()
 					+ ": Cannot instantiate a view class if model"
@@ -149,7 +149,7 @@ public final class AppointmentController {
 		}
 		
 		if(mAW == null){
-			mAW = new AppointmentWindow();
+			mAW = new AppointmentWindowController();
 			
 			//First time initializing the window, so the model list might have
 			//appointments that haven't been added to the UI (appointments that were
