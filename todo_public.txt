@@ -18,3 +18,11 @@
 
 6) TaskCreationDialog
 	- the more ellaborate dialog mentioned on 5
+
+7) Wrap model data in structures that provide minimal functionality
+
+8) AppointmentWeeklyViewer
+	- Display appointments just like how google calendar
+
+9) TaskViewer
+	- Displays tasks in a fancy manner
