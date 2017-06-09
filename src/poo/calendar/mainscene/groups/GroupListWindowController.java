@@ -11,6 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import poo.calendar.controller.MainApplication;
 import poo.calendar.model.CalendarGroup;
 
 public class GroupListWindowController {
@@ -32,6 +33,8 @@ public class GroupListWindowController {
 	@FXML
 	private Button mAddButton;
 	
+	private MainApplication mMainApp;
+	
 	// Mode data
 	private ObservableMap<UUID, CalendarGroup> mGroupMap;
 	
@@ -52,6 +55,10 @@ public class GroupListWindowController {
 				new GroupView("Oh", Color.RED, UUID.randomUUID()),
 				new GroupView("Oh2", Color.RED, UUID.randomUUID())
 						);
+		
+		mAddButton.setOnAction(action -> {
+			mMainApp.displayGroupCreationDialog();
+		});
 	}
 	
 	/**
@@ -60,5 +67,13 @@ public class GroupListWindowController {
 	 */
 	public void initializeModel(ObservableMap<UUID, CalendarGroup> map){
 		mGroupMap = map;
+	}
+	
+	/**
+	 * Sets the main application from which this widget will later request a scene change;
+	 * @param app
+	 */
+	public void setMainApp(MainApplication app){
+		mMainApp = app;
 	}
 }
