@@ -6,6 +6,7 @@ import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.control.MenuBar;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -23,7 +24,16 @@ public class MainSceneController {
 	private VBox mMainBox;
 	
 	@FXML
-	private Text mTitleText;
+	private MenuBar mMenuBar;
+	
+	@FXML
+	private HBox mTopBox;
+	
+	@FXML
+	private Text mAppTitleText;
+	
+	@FXML
+	private Text mDateText;
 	
 	@FXML
 	private HBox mBottomBox;
@@ -48,8 +58,8 @@ public class MainSceneController {
     	DropShadow ds = new DropShadow();
     	ds.setOffsetY(3.0f);
     	ds.setColor(Color.color(0.4f, 0.4f, 0.4f));
-    	mTitleText.setEffect(ds);
-    	mTitleText.setCache(true);
+    	mAppTitleText.setEffect(ds);
+    	mAppTitleText.setCache(true);
     	
     	FXMLLoader loader = new FXMLLoader();
     	loader.setLocation(this.getClass().getResource("/poo/calendar/view/CalendarGroupListView.fxml"));
@@ -95,10 +105,6 @@ public class MainSceneController {
      */
     public void addGroupsWidget(Node widget){
     	VBox.setVgrow(widget, Priority.ALWAYS);
-    	try {
-    		mMainBox.getChildren().add(1, widget);
-    	} catch(IndexOutOfBoundsException e){
-    		mMainBox.getChildren().add(widget);
-    	}
+    	mTopBox.getChildren().add(widget);
     }
 }

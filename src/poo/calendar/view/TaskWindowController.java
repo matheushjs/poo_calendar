@@ -11,9 +11,9 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import poo.calendar.model.Task;
 
@@ -23,19 +23,31 @@ import poo.calendar.model.Task;
  */
 public class TaskWindowController {
 	@FXML
-	private VBox mMainBox;
+	private AnchorPane mMainPane;
 	
 	@FXML
-	private VBox mTasksBox;
+	private VBox mOuterBox;
 	
 	@FXML
-	private HBox mButtonBox;
+	private ScrollPane mUpperScrollPane;
+	
+	@FXML
+	private AnchorPane mUpperAnchorPane;
+	
+	@FXML
+	private VBox mUpperBox;
+	
+	@FXML
+	private ScrollPane mLowerScrollPane;
+	
+	@FXML
+	private AnchorPane mLowerAnchorPane;
+	
+	@FXML
+	private VBox mLowerBox;
 	
 	@FXML
 	private Button mAddButton;
-	
-	@FXML
-	private ToggleButton mDeleteButton;
 
 	//Model data
 	private ObservableList<Task> mTaskList = null;
@@ -51,8 +63,6 @@ public class TaskWindowController {
 	 */
 	@FXML
 	private void initialize(){
-		mTasksBox.setStyle("-fx-border-style: solid; -fx-border-width: 5;");
-		
 		mAddButton.setOnAction(a -> onAddClick(a));
 	}
 	
@@ -96,12 +106,12 @@ public class TaskWindowController {
 	 * @param task Task to be added.
 	 */
 	private void addTaskView(Task task){
-		ObservableList<Node> nodes = mTasksBox.getChildren();
+		ObservableList<Node> nodes = mLowerBox.getChildren();
 
 		TaskView view = new TaskView(task.getTitle(), task.getDeadlineDate(), task.getID());
 		view.setOnMouseClicked(click -> {
 			TaskView source = (TaskView) click.getSource();
-			if(mDeleteButton.isSelected() && click.getButton() == MouseButton.PRIMARY){
+			if(click.getButton() == MouseButton.PRIMARY){
 				this.removeTask(source.getID());
 			}
 		});
@@ -113,7 +123,7 @@ public class TaskWindowController {
 	 * @param id ID of the task to remove
 	 */
 	private void removeTaskView(UUID id){
-		ObservableList<Node> nodes = mTasksBox.getChildren();
+		ObservableList<Node> nodes = mLowerBox.getChildren();
 		nodes.removeIf(view -> {
 			return 0 == ((TaskView)view).getID().compareTo(id);
 		});

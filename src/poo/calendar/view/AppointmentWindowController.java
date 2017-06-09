@@ -12,10 +12,10 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import poo.calendar.model.Appointment;
 
 
@@ -25,19 +25,25 @@ import poo.calendar.model.Appointment;
  */
 public class AppointmentWindowController {
 	@FXML
-	private VBox mMainBox;
+	private AnchorPane mMainPane;
 	
 	@FXML
-	private VBox mAppointmentsBox;
+	private ScrollPane mInnerScrollPane;
 	
 	@FXML
-	private HBox mButtonBox;
+	private AnchorPane mInnerAnchorPane;
+	
+	@FXML
+	private HBox mInnerBox;
 	
 	@FXML
 	private Button mAddButton;
 	
 	@FXML
-	private ToggleButton mDeleteButton;
+	private Button mLeftButton;
+	
+	@FXML
+	private Button mRightButton;
 	
 	//Model data
 	private ObservableList<Appointment> mAppointmentList = null;
@@ -54,8 +60,7 @@ public class AppointmentWindowController {
 	@FXML
 	private void initialize(){
 		//TODO: Register due listeners
-		mAppointmentsBox.setStyle("-fx-border-style: solid; -fx-border-width: 5;");
-		
+
 		mAddButton.setOnAction(a -> onAddClick(a));
 	}
 	
@@ -103,14 +108,14 @@ public class AppointmentWindowController {
 	 * @param appointment Appointment to be added.
 	 */
 	private void addAppointmentView(Appointment appointment){
-		ObservableList<Node> nodes = mAppointmentsBox.getChildren();
+		ObservableList<Node> nodes = mInnerBox.getChildren();
 		
 		AppointmentView view = new AppointmentView(
 				appointment.getTitle(), appointment.getInitDate(), appointment.getID()
 			);
 		view.setOnMouseClicked(click -> {
 			AppointmentView source = (AppointmentView) click.getSource();
-			if(mDeleteButton.isSelected() && click.getButton() == MouseButton.PRIMARY){
+			if(click.getButton() == MouseButton.PRIMARY){
 				this.removeAppointment(source.getID());
 			}
 		});
@@ -123,7 +128,7 @@ public class AppointmentWindowController {
 	 * @param id ID of the appointment to remove.
 	 */
 	private void removeAppointmentView(UUID id){
-		ObservableList<Node> nodes = mAppointmentsBox.getChildren();
+		ObservableList<Node> nodes = mInnerBox.getChildren();
 		nodes.removeIf(view -> {
 			return ((AppointmentView)view).getID().compareTo(id) == 0;
 		});

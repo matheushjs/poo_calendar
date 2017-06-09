@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import poo.calendar.model.Appointment;
@@ -37,9 +38,9 @@ public class MainApplication extends Application {
 		// Load AppointmentsWindow
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(this.getClass().getResource("/poo/calendar/view/AppointmentWindow.fxml"));
-		VBox appointmentsWidget = null;
+		AnchorPane appointmentsWidget = null;
 		try {
-			appointmentsWidget = (VBox) loader.load();
+			appointmentsWidget = (AnchorPane) loader.load();
 		} catch(IOException e){
 			System.out.println(e.getMessage());
 			System.exit(1);
@@ -50,9 +51,9 @@ public class MainApplication extends Application {
 		// Load TaskWindow
 		loader = new FXMLLoader();
 		loader.setLocation(this.getClass().getResource("/poo/calendar/view/TaskWindow.fxml"));
-		VBox tasksWidget = null;
+		AnchorPane tasksWidget = null;
 		try {
-			tasksWidget = (VBox) loader.load();
+			tasksWidget = (AnchorPane) loader.load();
 		} catch(IOException e) {
 			System.out.println(e.getMessage());
 			System.exit(1);

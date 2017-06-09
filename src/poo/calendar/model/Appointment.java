@@ -17,6 +17,8 @@ public class Appointment extends CalendarNodeBase {
 	// The time when the Appointment ends
 	private ObjectProperty<Calendar> mEndDate;
 
+	//TODO: ADD RECURRENCY ENUM HERE
+	
 	/**
 	 * Appointment's default constructor.
 	 *
