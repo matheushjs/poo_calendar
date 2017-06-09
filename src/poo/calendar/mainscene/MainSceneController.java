@@ -60,19 +60,6 @@ public class MainSceneController {
     	ds.setColor(Color.color(0.4f, 0.4f, 0.4f));
     	mAppTitleText.setEffect(ds);
     	mAppTitleText.setCache(true);
-    	
-    	FXMLLoader loader = new FXMLLoader();
-    	loader.setLocation(this.getClass().getResource("/poo/calendar/mainscene/groups/GroupListWindow.fxml"));
-    	
-    	VBox groupsWidget = null;
-    	try {
-    		groupsWidget = (VBox) loader.load();
-    	} catch(IOException e){
-    		System.out.println(e.getMessage());
-    		System.exit(1);
-    	}
-    	
-    	addGroupsWidget(groupsWidget);
     }
     
     /**
