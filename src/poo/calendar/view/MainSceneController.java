@@ -62,7 +62,7 @@ public class MainSceneController {
     	mAppTitleText.setCache(true);
     	
     	FXMLLoader loader = new FXMLLoader();
-    	loader.setLocation(this.getClass().getResource("/poo/calendar/view/CalendarGroupListView.fxml"));
+    	loader.setLocation(this.getClass().getResource("/poo/calendar/view/GroupListWindow.fxml"));
     	
     	VBox groupsWidget = null;
     	try {
@@ -72,6 +72,7 @@ public class MainSceneController {
     		System.exit(1);
     	}
     	
+    	HBox.setHgrow(groupsWidget, Priority.ALWAYS);
     	addGroupsWidget(groupsWidget);
     }
     
