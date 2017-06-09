@@ -12,7 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import poo.calendar.dialogscenes.GroupCreationDialogController;
+import poo.calendar.dialogscenes.GroupDialogController;
 import poo.calendar.mainscene.MainSceneController;
 import poo.calendar.mainscene.appointments.AppointmentWindowController;
 import poo.calendar.mainscene.groups.GroupListWindowController;
@@ -118,13 +118,15 @@ public class MainApplication extends Application {
 	
 	/**
 	 * Changes current scene to the group creation dialog.
+	 * Creates a dialog on EDIT mode.
+	 * @param id the ID of the group to edit
 	 */
-	public void displayGroupCreationDialog(){
+	public void displayGroupCreationDialog(UUID id){
 		//TODO: Add switching animation using snapshots
 		
 		// Load dialog
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(this.getClass().getResource("/poo/calendar/dialogscenes/GroupCreationDialog.fxml"));
+		loader.setLocation(this.getClass().getResource("/poo/calendar/dialogscenes/GroupDialog.fxml"));
 		Parent dialog = null;
 		try {
 			dialog = loader.load();
@@ -132,11 +134,22 @@ public class MainApplication extends Application {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		GroupCreationDialogController controller = loader.getController();
-		controller.initializeModel(mGroups);
+		GroupDialogController controller = loader.getController();
+		controller.initializeModel(mGroups, mTasks, mAppointments);
 		controller.setMainApp(this);
 		
+		if(id != null)
+			controller.setGroupID(id);
+		
 		mMainScene.setRoot(dialog);
+	}
+	
+	/**
+	 * Wrapper for displayGroupCreationDialog() method.
+	 * Creates a dialog on CREATE mode.
+	 */
+	public void displayGroupCreationDialog(){
+		displayGroupCreationDialog(null);
 	}
 	
 	public static void main(String[] args) {
