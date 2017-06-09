@@ -4,6 +4,8 @@ import java.util.UUID;
 
 import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
@@ -44,6 +46,8 @@ public class GroupCreationDialogController {
 	@FXML
 	private void initialize(){
 		//ŦODO: Connect due signals
+		Button bt = (Button) mMainPane.lookupButton(ButtonType.APPLY);
+		bt.setOnAction(action -> mMainApp.displayMainScene());
 	}
 	
 	/**
