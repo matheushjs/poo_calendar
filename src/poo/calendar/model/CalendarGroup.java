@@ -97,8 +97,10 @@ public class CalendarGroup {
 		return mColor;
 	}
 	
-	@Override
-	public int hashCode(){
-		return mID.hashCode();
+	/**
+	 * @return the group's UUID
+	 */
+	public UUID getID(){
+		return mID;
 	}
 }

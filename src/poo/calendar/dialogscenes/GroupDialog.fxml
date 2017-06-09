@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.ButtonType?>
+<?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.control.DialogPane?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
@@ -32,9 +33,10 @@
                         <HBox alignment="CENTER_LEFT">
                            <children>
                               <Label text="Title:" />
-                              <TextField fx:id="mTitleField" />
+                              <TextField fx:id="mNameField" />
                            </children>
                         </HBox>
+                        <ColorPicker fx:id="mColorPicker" />
                      </children>
                   </VBox>
                </children>
