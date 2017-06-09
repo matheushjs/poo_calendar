@@ -24,15 +24,17 @@ import poo.calendar.model.Task;
 public class MainApplication extends Application {
 	private Stage mStage;
 	private Scene mMainScene;
+	private Parent mMainRoot;
 	
 	private ObservableList<Appointment> mAppointments;
 	private ObservableList<Task> mTasks;
 	private ObservableMap<UUID, CalendarGroup> mGroups;
 	
 	/**
-	 * Creates the main scene, which should be live during the whole program.
+	 * Creates the main root for the scene graph.
+	 * This root should be live during the whole program.
 	 */
-	private void createMainScene(){
+	private void createMainRoot(){
 		// Load AppointmentsWindow
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(this.getClass().getResource("/poo/calendar/mainscene/appointments/AppointmentWindow.fxml"));
@@ -88,16 +90,14 @@ public class MainApplication extends Application {
 		mainSceneController.addTaskWidget(tasksWidget);
 		mainSceneController.addGroupsWidget(groupsWidget);
 		
-		mMainScene = new Scene(mainScene);
+		mMainRoot = mainScene;
 	}
 	
 	/**
 	 * Changes stage to the already created main scene
 	 */
-	public void displayMainScene(){
-		mStage.setTitle("Calendar");
-		mStage.setScene(mMainScene);
-		mStage.show();
+	public void displayMainRoot(){
+		mMainScene.setRoot(mMainRoot);
 	}
 	
 	@Override
@@ -109,8 +109,11 @@ public class MainApplication extends Application {
 		mTasks = FXCollections.observableArrayList();
 		mGroups = FXCollections.observableHashMap();
 		
-		createMainScene();
-		displayMainScene();
+		createMainRoot();
+		mMainScene = new Scene(mMainRoot);
+		mStage.setTitle("Calendar");
+		mStage.setScene(mMainScene);
+		mStage.show();
 	}
 	
 	/**
@@ -125,7 +128,7 @@ public class MainApplication extends Application {
 		Parent dialog = null;
 		try {
 			dialog = loader.load();
-		} catch(IOException e){
+		} catch(IOException e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
@@ -133,9 +136,7 @@ public class MainApplication extends Application {
 		controller.initializeModel(mGroups);
 		controller.setMainApp(this);
 		
-		Scene scene = new Scene(dialog);
-		this.mStage.setScene(scene);
-		mStage.show();
+		mMainScene.setRoot(dialog);
 	}
 	
 	public static void main(String[] args) {

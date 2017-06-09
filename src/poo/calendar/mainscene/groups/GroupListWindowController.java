@@ -55,10 +55,6 @@ public class GroupListWindowController {
 				new GroupView("Oh", Color.RED, UUID.randomUUID()),
 				new GroupView("Oh2", Color.RED, UUID.randomUUID())
 						);
-		
-		mAddButton.setOnAction(action -> {
-			mMainApp.displayGroupCreationDialog();
-		});
 	}
 	
 	/**
@@ -75,5 +71,9 @@ public class GroupListWindowController {
 	 */
 	public void setMainApp(MainApplication app){
 		mMainApp = app;
+		
+		mAddButton.setOnAction(action -> {
+			mMainApp.displayGroupCreationDialog();
+		});
 	}
 }

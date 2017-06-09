@@ -46,8 +46,6 @@ public class GroupCreationDialogController {
 	@FXML
 	private void initialize(){
 		//ŦODO: Connect due signals
-		Button bt = (Button) mMainPane.lookupButton(ButtonType.APPLY);
-		bt.setOnAction(action -> mMainApp.displayMainScene());
 	}
 	
 	/**
@@ -63,5 +61,8 @@ public class GroupCreationDialogController {
 	 */
 	public void setMainApp(MainApplication app){
 		mMainApp = app;
+		
+		Button bt = (Button) mMainPane.lookupButton(ButtonType.APPLY);
+		bt.setOnAction(action -> mMainApp.displayMainRoot());
 	}
 }
