@@ -1,4 +1,4 @@
-package poo.calendar.view;
+package poo.calendar.mainscene;
 
 
 import java.io.IOException;
@@ -62,7 +62,7 @@ public class MainSceneController {
     	mAppTitleText.setCache(true);
     	
     	FXMLLoader loader = new FXMLLoader();
-    	loader.setLocation(this.getClass().getResource("/poo/calendar/view/GroupListWindow.fxml"));
+    	loader.setLocation(this.getClass().getResource("/poo/calendar/mainscene/GroupListWindow.fxml"));
     	
     	VBox groupsWidget = null;
     	try {
@@ -72,7 +72,6 @@ public class MainSceneController {
     		System.exit(1);
     	}
     	
-    	HBox.setHgrow(groupsWidget, Priority.ALWAYS);
     	addGroupsWidget(groupsWidget);
     }
     
@@ -105,7 +104,7 @@ public class MainSceneController {
      * @param widget
      */
     public void addGroupsWidget(Node widget){
-    	VBox.setVgrow(widget, Priority.ALWAYS);
+    	HBox.setHgrow(widget, Priority.ALWAYS);
     	mTopBox.getChildren().add(widget);
     }
 }

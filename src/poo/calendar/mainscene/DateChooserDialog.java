@@ -1,4 +1,4 @@
-package poo.calendar.view;
+package poo.calendar.mainscene;
 
 import java.util.ArrayList;
 import java.util.Calendar;

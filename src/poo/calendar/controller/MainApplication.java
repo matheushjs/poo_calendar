@@ -12,12 +12,12 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import poo.calendar.mainscene.AppointmentWindowController;
+import poo.calendar.mainscene.MainSceneController;
+import poo.calendar.mainscene.TaskWindowController;
 import poo.calendar.model.Appointment;
 import poo.calendar.model.CalendarGroup;
 import poo.calendar.model.Task;
-import poo.calendar.view.AppointmentWindowController;
-import poo.calendar.view.MainSceneController;
-import poo.calendar.view.TaskWindowController;
 
 public class MainApplication extends Application {
 	private Stage mStage;
@@ -37,12 +37,12 @@ public class MainApplication extends Application {
 		
 		// Load AppointmentsWindow
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(this.getClass().getResource("/poo/calendar/view/AppointmentWindow.fxml"));
+		loader.setLocation(this.getClass().getResource("/poo/calendar/mainscene/AppointmentWindow.fxml"));
 		AnchorPane appointmentsWidget = null;
 		try {
 			appointmentsWidget = (AnchorPane) loader.load();
 		} catch(IOException e){
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 			System.exit(1);
 		}
 		AppointmentWindowController appointmentsController = loader.getController();
@@ -50,12 +50,12 @@ public class MainApplication extends Application {
 
 		// Load TaskWindow
 		loader = new FXMLLoader();
-		loader.setLocation(this.getClass().getResource("/poo/calendar/view/TaskWindow.fxml"));
+		loader.setLocation(this.getClass().getResource("/poo/calendar/mainscene/TaskWindow.fxml"));
 		AnchorPane tasksWidget = null;
 		try {
 			tasksWidget = (AnchorPane) loader.load();
 		} catch(IOException e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 			System.exit(1);
 		}
 		TaskWindowController tasksController = loader.getController();
@@ -63,12 +63,12 @@ public class MainApplication extends Application {
 		
 		// Load MainScene
 		loader = new FXMLLoader();
-		loader.setLocation(this.getClass().getResource("/poo/calendar/view/MainScene.fxml"));
+		loader.setLocation(this.getClass().getResource("/poo/calendar/mainscene/MainScene.fxml"));
 		VBox mainScene = null;
 		try {
 			mainScene = (VBox) loader.load();
 		} catch(IOException e){ 
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 			System.exit(1);
 		}
 		MainSceneController mainSceneController = loader.getController();
