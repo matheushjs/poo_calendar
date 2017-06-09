@@ -62,7 +62,7 @@ public class MainSceneController {
     	mAppTitleText.setCache(true);
     	
     	FXMLLoader loader = new FXMLLoader();
-    	loader.setLocation(this.getClass().getResource("/poo/calendar/mainscene/GroupListWindow.fxml"));
+    	loader.setLocation(this.getClass().getResource("/poo/calendar/mainscene/groups/GroupListWindow.fxml"));
     	
     	VBox groupsWidget = null;
     	try {

@@ -1,4 +1,4 @@
-package poo.calendar.mainscene;
+package poo.calendar.mainscene.appointments;
 
 import java.util.Calendar;
 import java.util.Map;
@@ -16,6 +16,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import poo.calendar.mainscene.DateChooserDialog;
 import poo.calendar.model.Appointment;
 
 

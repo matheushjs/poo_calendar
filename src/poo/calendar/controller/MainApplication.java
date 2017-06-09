@@ -12,9 +12,9 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import poo.calendar.mainscene.AppointmentWindowController;
 import poo.calendar.mainscene.MainSceneController;
-import poo.calendar.mainscene.TaskWindowController;
+import poo.calendar.mainscene.appointments.AppointmentWindowController;
+import poo.calendar.mainscene.tasks.TaskWindowController;
 import poo.calendar.model.Appointment;
 import poo.calendar.model.CalendarGroup;
 import poo.calendar.model.Task;
@@ -37,7 +37,7 @@ public class MainApplication extends Application {
 		
 		// Load AppointmentsWindow
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(this.getClass().getResource("/poo/calendar/mainscene/AppointmentWindow.fxml"));
+		loader.setLocation(this.getClass().getResource("/poo/calendar/mainscene/appointments/AppointmentWindow.fxml"));
 		AnchorPane appointmentsWidget = null;
 		try {
 			appointmentsWidget = (AnchorPane) loader.load();
@@ -50,7 +50,7 @@ public class MainApplication extends Application {
 
 		// Load TaskWindow
 		loader = new FXMLLoader();
-		loader.setLocation(this.getClass().getResource("/poo/calendar/mainscene/TaskWindow.fxml"));
+		loader.setLocation(this.getClass().getResource("/poo/calendar/mainscene/tasks/TaskWindow.fxml"));
 		AnchorPane tasksWidget = null;
 		try {
 			tasksWidget = (AnchorPane) loader.load();

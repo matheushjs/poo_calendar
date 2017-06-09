@@ -1,4 +1,4 @@
-package poo.calendar.mainscene;
+package poo.calendar.mainscene.appointments;
 
 import java.util.Calendar;
 import java.util.UUID;
