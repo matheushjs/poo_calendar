@@ -86,7 +86,7 @@ public class GroupListWindowController {
 		mMainApp = app;
 		
 		mAddButton.setOnAction(action -> {
-			mMainApp.displayGroupCreationDialog();
+			mMainApp.displayGroupDialog();
 		});
 	}
 	

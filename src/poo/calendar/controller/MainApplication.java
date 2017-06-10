@@ -12,6 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import poo.calendar.dialogscenes.AppointmentDialogController;
 import poo.calendar.dialogscenes.GroupDialogController;
 import poo.calendar.mainscene.MainSceneController;
 import poo.calendar.mainscene.appointments.AppointmentWindowController;
@@ -24,7 +25,7 @@ import poo.calendar.model.Task;
 public class MainApplication extends Application {
 	private Stage mStage;
 	private Scene mMainScene;
-	private Parent mMainRoot;
+	private Parent mMainParent;
 	
 	private ObservableList<Appointment> mAppointments;
 	private ObservableList<Task> mTasks;
@@ -34,7 +35,7 @@ public class MainApplication extends Application {
 	 * Creates the main root for the scene graph.
 	 * This root should be live during the whole program.
 	 */
-	private void createMainRoot(){
+	private void createMainParent(){
 		// Load AppointmentsWindow
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(this.getClass().getResource("/poo/calendar/mainscene/appointments/AppointmentWindow.fxml"));
@@ -47,7 +48,8 @@ public class MainApplication extends Application {
 		}
 		AppointmentWindowController appointmentsController = loader.getController();
 		appointmentsController.initializeModel(mAppointments);
-
+		appointmentsController.setMainApp(this);
+		
 		// Load TaskWindow
 		loader = new FXMLLoader();
 		loader.setLocation(this.getClass().getResource("/poo/calendar/mainscene/tasks/TaskWindow.fxml"));
@@ -90,14 +92,14 @@ public class MainApplication extends Application {
 		mainSceneController.addTaskWidget(tasksWidget);
 		mainSceneController.addGroupsWidget(groupsWidget);
 		
-		mMainRoot = mainScene;
+		mMainParent = mainScene;
 	}
 	
 	/**
 	 * Changes stage to the already created main scene
 	 */
 	public void displayMainRoot(){
-		mMainScene.setRoot(mMainRoot);
+		mMainScene.setRoot(mMainParent);
 	}
 	
 	@Override
@@ -109,8 +111,8 @@ public class MainApplication extends Application {
 		mTasks = FXCollections.observableArrayList();
 		mGroups = FXCollections.observableHashMap();
 		
-		createMainRoot();
-		mMainScene = new Scene(mMainRoot);
+		createMainParent();
+		mMainScene = new Scene(mMainParent);
 		mStage.setTitle("Calendar");
 		mStage.setScene(mMainScene);
 		mStage.show();
@@ -118,7 +120,7 @@ public class MainApplication extends Application {
 	
 	/**
 	 * Changes current scene to the group creation dialog.
-	 * Creates a dialog on EDIT mode.
+	 * Creates a dialog on EDIT mode if ID is provided.
 	 * @param id the ID of the group to edit
 	 */
 	public void displayGroupDialog(UUID id){
@@ -145,11 +147,45 @@ public class MainApplication extends Application {
 	}
 	
 	/**
-	 * Wrapper for displayGroupCreationDialog() method.
 	 * Creates a dialog on CREATE mode.
 	 */
-	public void displayGroupCreationDialog(){
+	public void displayGroupDialog(){
 		displayGroupDialog(null);
+	}
+	
+	/**
+	 * Changes current scene to the appointment creation dialog.
+	 * Creates a dialog on EDIT mode, if ID is provided.
+	 * @param id the ID of the appointment to edit
+	 */
+	public void displayAppointmentDialog(UUID id){
+		//TODO: Add switching animation using snapshots
+		
+		//Load dialog
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(this.getClass().getResource("/poo/calendar/dialogscenes/AppointmentDialog.fxml"));
+		Parent dialog = null;
+		try {
+			dialog = loader.load();
+		} catch(IOException e){
+			e.printStackTrace();
+			System.exit(1);
+		}
+		AppointmentDialogController controller = loader.getController();
+		controller.initializeModel(mGroups, mTasks, mAppointments);
+		controller.setMainApp(this);
+		
+		if(id != null)
+			controller.setAppointmentID(id);
+		
+		mMainScene.setRoot(dialog);
+	}
+	
+	/**
+	 * Creates a dialog on CREATE mode
+	 */
+	public void displayAppointmentDialog(){
+		displayAppointmentDialog(null);
 	}
 	
 	public static void main(String[] args) {

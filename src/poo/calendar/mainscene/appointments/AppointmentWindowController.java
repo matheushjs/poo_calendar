@@ -16,6 +16,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import poo.calendar.controller.MainApplication;
 import poo.calendar.mainscene.DateChooserDialog;
 import poo.calendar.model.Appointment;
 
@@ -46,6 +47,8 @@ public class AppointmentWindowController {
 	@FXML
 	private Button mRightButton;
 	
+	private MainApplication mMainApp;
+	
 	//Model data
 	private ObservableList<Appointment> mAppointmentList = null;
 	
@@ -62,7 +65,6 @@ public class AppointmentWindowController {
 	private void initialize(){
 		//TODO: Register due listeners
 
-		mAddButton.setOnAction(a -> onAddClick(a));
 	}
 	
 	/**
@@ -213,6 +215,19 @@ public class AppointmentWindowController {
 			
 			Appointment appointment = new Appointment(name.get("title"), "", c1, c2);	
 			mAppointmentList.add(appointment);
+		});
+	}
+	
+	
+	/**
+	 * Sets the main application from which this widget will later request a scene change;
+	 * @param app
+	 */
+	public void setMainApp(MainApplication app){
+		mMainApp = app;
+		
+		mAddButton.setOnAction(action -> {
+			mMainApp.displayAppointmentDialog();
 		});
 	}
 }
