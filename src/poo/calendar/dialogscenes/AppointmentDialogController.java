@@ -15,6 +15,7 @@ import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import poo.calendar.controller.MainApplication;
+import poo.calendar.dialogscenes.utils.DateFieldsUtil;
 import poo.calendar.dialogscenes.utils.GroupComboBoxUtil;
 import poo.calendar.model.Appointment;
 import poo.calendar.model.CalendarGroup;
@@ -80,24 +81,12 @@ public class AppointmentDialogController {
 		mRecurrenceChoice.setValue("None");
 		
 		Calendar calendar = Calendar.getInstance();
-		mDateField1.setText(String.format("%d/%d/%d",
-				calendar.get(Calendar.DAY_OF_MONTH),
-				calendar.get(Calendar.MONTH),
-				calendar.get(Calendar.YEAR)));
-		
-		mHourField1.setText(String.format("%d:%d", 
-				calendar.get(Calendar.HOUR_OF_DAY),
-				calendar.get(Calendar.MINUTE)));
+		mDateField1.setText(DateFieldsUtil.dateString(calendar));
+		mHourField1.setText(DateFieldsUtil.hourString(calendar));
 		
 		calendar.add(Calendar.MINUTE, 30);
-		mDateField2.setText(String.format("%d/%d/%d",
-				calendar.get(Calendar.DAY_OF_MONTH),
-				calendar.get(Calendar.MONTH),
-				calendar.get(Calendar.YEAR)));
-		
-		mHourField2.setText(String.format("%d:%d", 
-				calendar.get(Calendar.HOUR_OF_DAY),
-				calendar.get(Calendar.MINUTE)));
+		mDateField2.setText(DateFieldsUtil.dateString(calendar));
+		mHourField2.setText(DateFieldsUtil.hourString(calendar));
 	}
 	
 	/**

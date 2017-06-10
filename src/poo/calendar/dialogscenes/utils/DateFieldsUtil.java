@@ -24,7 +24,7 @@ public class DateFieldsUtil {
 		calendar.set(Calendar.MILLISECOND, 0);
 		
 		try {
-			Matcher dateMatcher = Pattern.compile("^\\s*(\\d{2})\\s*/\\s*(\\d{2})\\s*/\\s*(\\d{2,4})\\s*$").matcher(date);
+			Matcher dateMatcher = Pattern.compile("^\\s*(\\d{1,2})\\s*/\\s*(\\d{1,2})\\s*/\\s*(\\d{1,4})\\s*$").matcher(date);
 			Matcher hourMatcher = Pattern.compile("^\\s*(\\d{1,2})\\s*:\\s*(\\d{1,2})\\s*$").matcher(hour);
 			
 			if(dateMatcher.matches() && dateMatcher.groupCount() == 3){
@@ -33,7 +33,7 @@ public class DateFieldsUtil {
 				
 				String year = dateMatcher.group(3);
 				int n = Integer.parseInt(year);
-				if(year.length() == 2)
+				if(year.length() <= 2)
 					n+= n > 50 ? 1900 : 2000;
 				calendar.set(Calendar.YEAR, n);
 			} else throw new Exception();
@@ -57,7 +57,7 @@ public class DateFieldsUtil {
 	 * @return "day/month/year" string
 	 */
 	public static String dateString(Calendar calendar){
-		return String.format("%d/%d/%d",
+		return String.format("%02d/%02d/%04d",
 				calendar.get(Calendar.DAY_OF_MONTH),
 				calendar.get(Calendar.MONTH),
 				calendar.get(Calendar.YEAR));
@@ -69,13 +69,13 @@ public class DateFieldsUtil {
 	 * @return "hour:minute" string
 	 */
 	public static String hourString(Calendar calendar){
-		return String.format("%d:%d", 
+		return String.format("%02d:%02d", 
 				calendar.get(Calendar.HOUR_OF_DAY),
 				calendar.get(Calendar.MINUTE));
 	}
 	
 	public static void main(String[] args){
-		Calendar c = parseFields(" 12 /06/19", " 12 : 05");	
-		System.out.println(c);
+		Calendar c = parseFields(" 12 / 6/ 96", " 12 : 5");	
+		System.out.println(dateString(c) + " " + hourString(c));
 	}
 }

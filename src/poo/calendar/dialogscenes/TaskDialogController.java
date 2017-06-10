@@ -14,6 +14,7 @@ import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import poo.calendar.controller.MainApplication;
+import poo.calendar.dialogscenes.utils.DateFieldsUtil;
 import poo.calendar.dialogscenes.utils.GroupComboBoxUtil;
 import poo.calendar.model.Appointment;
 import poo.calendar.model.CalendarGroup;
@@ -140,14 +141,8 @@ public class TaskDialogController {
 		
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.MINUTE, 30);
-		mDateField.setText(String.format("%d/%d/%d",
-				calendar.get(Calendar.DAY_OF_MONTH),
-				calendar.get(Calendar.MONTH),
-				calendar.get(Calendar.YEAR)));
-		
-		mHourField.setText(String.format("%d:%d", 
-				calendar.get(Calendar.HOUR_OF_DAY),
-				calendar.get(Calendar.MINUTE)));
+		mDateField.setText(DateFieldsUtil.dateString(calendar));
+		mHourField.setText(DateFieldsUtil.hourString(calendar));
 
 	}
 }
