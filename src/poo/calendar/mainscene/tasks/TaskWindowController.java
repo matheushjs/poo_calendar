@@ -11,6 +11,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import poo.calendar.controller.MainApplication;
 import poo.calendar.model.Task;
 
 /**
@@ -45,6 +46,8 @@ public class TaskWindowController {
 	@FXML
 	private Button mAddButton;
 
+	private MainApplication mMainApp;
+	
 	//Model data
 	private ObservableList<Task> mTaskList = null;
 	
@@ -135,5 +138,17 @@ public class TaskWindowController {
 				break;
 			}
 		}
+	}
+	
+	/**
+	 * Sets the main application from which this widget will later request a scene change;
+	 * @param app
+	 */
+	public void setMainApp(MainApplication app){
+		mMainApp = app;
+		
+		mAddButton.setOnAction(action -> {
+			mMainApp.displayTaskDialog();
+		});
 	}
 }

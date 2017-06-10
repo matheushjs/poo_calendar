@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import poo.calendar.dialogscenes.AppointmentDialogController;
 import poo.calendar.dialogscenes.GroupDialogController;
+import poo.calendar.dialogscenes.TaskDialogController;
 import poo.calendar.mainscene.MainSceneController;
 import poo.calendar.mainscene.appointments.AppointmentWindowController;
 import poo.calendar.mainscene.groups.GroupListWindowController;
@@ -62,6 +63,7 @@ public class MainApplication extends Application {
 		}
 		TaskWindowController tasksController = loader.getController();
 		tasksController.initializeModel(mTasks);
+		tasksController.setMainApp(this);
 		
 		// Load GroupsWindow
 		loader = new FXMLLoader();
@@ -186,6 +188,41 @@ public class MainApplication extends Application {
 	 */
 	public void displayAppointmentDialog(){
 		displayAppointmentDialog(null);
+	}
+	
+	/**
+	 * Changes current scene to the task creation dialog.
+	 * Creates a dialog on EDIT mode, if ID is provided.
+	 * @param id the ID of the task to edit
+	 */
+	public void displayTaskDialog(UUID id){
+		//TODO: Add switching animation using snapshots
+		
+		//Load dialog
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(this.getClass().getResource("/poo/calendar/dialogscenes/TaskDialog.fxml"));
+		Parent dialog = null;
+		try {
+			dialog = loader.load();
+		} catch(IOException e){
+			e.printStackTrace();
+			System.exit(1);
+		}
+		TaskDialogController controller = loader.getController();
+		controller.initializeModel(mGroups, mTasks, mAppointments);
+		controller.setMainApp(this);
+		
+		if(id != null)
+			controller.setTaskID(id);
+		
+		mMainScene.setRoot(dialog);
+	}
+	
+	/**
+	 * Creates a dialog on CREATE mode
+	 */
+	public void displayTaskDialog(){
+		displayTaskDialog(null);
 	}
 	
 	public static void main(String[] args) {

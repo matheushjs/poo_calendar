@@ -7,9 +7,12 @@ import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DialogPane;
+import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import poo.calendar.controller.MainApplication;
+import poo.calendar.dialogscenes.utils.GroupComboBoxUtil;
 import poo.calendar.model.Appointment;
 import poo.calendar.model.CalendarGroup;
 import poo.calendar.model.Task;
@@ -25,6 +28,21 @@ public class TaskDialogController {
 	
 	@FXML
 	private Text mHeaderText;
+	
+	@FXML
+	private TextField mTitleField;
+	
+	@FXML
+	private TextField mDateField;
+	
+	@FXML
+	private TextField mHourField;
+
+	@FXML
+	private TextField mDescriptionField;
+	
+	@FXML
+	private ComboBox<CalendarGroup> mGroupCombo;
 	
 	private MainApplication mMainApp;
 	
@@ -55,6 +73,11 @@ public class TaskDialogController {
 		mGroupMap = map;
 		mTasks = tasks;
 		mAppointments = appts;
+		
+		mGroupCombo.getItems().add(null);
+		mGroupCombo.getItems().addAll(mGroupMap.values());
+		mGroupCombo.setCellFactory(GroupComboBoxUtil.getAddCallback());
+		mGroupCombo.setValue(null);
 	}
 	
 	/**
