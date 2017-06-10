@@ -84,10 +84,10 @@ public class TaskDialogController {
 		mTasks = tasks;
 		mAppointments = appts;
 		
-		mGroupCombo.getItems().add(null);
+		mGroupCombo.getItems().add(CalendarGroup.DEFAULT_GROUP);
 		mGroupCombo.getItems().addAll(mGroupMap.values());
 		mGroupCombo.setCellFactory(GroupComboBoxUtil.getAddCallback());
-		mGroupCombo.setValue(null);
+		mGroupCombo.setValue(CalendarGroup.DEFAULT_GROUP);
 	}
 	
 	/**

@@ -16,6 +16,7 @@ import javafx.scene.paint.Color;
 public class CalendarGroup {
 	// ID for the default group
 	public static UUID DEFAULT_ID = UUID.fromString("d26a05c8-60c7-4a15-86ce-12605bb198a8");
+	public static CalendarGroup DEFAULT_GROUP = new CalendarGroup("Default", Color.ORANGE, DEFAULT_ID);
 	
 	// Array of colors that CalendarGroups can assume
 	private static Color[] mColorArray = new Color[] {
@@ -32,6 +33,11 @@ public class CalendarGroup {
 	
 	//The group's ID
 	private UUID mID;
+	
+	private CalendarGroup(String name, Color color, UUID id) throws NullPointerException {
+		this(name, color);
+		mID = id;
+	}
 	
 	/**
 	 * Default constructor.
