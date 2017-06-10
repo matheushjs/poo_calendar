@@ -117,7 +117,20 @@ public class TaskDialogController {
 	private void onApplyClick(ActionEvent a){
 		if(!validateInput()) return;
 		
-		//TODO: Add task
+		String title = mTitleField.getText();
+		String description = mDescriptionField.getText();
+		
+		String date = mDateField.getText().trim();
+		String hour = mHourField.getText().trim();
+		Calendar calendar = null;
+		if(date.length() != 0 && hour.length() != 0){
+			calendar = DateFieldsUtil.parseFields(date, hour);
+		}
+		
+		CalendarGroup cg = mGroupCombo.getValue();
+		
+		Task task = new Task(title, description, calendar, cg.getID());
+		mTasks.add(task);
 		
 		mMainApp.displayMainRoot();
 	}
@@ -126,7 +139,26 @@ public class TaskDialogController {
 	 * Returns true if user input is valid
 	 */
 	private boolean validateInput(){
-		return true; //TODO: Add validation
+		boolean allFine = true;
+		
+		String title = mTitleField.getText();
+		if(title.length() == 0){
+			//TODO: Add alert
+			allFine = false;
+		}
+		
+		String date = mDateField.getText().trim();
+		String hour = mHourField.getText().trim();
+		if(date.length() != 0 && hour.length() != 0){
+			try {
+				DateFieldsUtil.parseFields(date, hour);
+			} catch(IllegalArgumentException e){
+				//TODO: Add alert
+				allFine = false;
+			}
+		}
+
+		return allFine;
 	}
 	
 	/**

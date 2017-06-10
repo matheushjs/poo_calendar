@@ -19,6 +19,7 @@ import poo.calendar.dialogscenes.utils.DateFieldsUtil;
 import poo.calendar.dialogscenes.utils.GroupComboBoxUtil;
 import poo.calendar.model.Appointment;
 import poo.calendar.model.CalendarGroup;
+import poo.calendar.model.Recurrence;
 import poo.calendar.model.Task;
 
 
@@ -133,7 +134,23 @@ public class AppointmentDialogController {
 	private void onApplyClick(ActionEvent a){
 		if(!validateInput()) return;
 		
-		//TODO: Add appointment
+		String title = mTitleField.getText();
+		String description = mDescriptionField.getText();
+		
+		String date = mDateField1.getText().trim();
+		String hour = mHourField1.getText().trim();
+		Calendar initDate = DateFieldsUtil.parseFields(date, hour);
+		
+		date = mDateField2.getText().trim();
+		hour = mHourField2.getText().trim();
+		Calendar endDate = DateFieldsUtil.parseFields(date, hour);
+		
+		CalendarGroup cg = mGroupCombo.getValue();
+		Recurrence rc = Recurrence.valueOf(mRecurrenceChoice.getValue().toUpperCase());
+		
+		Appointment appointment = new Appointment(title, description, initDate, endDate, cg.getID());
+		appointment.setRecurrence(rc);
+		mAppointments.add(appointment);
 		
 		mMainApp.displayMainRoot();
 	}
@@ -142,6 +159,41 @@ public class AppointmentDialogController {
 	 * Returns true if user input is valid.
 	 */
 	private boolean validateInput(){
-		return true; //TODO: Add validation
+		boolean allFine = true;
+		
+		String title = mTitleField.getText();
+		if(title.length() == 0){
+			//TODO: Add alert
+			allFine = false;
+		}
+		
+		String date = mDateField1.getText().trim();
+		String hour = mHourField1.getText().trim();
+		Calendar initDate = null;
+		try {
+			initDate = DateFieldsUtil.parseFields(date, hour);
+		} catch(IllegalArgumentException e){
+			//TODO: Add alert
+			allFine = false;
+		}
+		
+		date = mDateField2.getText().trim();
+		hour = mHourField2.getText().trim();
+		Calendar endDate = null;
+		try {
+			endDate = DateFieldsUtil.parseFields(date, hour);
+		} catch(IllegalArgumentException e){
+			//TODO: Add alert
+			allFine = false;
+		}
+		
+		try {
+			new Appointment("", "", initDate, endDate);
+		} catch (IllegalArgumentException e){
+			//TODO: Add alert
+			allFine = false;
+		}
+
+		return allFine;
 	}
 }
