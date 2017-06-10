@@ -116,7 +116,7 @@ public class AppointmentWindowController {
 			);
 		view.setOnMouseClicked(click -> {
 			AppointmentView source = (AppointmentView) click.getSource();
-			if(click.getButton() == MouseButton.PRIMARY){
+			if(click.getButton().compareTo(MouseButton.PRIMARY) == 0){
 				this.removeAppointment(source.getID());
 			}
 		});

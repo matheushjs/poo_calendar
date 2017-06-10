@@ -121,7 +121,7 @@ public class MainApplication extends Application {
 	 * Creates a dialog on EDIT mode.
 	 * @param id the ID of the group to edit
 	 */
-	public void displayGroupCreationDialog(UUID id){
+	public void displayGroupDialog(UUID id){
 		//TODO: Add switching animation using snapshots
 		
 		// Load dialog
@@ -149,7 +149,7 @@ public class MainApplication extends Application {
 	 * Creates a dialog on CREATE mode.
 	 */
 	public void displayGroupCreationDialog(){
-		displayGroupCreationDialog(null);
+		displayGroupDialog(null);
 	}
 	
 	public static void main(String[] args) {
