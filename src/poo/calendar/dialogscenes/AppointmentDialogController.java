@@ -1,15 +1,21 @@
 package poo.calendar.dialogscenes;
 
+import java.util.Calendar;
 import java.util.UUID;
 
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DialogPane;
+import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import poo.calendar.controller.MainApplication;
+import poo.calendar.dialogscenes.utils.GroupComboBoxUtil;
 import poo.calendar.model.Appointment;
 import poo.calendar.model.CalendarGroup;
 import poo.calendar.model.Task;
@@ -26,6 +32,30 @@ public class AppointmentDialogController {
 	
 	@FXML
 	private Text mHeaderText;
+	
+	@FXML
+	private TextField mTitleField;
+	
+	@FXML
+	private TextField mDateField1;
+	
+	@FXML
+	private TextField mHourField1;
+	
+	@FXML
+	private TextField mDateField2;
+	
+	@FXML
+	private TextField mHourField2;
+	
+	@FXML
+	private TextField mDescriptionField;
+	
+	@FXML
+	private ComboBox<CalendarGroup> mGroupCombo;
+	
+	@FXML
+	private ChoiceBox<String> mRecurrenceChoice;
 	
 	private MainApplication mMainApp;
 	
@@ -46,7 +76,28 @@ public class AppointmentDialogController {
 	 */
 	@FXML
 	private void initialize(){
-		//ŦODO: Connect due signals
+		mRecurrenceChoice.getItems().addAll("None", "Hourly", "Daily", "Weekly", "Monthly", "Yearly");
+		mRecurrenceChoice.setValue("None");
+		
+		Calendar calendar = Calendar.getInstance();
+		mDateField1.setText(String.format("%d/%d/%d",
+				calendar.get(Calendar.DAY_OF_MONTH),
+				calendar.get(Calendar.MONTH),
+				calendar.get(Calendar.YEAR)));
+		
+		mHourField1.setText(String.format("%d:%d", 
+				calendar.get(Calendar.HOUR_OF_DAY),
+				calendar.get(Calendar.MINUTE)));
+		
+		calendar.add(Calendar.MINUTE, 30);
+		mDateField2.setText(String.format("%d/%d/%d",
+				calendar.get(Calendar.DAY_OF_MONTH),
+				calendar.get(Calendar.MONTH),
+				calendar.get(Calendar.YEAR)));
+		
+		mHourField2.setText(String.format("%d:%d", 
+				calendar.get(Calendar.HOUR_OF_DAY),
+				calendar.get(Calendar.MINUTE)));
 	}
 	
 	/**
@@ -56,6 +107,11 @@ public class AppointmentDialogController {
 		mGroupMap = map;
 		mTasks = tasks;
 		mAppointments = appts;
+		
+		mGroupCombo.getItems().add(null);
+		mGroupCombo.getItems().addAll(mGroupMap.values());
+		mGroupCombo.setCellFactory(GroupComboBoxUtil.getAddCallback());
+		mGroupCombo.setValue(null);
 	}
 	
 	/**
@@ -65,8 +121,11 @@ public class AppointmentDialogController {
 	public void setMainApp(MainApplication app){
 		mMainApp = app;
 		
-		Button bt = (Button) mMainPane.lookupButton(ButtonType.APPLY);
+		Button bt = (Button) mMainPane.lookupButton(ButtonType.CANCEL);
 		bt.setOnAction(action -> mMainApp.displayMainRoot());
+		
+		bt = (Button) mMainPane.lookupButton(ButtonType.APPLY);
+		bt.setOnAction(action -> onApplyClick(action));
 	}
 	
 	/**
@@ -77,5 +136,23 @@ public class AppointmentDialogController {
 		mAppointmentID = id;
 		//TODO: Place appointment info in the UI
 		//TODO: configure UI to edit mode
+	}
+	
+	/**
+	 * Callback for when the apply button is clicked
+	 */
+	private void onApplyClick(ActionEvent a){
+		if(!validateInput()) return;
+		
+		//TODO: Add appointment
+		
+		mMainApp.displayMainRoot();
+	}
+	
+	/**
+	 * Returns true if user input is valid.
+	 */
+	private boolean validateInput(){
+		return true; //TODO: Add validation
 	}
 }

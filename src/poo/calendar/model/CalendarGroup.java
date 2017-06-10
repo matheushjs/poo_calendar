@@ -103,4 +103,9 @@ public class CalendarGroup {
 	public UUID getID(){
 		return mID;
 	}
+	
+	@Override
+	public String toString(){
+		return mName.get();
+	}
 }

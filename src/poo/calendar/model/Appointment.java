@@ -17,7 +17,9 @@ public class Appointment extends CalendarNodeBase {
 	// The time when the Appointment ends
 	private ObjectProperty<Calendar> mEndDate;
 
-	//TODO: ADD RECURRENCY ENUM HERE
+	// Recurrence type
+	private ObjectProperty<Recurrence> mRecurrence;
+	
 	
 	/**
 	 * Appointment's default constructor.
@@ -34,7 +36,8 @@ public class Appointment extends CalendarNodeBase {
 		super(title, description, groupID);
 		mInitDate = new SimpleObjectProperty<Calendar>();
 		mEndDate = new SimpleObjectProperty<Calendar>();
-
+		mRecurrence = new SimpleObjectProperty<Recurrence>(Recurrence.NONE);
+		
 		this.setDates(initDate, endDate);
 	}
 
@@ -86,5 +89,26 @@ public class Appointment extends CalendarNodeBase {
 			throw new IllegalArgumentException("End date cannot be earlier than init date");
 		mInitDate.set(init);
 		mEndDate.set(end);
+	}
+	
+	/**
+	 * @param rec new recurrence type
+	 */
+	public final void setRecurrence(Recurrence rec){
+		mRecurrence.set(rec);
+	}
+	
+	/**
+	 * @return the appointment's recurrence type
+	 */
+	public final Recurrence getRecurrence(){
+		return mRecurrence.get();
+	}
+	
+	/**
+	 * @return the appointment's recurrence property
+	 */
+	public ObjectProperty<Recurrence> recurrenceProperty(){
+		return mRecurrence;
 	}
 }

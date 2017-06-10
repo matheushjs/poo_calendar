@@ -1,21 +1,16 @@
 package poo.calendar.mainscene.tasks;
 
-import java.util.Calendar;
-import java.util.Map;
 import java.util.UUID;
 
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import poo.calendar.mainscene.DateChooserDialog;
 import poo.calendar.model.Task;
 
 /**
@@ -64,7 +59,6 @@ public class TaskWindowController {
 	 */
 	@FXML
 	private void initialize(){
-		mAddButton.setOnAction(a -> onAddClick(a));
 	}
 	
 	/**
@@ -141,52 +135,5 @@ public class TaskWindowController {
 				break;
 			}
 		}
-	}
-	
-	/**
-	 * Function to run whenever the 'Add' button in the tasks window is clicked.
-	 * @param a
-	 */
-	private void onAddClick(ActionEvent a){
-		DateChooserDialog dialog = new DateChooserDialog(
-						"New Task", 
-						"Set up your new task",
-						DateChooserDialog.TASK_DIALOG
-				);
-
-		//createButton has not been overridden in DateChooserDialog, so the return type is a Button.
-		Button bt = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
-
-		bt.addEventFilter(ActionEvent.ACTION, event -> {
-			Map<String,String> map = dialog.getInputMap();
-			Calendar c1 = Calendar.getInstance();
-			
-			try {
-				c1.set( Integer.parseInt(map.get("year1")),
-						Integer.parseInt(map.get("month1")),
-						Integer.parseInt(map.get("day1")),
-						Integer.parseInt(map.get("hour1")),
-						Integer.parseInt(map.get("minute1")) );
-			} catch(NumberFormatException e){
-				//Integer.parseInt failed
-				dialog.alertUser("Date must be given with integer numbers!");
-				event.consume();
-			}
-		});
-		
-		dialog.showAndWait().ifPresent(name -> {
-			Calendar c1 = Calendar.getInstance();
-			
-			//TODO: Validate input. Check 'duration' key in the map
-			
-			c1.set( Integer.parseInt(name.get("year1")),
-					Integer.parseInt(name.get("month1")),
-					Integer.parseInt(name.get("day1")),
-					Integer.parseInt(name.get("hour1")),
-					Integer.parseInt(name.get("minute1")) );
-			
-			Task task = new Task(name.get("title"), "", c1);
-			mTaskList.add(task);
-		});
 	}
 }

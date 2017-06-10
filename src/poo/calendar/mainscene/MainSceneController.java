@@ -4,7 +4,6 @@ package poo.calendar.mainscene;
 import java.io.IOException;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.MenuBar;
 import javafx.scene.effect.DropShadow;
