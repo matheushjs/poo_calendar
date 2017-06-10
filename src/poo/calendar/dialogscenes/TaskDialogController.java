@@ -1,9 +1,11 @@
 package poo.calendar.dialogscenes;
 
+import java.util.Calendar;
 import java.util.UUID;
 
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -28,7 +30,7 @@ public class TaskDialogController {
 	
 	@FXML
 	private Text mHeaderText;
-	
+
 	@FXML
 	private TextField mTitleField;
 	
@@ -37,6 +39,9 @@ public class TaskDialogController {
 	
 	@FXML
 	private TextField mHourField;
+	
+	// Stores whether the + button has been clicked.
+	private boolean mDeadlineWasClicked;
 
 	@FXML
 	private TextField mDescriptionField;
@@ -56,6 +61,7 @@ public class TaskDialogController {
 	 * Default constructor
 	 */
 	public TaskDialogController(){
+		mDeadlineWasClicked = false;
 	}
 	
 	/**
@@ -64,6 +70,9 @@ public class TaskDialogController {
 	@FXML
 	private void initialize(){
 		//ŦODO: Connect due signals
+		
+		mDateField.setOnMouseClicked(action -> onDeadlineFieldClick());
+		mHourField.setOnMouseClicked(action -> onDeadlineFieldClick());
 	}
 	
 	/**
@@ -87,8 +96,11 @@ public class TaskDialogController {
 	public void setMainApp(MainApplication app){
 		mMainApp = app;
 		
-		Button bt = (Button) mMainPane.lookupButton(ButtonType.APPLY);
+		Button bt = (Button) mMainPane.lookupButton(ButtonType.CANCEL);
 		bt.setOnAction(action -> mMainApp.displayMainRoot());
+		
+		bt = (Button) mMainPane.lookupButton(ButtonType.APPLY);
+		bt.setOnAction(action -> onApplyClick(action));
 	}
 	
 	/**
@@ -97,7 +109,45 @@ public class TaskDialogController {
 	 */
 	public void setTaskID(UUID id){
 		mTaskID = id;
-		//TODO: Place appointment info in the UI
+		//TODO: Place task info in the UI
 		//TODO: configure UI to edit mode
+	}
+	
+	private void onApplyClick(ActionEvent a){
+		if(!validateInput()) return;
+		
+		//TODO: Add task
+		
+		mMainApp.displayMainRoot();
+	}
+	
+	/**
+	 * Returns true if user input is valid
+	 */
+	private boolean validateInput(){
+		return true; //TODO: Add validation
+	}
+	
+	/**
+	 * Callback for when the user clicks any Deadline text field.
+	 * On first click, will fill the deadline fields with some valid values.
+	 */
+	private void onDeadlineFieldClick(){
+		if(mDeadlineWasClicked) return;
+		mDeadlineWasClicked = true;
+		
+		//TODO: Make fields start greyish, then make them white upon clicking
+		
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.MINUTE, 30);
+		mDateField.setText(String.format("%d/%d/%d",
+				calendar.get(Calendar.DAY_OF_MONTH),
+				calendar.get(Calendar.MONTH),
+				calendar.get(Calendar.YEAR)));
+		
+		mHourField.setText(String.format("%d:%d", 
+				calendar.get(Calendar.HOUR_OF_DAY),
+				calendar.get(Calendar.MINUTE)));
+
 	}
 }
