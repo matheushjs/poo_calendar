@@ -59,7 +59,7 @@ public class DateFieldsUtil {
 	public static String dateString(Calendar calendar){
 		return String.format("%02d/%02d/%04d",
 				calendar.get(Calendar.DAY_OF_MONTH),
-				calendar.get(Calendar.MONTH),
+				calendar.get(Calendar.MONTH)+1,
 				calendar.get(Calendar.YEAR));
 	}
 	
@@ -72,10 +72,5 @@ public class DateFieldsUtil {
 		return String.format("%02d:%02d", 
 				calendar.get(Calendar.HOUR_OF_DAY),
 				calendar.get(Calendar.MINUTE));
-	}
-	
-	public static void main(String[] args){
-		Calendar c = parseFields(" 12 / 6/ 96", " 12 : 5");	
-		System.out.println(dateString(c) + " " + hourString(c));
 	}
 }
