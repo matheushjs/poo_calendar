@@ -2,7 +2,9 @@ package poo.calendar.mainscene.appointments;
 
 import java.util.UUID;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.control.OverrunStyle;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -44,9 +46,13 @@ public class AppointmentViewController extends ControlledWidget<AnchorPane> {
 		
 		AnchorPane.setTopAnchor(mHourRange, 0.0);
 		AnchorPane.setRightAnchor(mHourRange, 0.0);
+		AnchorPane.setLeftAnchor(mHourRange, 0.0);
+		mHourRange.setAlignment(Pos.TOP_RIGHT);
 		
 		AnchorPane.setBottomAnchor(mIDLabel, 0.0);
+		AnchorPane.setRightAnchor(mIDLabel, 0.0);
 		AnchorPane.setLeftAnchor(mIDLabel, 0.0);
+		mIDLabel.setAlignment(Pos.BOTTOM_LEFT);
 		
 		mMainPane.getChildren().addAll(mTitle, mHourRange, mIDLabel);
 	}
@@ -72,6 +78,7 @@ public class AppointmentViewController extends ControlledWidget<AnchorPane> {
 		mID = id;
 		mTitle.setText(title);
 		mIDLabel.setText(id.toString());
+		mIDLabel.setTextOverrun(OverrunStyle.ELLIPSIS);
 		setBackground(bg);
 	}
 	

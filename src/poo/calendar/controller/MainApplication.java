@@ -48,7 +48,7 @@ public class MainApplication extends Application {
 			System.exit(1);
 		}
 		AppointmentWindowController appointmentsController = loader.getController();
-		appointmentsController.initializeModel(mAppointments);
+		appointmentsController.initializeModel(mAppointments, mGroups);
 		appointmentsController.setMainApp(this);
 		
 		// Load TaskWindow
@@ -112,6 +112,7 @@ public class MainApplication extends Application {
 		mAppointments = FXCollections.observableArrayList();
 		mTasks = FXCollections.observableArrayList();
 		mGroups = FXCollections.observableHashMap();
+		mGroups.put(CalendarGroup.DEFAULT_ID, CalendarGroup.DEFAULT_GROUP);
 		
 		createMainParent();
 		mMainScene = new Scene(mMainParent);

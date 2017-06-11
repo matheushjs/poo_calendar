@@ -98,7 +98,6 @@ public class AppointmentDialogController {
 		mTasks = tasks;
 		mAppointments = appts;
 		
-		mGroupCombo.getItems().add(CalendarGroup.DEFAULT_GROUP);
 		mGroupCombo.getItems().addAll(mGroupMap.values());
 		mGroupCombo.setCellFactory(GroupComboBoxUtil.getAddCallback());
 		mGroupCombo.setValue(CalendarGroup.DEFAULT_GROUP);

@@ -1,19 +1,19 @@
 package poo.calendar.mainscene.appointments;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 import poo.calendar.controller.MainApplication;
 import poo.calendar.model.Appointment;
+import poo.calendar.model.CalendarGroup;
 
 
 /**
@@ -28,7 +28,7 @@ public class AppointmentWindowController {
 	private ScrollPane mInnerScrollPane;
 	
 	@FXML
-	private VBox mInnerBox;
+	private HBox mInnerBox;
 	
 	@FXML
 	private Button mAddButton;
@@ -40,16 +40,19 @@ public class AppointmentWindowController {
 	private Button mRightButton;
 	
 	private MainApplication mMainApp;
-	private AppointmentDayPortController mDayPort;
+	private ArrayList<AppointmentDayPortController> mDayPort;
 	
 	//Model data
-	private ObservableList<Appointment> mAppointmentList = null;
+	private ObservableList<Appointment> mAppointmentList;
+	private ObservableMap<UUID, CalendarGroup> mGroupMap;
 	
 	/**
 	 * Default constructor
 	 */
 	public AppointmentWindowController(){
-		mDayPort = new AppointmentDayPortController();
+		mDayPort = new ArrayList<>(7);
+		for(int i = 0; i < 7; i++)
+				mDayPort.add(new AppointmentDayPortController());
 	}
 	
 	/**
@@ -58,7 +61,14 @@ public class AppointmentWindowController {
 	@FXML
 	private void initialize(){
 		//TODO: Register due listeners
-		mInnerBox.getChildren().add(mDayPort.getWidget());
+		for(AppointmentDayPortController adpc: mDayPort){
+			AnchorPane widget = adpc.getWidget();
+			widget.prefWidthProperty().bind(mInnerBox.widthProperty().divide(7.0));
+			widget.maxWidthProperty().bind(mInnerBox.widthProperty().divide(7.0));
+			mInnerBox.getChildren().add(widget);
+		}
+		mInnerBox.prefWidthProperty().bind(mInnerScrollPane.widthProperty());
+		mInnerBox.maxWidthProperty().bind(mInnerScrollPane.widthProperty());
 	}
 	
 	/**
@@ -67,7 +77,7 @@ public class AppointmentWindowController {
 	 * 
 	 * @param list List of appointments that should be controlled by this Class
 	 */
-	public void initializeModel(ObservableList<Appointment> list){
+	public void initializeModel(ObservableList<Appointment> list, ObservableMap<UUID, CalendarGroup> map){
 		if(mAppointmentList != null){
 			//TODO: Verify logging / exception
 			System.err.println(this.getClass().getName() + ": Can only initialize model once.");
@@ -75,6 +85,7 @@ public class AppointmentWindowController {
 		}
 		
 		mAppointmentList = list;
+		mGroupMap = map;
 
 		for(Appointment a: mAppointmentList){
 			this.addAppointmentView(a);
@@ -105,7 +116,8 @@ public class AppointmentWindowController {
 	 * @param appointment Appointment to be added.
 	 */
 	private void addAppointmentView(Appointment appointment){
-		mDayPort.addAppointment(appointment);
+		for(AppointmentDayPortController adpc: mDayPort)
+			adpc.addAppointment(appointment, mGroupMap.get(appointment.getGroupID()));
 
 		/*
 		view.setOnMouseClicked(click -> {
@@ -155,5 +167,8 @@ public class AppointmentWindowController {
 		mAddButton.setOnAction(action -> {
 			mMainApp.displayAppointmentDialog();
 		});
+		
+		for(AppointmentDayPortController adpc: mDayPort)
+			adpc.setMainApp(mMainApp);
 	}
 }
