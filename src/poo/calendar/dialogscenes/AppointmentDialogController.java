@@ -14,8 +14,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+import poo.calendar.DateUtil;
 import poo.calendar.controller.MainApplication;
-import poo.calendar.dialogscenes.utils.DateFieldsUtil;
 import poo.calendar.dialogscenes.utils.GroupComboBoxUtil;
 import poo.calendar.model.Appointment;
 import poo.calendar.model.CalendarGroup;
@@ -82,12 +82,12 @@ public class AppointmentDialogController {
 		mRecurrenceChoice.setValue("None");
 		
 		Calendar calendar = Calendar.getInstance();
-		mDateField1.setText(DateFieldsUtil.dateString(calendar));
-		mHourField1.setText(DateFieldsUtil.hourString(calendar));
+		mDateField1.setText(DateUtil.dateString(calendar));
+		mHourField1.setText(DateUtil.hourString(calendar));
 		
 		calendar.add(Calendar.MINUTE, 30);
-		mDateField2.setText(DateFieldsUtil.dateString(calendar));
-		mHourField2.setText(DateFieldsUtil.hourString(calendar));
+		mDateField2.setText(DateUtil.dateString(calendar));
+		mHourField2.setText(DateUtil.hourString(calendar));
 	}
 	
 	/**
@@ -138,11 +138,11 @@ public class AppointmentDialogController {
 		
 		String date = mDateField1.getText().trim();
 		String hour = mHourField1.getText().trim();
-		Calendar initDate = DateFieldsUtil.parseFields(date, hour);
+		Calendar initDate = DateUtil.parseFields(date, hour);
 		
 		date = mDateField2.getText().trim();
 		hour = mHourField2.getText().trim();
-		Calendar endDate = DateFieldsUtil.parseFields(date, hour);
+		Calendar endDate = DateUtil.parseFields(date, hour);
 		
 		CalendarGroup cg = mGroupCombo.getValue();
 		Recurrence rc = Recurrence.valueOf(mRecurrenceChoice.getValue().toUpperCase());
@@ -170,7 +170,7 @@ public class AppointmentDialogController {
 		String hour = mHourField1.getText().trim();
 		Calendar initDate = null;
 		try {
-			initDate = DateFieldsUtil.parseFields(date, hour);
+			initDate = DateUtil.parseFields(date, hour);
 		} catch(IllegalArgumentException e){
 			//TODO: Add alert
 			allFine = false;
@@ -180,7 +180,7 @@ public class AppointmentDialogController {
 		hour = mHourField2.getText().trim();
 		Calendar endDate = null;
 		try {
-			endDate = DateFieldsUtil.parseFields(date, hour);
+			endDate = DateUtil.parseFields(date, hour);
 		} catch(IllegalArgumentException e){
 			//TODO: Add alert
 			allFine = false;

@@ -1,10 +1,10 @@
-package poo.calendar.dialogscenes.utils;
+package poo.calendar;
 
 import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class DateFieldsUtil {
+public class DateUtil {
 	
 	/**
 	 * Creates a calendar from 2 strings 'date' and 'hour'.
@@ -72,5 +72,16 @@ public class DateFieldsUtil {
 		return String.format("%02d:%02d", 
 				calendar.get(Calendar.HOUR_OF_DAY),
 				calendar.get(Calendar.MINUTE));
+	}
+	
+	/**
+	 * Sets fields lower than DATE of 'calendar' to 0. 
+	 * @param calendar
+	 */
+	public static void resetToDate(Calendar calendar){
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
 	}
 }

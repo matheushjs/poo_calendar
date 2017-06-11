@@ -13,8 +13,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+import poo.calendar.DateUtil;
 import poo.calendar.controller.MainApplication;
-import poo.calendar.dialogscenes.utils.DateFieldsUtil;
 import poo.calendar.dialogscenes.utils.GroupComboBoxUtil;
 import poo.calendar.model.Appointment;
 import poo.calendar.model.CalendarGroup;
@@ -123,7 +123,7 @@ public class TaskDialogController {
 		String hour = mHourField.getText().trim();
 		Calendar calendar = null;
 		if(date.length() != 0 && hour.length() != 0){
-			calendar = DateFieldsUtil.parseFields(date, hour);
+			calendar = DateUtil.parseFields(date, hour);
 		}
 		
 		CalendarGroup cg = mGroupCombo.getValue();
@@ -150,7 +150,7 @@ public class TaskDialogController {
 		String hour = mHourField.getText().trim();
 		if(date.length() != 0 && hour.length() != 0){
 			try {
-				DateFieldsUtil.parseFields(date, hour);
+				DateUtil.parseFields(date, hour);
 			} catch(IllegalArgumentException e){
 				//TODO: Add alert
 				allFine = false;
@@ -172,8 +172,8 @@ public class TaskDialogController {
 		
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.MINUTE, 30);
-		mDateField.setText(DateFieldsUtil.dateString(calendar));
-		mHourField.setText(DateFieldsUtil.hourString(calendar));
+		mDateField.setText(DateUtil.dateString(calendar));
+		mHourField.setText(DateUtil.hourString(calendar));
 
 	}
 }

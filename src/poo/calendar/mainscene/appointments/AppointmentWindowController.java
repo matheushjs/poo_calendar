@@ -1,6 +1,7 @@
 package poo.calendar.mainscene.appointments;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.UUID;
 
 import javafx.collections.ListChangeListener;
@@ -51,8 +52,11 @@ public class AppointmentWindowController {
 	 */
 	public AppointmentWindowController(){
 		mDayPort = new ArrayList<>(7);
+		
+		Calendar c = Calendar.getInstance();
+		
 		for(int i = 0; i < 7; i++)
-				mDayPort.add(new AppointmentDayPortController());
+				mDayPort.add(new AppointmentDayPortController(c));
 	}
 	
 	/**
@@ -118,15 +122,8 @@ public class AppointmentWindowController {
 	private void addAppointmentView(Appointment appointment){
 		for(AppointmentDayPortController adpc: mDayPort)
 			adpc.addAppointment(appointment, mGroupMap.get(appointment.getGroupID()));
-
-		/*
-		view.setOnMouseClicked(click -> {
-			AppointmentView source = (AppointmentView) click.getSource();
-			if(click.getButton().compareTo(MouseButton.PRIMARY) == 0){
-				this.removeAppointment(source.getID());
-			}
-		})
-		*/
+		
+		//TODO: add listeners to Appointment calendar properties
 	}
 	
 	/**

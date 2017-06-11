@@ -18,13 +18,6 @@ public class CalendarGroup {
 	public static UUID DEFAULT_ID = UUID.fromString("d26a05c8-60c7-4a15-86ce-12605bb198a8");
 	public static CalendarGroup DEFAULT_GROUP = new CalendarGroup("Default", Color.ORANGE, DEFAULT_ID);
 	
-	// Array of colors that CalendarGroups can assume
-	private static Color[] mColorArray = new Color[] {
-		Color.AQUA, Color.CORAL, Color.CORNFLOWERBLUE,
-		Color.GOLD, Color.GREENYELLOW, Color.HOTPINK,
-		Color.MOCCASIN, Color.WHITESMOKE
-	};
-	
 	//The group's name
 	private StringProperty mName;
 	
