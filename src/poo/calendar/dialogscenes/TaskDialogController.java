@@ -12,6 +12,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import poo.calendar.DateUtil;
 import poo.calendar.controller.MainApplication;
@@ -28,6 +29,12 @@ import poo.calendar.model.Task;
 public class TaskDialogController {
 	@FXML
 	private DialogPane mMainPane;
+	
+	@FXML
+	private VBox mFormBox;
+	
+	@FXML
+	private Button mDeleteButton;
 	
 	@FXML
 	private Text mHeaderText;
@@ -56,7 +63,7 @@ public class TaskDialogController {
 	public ObservableMap<UUID, CalendarGroup> mGroupMap;
 	public ObservableList<Task> mTasks;
 	public ObservableList<Appointment> mAppointments;
-	public UUID mTaskID;
+	public Task mTask;
 	
 	/**
 	 * Default constructor
@@ -70,7 +77,9 @@ public class TaskDialogController {
 	 */
 	@FXML
 	private void initialize(){
-		//ŦODO: Connect due signals
+		//TODO: Connect due signals
+		mFormBox.getChildren().remove(mDeleteButton);
+		mDeleteButton.setOnAction(action -> onDeleteClick());
 		
 		mDateField.setOnMouseClicked(action -> onDeadlineFieldClick());
 		mHourField.setOnMouseClicked(action -> onDeadlineFieldClick());
@@ -108,19 +117,40 @@ public class TaskDialogController {
 	 * @param id
 	 */
 	public void setTaskID(UUID id){
-		mTaskID = id;
-		//TODO: Place task info in the UI
-		//TODO: configure UI to edit mode
+		for(Task t: mTasks){
+			if(t.getID().compareTo(id) == 0)
+				mTask = t;
+		}
+		
+		try {
+			mFormBox.getChildren().add(0, mDeleteButton);
+		} catch(IndexOutOfBoundsException e){
+			mFormBox.getChildren().add(mDeleteButton);
+		}
+		
+		mTitleField.setText(mTask.getTitle());
+		mDescriptionField.setText(mTask.getDescription());
+		
+		if(mTask.getDeadlineDate() != null){
+			mDateField.setText(DateUtil.dateString(mTask.getDeadlineDate()));
+			mHourField.setText(DateUtil.hourString(mTask.getDeadlineDate()));
+		}
+		
+		mGroupCombo.setValue(mGroupMap.get(mTask.getID()));
 	}
 	
+	/**
+	 * Callback function to call upon a click on the 'apply' button.
+	 * @param a
+	 */
 	private void onApplyClick(ActionEvent a){
 		if(!validateInput()) return;
 		
-		String title = mTitleField.getText();
+		String title = mTitleField.getText().trim();
 		String description = mDescriptionField.getText();
 		
-		String date = mDateField.getText().trim();
-		String hour = mHourField.getText().trim();
+		String date = mDateField.getText();
+		String hour = mHourField.getText();
 		Calendar calendar = null;
 		if(date.length() != 0 && hour.length() != 0){
 			calendar = DateUtil.parseFields(date, hour);
@@ -140,14 +170,14 @@ public class TaskDialogController {
 	private boolean validateInput(){
 		boolean allFine = true;
 		
-		String title = mTitleField.getText();
+		String title = mTitleField.getText().trim();
 		if(title.length() == 0){
 			//TODO: Add alert
 			allFine = false;
 		}
 		
-		String date = mDateField.getText().trim();
-		String hour = mHourField.getText().trim();
+		String date = mDateField.getText();
+		String hour = mHourField.getText();
 		if(date.length() != 0 && hour.length() != 0){
 			try {
 				DateUtil.parseFields(date, hour);
@@ -174,6 +204,15 @@ public class TaskDialogController {
 		calendar.add(Calendar.MINUTE, 30);
 		mDateField.setText(DateUtil.dateString(calendar));
 		mHourField.setText(DateUtil.hourString(calendar));
-
+	}
+	
+	/**
+	 * Removes the task being edited from the list of tasks.
+	 */
+	private void onDeleteClick(){
+		//TODO: Request confirmation
+		if(mTask != null)
+			mTasks.remove(mTask);
+		mMainApp.displayMainRoot();
 	}
 }

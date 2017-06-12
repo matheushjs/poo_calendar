@@ -3,7 +3,7 @@ package poo.calendar;
 import javafx.scene.Node;
 
 /**
- * Class that every widget controller should extend.
+ * Class that every non-FXML widget controller should extend.
  */
 public abstract class ControlledWidget<T extends Node> {
 	public ControlledWidget(){
@@ -11,7 +11,7 @@ public abstract class ControlledWidget<T extends Node> {
 	}
 	
 	/**
-	 * @return the widget controller by this class
+	 * @return the widget controlled by this class
 	 */
 	public abstract T getWidget();
 	

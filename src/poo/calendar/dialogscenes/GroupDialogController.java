@@ -29,6 +29,9 @@ public class GroupDialogController {
 	private DialogPane mMainPane;
 	
 	@FXML
+	private Button mDeleteButton;
+	
+	@FXML
 	private Text mHeaderText;
 	
 	@FXML
@@ -61,6 +64,8 @@ public class GroupDialogController {
 	private void initialize(){
 		//TODO: Connect due signals
 		//TODO: Wisely choose a default color
+		mFormBox.getChildren().remove(mDeleteButton);
+		mDeleteButton.setOnAction(action -> onDeleteClick());
 	}
 	
 	/**
@@ -97,6 +102,14 @@ public class GroupDialogController {
 		if(mGroup == null)
 			throw new IllegalArgumentException("Received UUID for an inexistent group.");
 		
+		//Add the delete button.
+		try {
+			mFormBox.getChildren().add(0, mDeleteButton);
+		} catch(IndexOutOfBoundsException e){
+			//Not an expected situation, but could happen if the dialog happens to be modified.
+			mFormBox.getChildren().add(mDeleteButton);
+		}
+		
 		mNameField.setText(mGroup.getName());
 		mColorPicker.setValue(mGroup.getColor());
 	}
@@ -125,6 +138,21 @@ public class GroupDialogController {
 	 * Returns true if user input is valid.
 	 */
 	private boolean validateInput(){
-		return true; //No validation to do yet
+		String title = mNameField.getText().trim();
+		if(title.length() == 0){
+			//TODO: Add alert
+			return false;
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * Remove the group being edited from the map of groups.
+	 */
+	private void onDeleteClick(){
+		//TODO: Request confirmation
+		mGroupMap.remove(mGroup.getID());
+		mMainApp.displayMainRoot();
 	}
 }

@@ -99,7 +99,11 @@ public class GroupListWindowController {
 		view.setOnMouseClicked(event -> {
 			if(event.getButton().compareTo(MouseButton.PRIMARY) == 0){
 				GroupView iview = (GroupView) event.getSource();
-				mMainApp.displayGroupDialog(iview.getID());
+				
+				// Do not allow user to edit the default group
+				if(iview.getID() != CalendarGroup.DEFAULT_ID){
+					mMainApp.displayGroupDialog(iview.getID());
+				}
 			}
 		});
 		

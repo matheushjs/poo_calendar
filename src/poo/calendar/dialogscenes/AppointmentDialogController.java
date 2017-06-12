@@ -13,6 +13,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import poo.calendar.DateUtil;
 import poo.calendar.controller.MainApplication;
@@ -31,6 +32,12 @@ import poo.calendar.model.Task;
 public class AppointmentDialogController {
 	@FXML
 	private DialogPane mMainPane;
+	
+	@FXML
+	private VBox mFormBox;
+	
+	@FXML
+	private Button mDeleteButton;
 	
 	@FXML
 	private Text mHeaderText;
@@ -65,7 +72,7 @@ public class AppointmentDialogController {
 	public ObservableMap<UUID, CalendarGroup> mGroupMap;
 	public ObservableList<Task> mTasks;
 	public ObservableList<Appointment> mAppointments;
-	public UUID mAppointmentID;
+	public Appointment mAppointment;
 	
 	/**
 	 * Default constructor
@@ -80,6 +87,9 @@ public class AppointmentDialogController {
 	private void initialize(){
 		mRecurrenceChoice.getItems().addAll("None", "Daily", "Weekly", "Monthly", "Yearly");
 		mRecurrenceChoice.setValue("None");
+		
+		mFormBox.getChildren().remove(mDeleteButton);
+		mDeleteButton.setOnAction(action -> onDeleteClick());
 		
 		Calendar calendar = Calendar.getInstance();
 		mDateField1.setText(DateUtil.dateString(calendar));
@@ -122,9 +132,31 @@ public class AppointmentDialogController {
 	 * @param id
 	 */
 	public void setAppointmentID(UUID id){
-		mAppointmentID = id;
-		//TODO: Place appointment info in the UI
-		//TODO: configure UI to edit mode
+		for(Appointment a: mAppointments){
+			if(a.getID().compareTo(id) == 0){
+				mAppointment = a;
+				break;
+			}
+		}
+		
+		try {
+			mFormBox.getChildren().add(0, mDeleteButton);
+		} catch(IndexOutOfBoundsException e){
+			mFormBox.getChildren().add(mDeleteButton);
+		}
+		
+		mTitleField.setText(mAppointment.getTitle());
+		mDescriptionField.setText(mAppointment.getDescription());
+		mDateField1.setText(DateUtil.dateString(mAppointment.getInitDate()));
+		mDateField2.setText(DateUtil.dateString(mAppointment.getEndDate()));
+		mHourField1.setText(DateUtil.hourString(mAppointment.getInitDate()));
+		mHourField2.setText(DateUtil.hourString(mAppointment.getEndDate()));
+		
+		mGroupCombo.setValue(mGroupMap.get(mAppointment.getGroupID()));
+		
+		String recString = mAppointment.getRecurrence().toString().toLowerCase();
+		recString = recString.substring(0, 1).toUpperCase() + recString.substring(1);
+		mRecurrenceChoice.setValue(recString);
 	}
 	
 	/**
@@ -133,15 +165,15 @@ public class AppointmentDialogController {
 	private void onApplyClick(ActionEvent a){
 		if(!validateInput()) return;
 		
-		String title = mTitleField.getText();
+		String title = mTitleField.getText().trim();
 		String description = mDescriptionField.getText();
 		
-		String date = mDateField1.getText().trim();
-		String hour = mHourField1.getText().trim();
+		String date = mDateField1.getText();
+		String hour = mHourField1.getText();
 		Calendar initDate = DateUtil.parseFields(date, hour);
 		
-		date = mDateField2.getText().trim();
-		hour = mHourField2.getText().trim();
+		date = mDateField2.getText();
+		hour = mHourField2.getText();
 		Calendar endDate = DateUtil.parseFields(date, hour);
 		
 		CalendarGroup cg = mGroupCombo.getValue();
@@ -160,14 +192,14 @@ public class AppointmentDialogController {
 	private boolean validateInput(){
 		boolean allFine = true;
 		
-		String title = mTitleField.getText();
+		String title = mTitleField.getText().trim();
 		if(title.length() == 0){
 			//TODO: Add alert
 			allFine = false;
 		}
 		
-		String date = mDateField1.getText().trim();
-		String hour = mHourField1.getText().trim();
+		String date = mDateField1.getText();
+		String hour = mHourField1.getText();
 		Calendar initDate = null;
 		try {
 			initDate = DateUtil.parseFields(date, hour);
@@ -176,8 +208,8 @@ public class AppointmentDialogController {
 			allFine = false;
 		}
 		
-		date = mDateField2.getText().trim();
-		hour = mHourField2.getText().trim();
+		date = mDateField2.getText();
+		hour = mHourField2.getText();
 		Calendar endDate = null;
 		try {
 			endDate = DateUtil.parseFields(date, hour);
@@ -194,5 +226,16 @@ public class AppointmentDialogController {
 		}
 
 		return allFine;
+	}
+	
+	/**
+	 * Removes appointment being edited from the appointments list.
+	 */
+	private void onDeleteClick(){
+		//TODO: Request confirmation
+		if(mAppointment != null){
+			mAppointments.remove(mAppointment);
+		}
+		mMainApp.displayMainRoot();
 	}
 }
