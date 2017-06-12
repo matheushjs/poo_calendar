@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import poo.calendar.DateUtil;
 import poo.calendar.controller.MainApplication;
 import poo.calendar.model.Appointment;
 import poo.calendar.model.CalendarGroup;
@@ -42,6 +43,7 @@ public class AppointmentWindowController {
 	
 	private MainApplication mMainApp;
 	private ArrayList<AppointmentDayPortController> mDayPort;
+	private Calendar mAssignedWeek;
 	
 	//Model data
 	private ObservableList<Appointment> mAppointmentList;
@@ -51,12 +53,20 @@ public class AppointmentWindowController {
 	 * Default constructor
 	 */
 	public AppointmentWindowController(){
-		mDayPort = new ArrayList<>(7);
+		mDayPort = new ArrayList<>();
 		
-		Calendar c = Calendar.getInstance();
+		mAssignedWeek = Calendar.getInstance();
+		DateUtil.resetToWeek(mAssignedWeek);
 		
-		for(int i = 0; i < 7; i++)
-				mDayPort.add(new AppointmentDayPortController(c));
+		Calendar auxCalendar = (Calendar) mAssignedWeek.clone();
+		for(int i = 0; i < 7; i++){
+			AppointmentDayPortController adpc = new AppointmentDayPortController(auxCalendar);
+			adpc.initializeModel(mGroupMap);
+			//TODO: All initializeModel functions, remove them and do their task in constructor.
+			mDayPort.add(adpc);
+			
+			auxCalendar.add(Calendar.DAY_OF_WEEK, 1);
+		}
 	}
 	
 	/**
@@ -120,8 +130,48 @@ public class AppointmentWindowController {
 	 * @param appointment Appointment to be added.
 	 */
 	private void addAppointmentView(Appointment appointment){
-		for(AppointmentDayPortController adpc: mDayPort)
-			adpc.addAppointment(appointment, mGroupMap.get(appointment.getGroupID()));
+		Calendar init, end;
+		init = appointment.getInitDate();
+		end = appointment.getEndDate();
+		
+		int base = mAssignedWeek.get(Calendar.YEAR);
+		int low = init.get(Calendar.YEAR);
+		int high = end.get(Calendar.YEAR);
+		if(low > base || high < base) return;
+		
+		base = mAssignedWeek.get(Calendar.MONTH);
+		low = init.get(Calendar.MONTH);
+		if(low > base) return;
+
+		//Gets calendar for last day of the week being displayed.
+		Calendar endOfWeek = (Calendar) mAssignedWeek.clone();
+		endOfWeek.add(Calendar.DAY_OF_WEEK, 6);
+		
+		base = endOfWeek.get(Calendar.MONTH);
+		high = end.get(Calendar.MONTH);
+		if(high < base) return;
+
+		base = mAssignedWeek.get(Calendar.DATE);
+		high = end.get(Calendar.DATE);
+		if(high < base) return;
+
+		base = endOfWeek.get(Calendar.DATE);
+		low = init.get(Calendar.DATE);
+		if(low > base) return;
+
+		int day1 = low;
+		int day2 = high;
+		boolean control = false;
+		for(AppointmentDayPortController adpc: mDayPort){
+			if(day1 == adpc.getAssignedDay())
+				control = true;
+			
+			if(control)
+				adpc.addAppointment(appointment, mGroupMap.get(appointment.getGroupID()));
+			
+			if(day2 == adpc.getAssignedDay())
+				control = false;
+		}
 		
 		//TODO: add listeners to Appointment calendar properties
 	}

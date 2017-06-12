@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
+import javafx.collections.ObservableMap;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 import poo.calendar.ControlledWidget;
@@ -29,6 +30,9 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 	
 	// Calendar storing the day this DayPort represents
 	private Calendar mAssignedDay;
+	
+	// Model data
+	private ObservableMap<UUID, CalendarGroup> mGroupMap;
 	
 	/**
 	 * Default constructor
@@ -60,11 +64,20 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 		return mMainPane;
 	}
 	
+	public void initializeModel(ObservableMap<UUID, CalendarGroup> map){
+		mGroupMap = map;
+	}
+	
 	/**
 	 * Adds an appointment to the Day port widget.
 	 * @param appt An appointment whose day correspond to that of this DayPort
 	 */
 	public void addAppointment(Appointment appt, CalendarGroup cg){
+		if(mGroupMap != null){
+			System.err.println("Must initialize model for AppointmentDayPortController");
+			System.exit(1);
+		}
+		
 		AppointmentViewController AVC = new AppointmentViewController();
 		AnchorPane widget = AVC.getWidget();
 		
@@ -72,6 +85,9 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 		
 		String range = DateUtil.hourString(appt.getInitDate()) + " - " + DateUtil.hourString(appt.getEndDate());
 		AVC.initializeModel(appt, cg, range);
+		
+		// If appointment changes Calendar Group, repaint it.
+		appt.groupIDProperty().addListener(change -> AVC.setColor(cg.getColor()));
 		
 		if(mMainApp != null)
 			widget.setOnMouseClicked(action -> mMainApp.displayAppointmentDialog(AVC.getID()));
@@ -89,7 +105,7 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 	 */
 	private void manageWidgetSize(Node widget, Appointment appt){
 		Calendar init, end;
-		int minute1, hour1;
+		int minute1, hour1, day1;
 		int minute2, hour2, day2;
 		
 		init = appt.getInitDate();
@@ -97,6 +113,7 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 		
 		minute1 = init.get(Calendar.MINUTE);
 		hour1 = init.get(Calendar.HOUR_OF_DAY);
+		day1 = init.get(Calendar.DAY_OF_MONTH);
 		minute2 = end.get(Calendar.MINUTE);
 		hour2 = end.get(Calendar.HOUR_OF_DAY);
 		day2 = end.get(Calendar.DAY_OF_MONTH);
@@ -108,6 +125,10 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 		offset1 -= offset1%15; //Rounds to lower 15 minutes
 		offset2 += offset2%15 == 0 ? 0 : 15 - offset2%15; //Rounds to upper 15 minutes
 		
+		if(day1 < mAssignedDay.get(Calendar.DAY_OF_MONTH)){
+			offset1 = 0;
+		}
+		
 		if(day2 > mAssignedDay.get(Calendar.DAY_OF_MONTH)){
 			offset2 = whole;
 		}
@@ -116,9 +137,6 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 		double bottomAnchor = PORT_HEIGHT * (whole - offset2) / whole;
 		
 		//TODO: Resize other appointments whenever needed
-		
-		System.out.println(topAnchor);
-		System.out.println(bottomAnchor);
 		
 		AnchorPane.setTopAnchor(widget, topAnchor);
 		AnchorPane.setBottomAnchor(widget, bottomAnchor);
@@ -141,5 +159,12 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 		for(AppointmentViewController AVC: mAppointmentControllers){
 			AVC.getWidget().setOnMouseClicked(action -> mMainApp.displayAppointmentDialog(AVC.getID()));
 		}
+	}
+	
+	/**
+	 * @return DAY_OF_MONTH this DayPort represents
+	 */
+	public int getAssignedDay(){
+		return mAssignedDay.get(Calendar.DATE);
 	}
 }

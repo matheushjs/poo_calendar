@@ -113,7 +113,7 @@ public class AppointmentViewController extends ControlledWidget<AnchorPane> {
 	 * 
 	 * @param bg
 	 */
-	private void setColor(Color bg){
+	public void setColor(Color bg){
 		//TODO: Decide the label's font color
 		mMainPane.setBackground(new Background(new BackgroundFill(Paint.valueOf(bg.toString()), null, null)));
 	}

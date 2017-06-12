@@ -29,7 +29,7 @@ public class DateUtil {
 			
 			if(dateMatcher.matches() && dateMatcher.groupCount() == 3){
 				calendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dateMatcher.group(1)));
-				calendar.set(Calendar.MONTH, Integer.parseInt(dateMatcher.group(2)));
+				calendar.set(Calendar.MONTH, Integer.parseInt(dateMatcher.group(2))-1 ); //January is 0, so we sum 1.
 				
 				String year = dateMatcher.group(3);
 				int n = Integer.parseInt(year);
@@ -84,4 +84,24 @@ public class DateUtil {
 		calendar.set(Calendar.SECOND, 0);
 		calendar.set(Calendar.MILLISECOND, 0);
 	}
+	
+	
+	/**
+	 * Sets fields lower than DAY_OF_WEEK to 0.
+	 * @param calendar
+	 */
+	public static void resetToWeek(Calendar calendar){
+		DateUtil.resetToDate(calendar);
+		calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
+	}
+	
+	/*
+	public static void main(String[] args){
+		Calendar c = Calendar.getInstance();
+		
+		c.add(Calendar.DAY_OF_MONTH, -2);
+		DateUtil.resetToWeek(c);
+		System.out.println(dateString(c));
+	}
+	*/
 }
