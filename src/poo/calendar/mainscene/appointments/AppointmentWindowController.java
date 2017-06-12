@@ -43,7 +43,7 @@ public class AppointmentWindowController {
 	private Button mRightButton;
 	
 	private MainApplication mMainApp;
-	private ArrayList<AppointmentDayPortController> mDayPort;
+	private ArrayList<AppointmentDayPortController> mDayPorts;
 	private Calendar mAssignedWeek;
 	
 	//Model data
@@ -54,7 +54,7 @@ public class AppointmentWindowController {
 	 * Default constructor
 	 */
 	public AppointmentWindowController(){
-		mDayPort = new ArrayList<>();
+		mDayPorts = new ArrayList<>();
 		
 		mAssignedWeek = Calendar.getInstance();
 		DateUtil.resetToWeek(mAssignedWeek);
@@ -62,9 +62,7 @@ public class AppointmentWindowController {
 		Calendar auxCalendar = (Calendar) mAssignedWeek.clone();
 		for(int i = 0; i < 7; i++){
 			AppointmentDayPortController adpc = new AppointmentDayPortController(auxCalendar);
-			adpc.initializeModel(mGroupMap);
-			//TODO: All initializeModel functions, remove them and do their task in constructor.
-			mDayPort.add(adpc);
+			mDayPorts.add(adpc);
 			
 			auxCalendar.add(Calendar.DAY_OF_WEEK, 1);
 		}
@@ -76,7 +74,7 @@ public class AppointmentWindowController {
 	@FXML
 	private void initialize(){
 		//TODO: Register due listeners
-		for(AppointmentDayPortController adpc: mDayPort){
+		for(AppointmentDayPortController adpc: mDayPorts){
 			AnchorPane widget = adpc.getWidget();
 			widget.prefWidthProperty().bind(mInnerBox.widthProperty().divide(7.0));
 			widget.maxWidthProperty().bind(mInnerBox.widthProperty().divide(7.0));
@@ -102,6 +100,10 @@ public class AppointmentWindowController {
 		mAppointmentList = list;
 		mGroupMap = map;
 
+		// Initialize model for each DayPort
+		for(AppointmentDayPortController adpc: mDayPorts)
+			adpc.initializeModel(mGroupMap);
+		
 		for(Appointment a: mAppointmentList){
 			this.addAppointmentView(a);
 		}
@@ -197,7 +199,7 @@ public class AppointmentWindowController {
 		}
 		
 		boolean control = false;
-		for(AppointmentDayPortController adpc: mDayPort){
+		for(AppointmentDayPortController adpc: mDayPorts){
 			if(day1 == adpc.getAssignedDay())
 				control = true;
 			
@@ -217,7 +219,7 @@ public class AppointmentWindowController {
 	 * @param id the ID of the appointment to be removed
 	 */
 	private void removeAppointmentView(UUID id){
-		for(AppointmentDayPortController adpc: mDayPort){
+		for(AppointmentDayPortController adpc: mDayPorts){
 			adpc.removeAppointmentView(id);
 		}
 	}
@@ -233,7 +235,7 @@ public class AppointmentWindowController {
 			mMainApp.displayAppointmentDialog();
 		});
 		
-		for(AppointmentDayPortController adpc: mDayPort)
+		for(AppointmentDayPortController adpc: mDayPorts)
 			adpc.setMainApp(mMainApp);
 	}
 }

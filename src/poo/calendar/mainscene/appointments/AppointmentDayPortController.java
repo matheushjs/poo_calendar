@@ -53,6 +53,7 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 	
 	/**
 	 * Sets the controlled widget to a valid state, independent of any model data.
+	 * Automatically called upon construction.
 	 */
 	protected void initializeWidget(){
 		mMainPane = new AnchorPane();
@@ -77,11 +78,12 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 	 * @param appt An appointment whose day correspond to that of this DayPort
 	 */
 	public void addAppointment(Appointment appt, CalendarGroup cg){
-		if(mGroupMap != null){
+		if(mGroupMap == null){
 			System.err.println("Must initialize model for AppointmentDayPortController");
 			System.exit(1);
 		}
 		
+		System.out.println("Control3");
 		AppointmentViewController AVC = new AppointmentViewController();
 		AnchorPane widget = AVC.getWidget();
 		
@@ -91,12 +93,14 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 		AVC.initializeModel(appt, cg, range);
 		
 		// If appointment changes Calendar Group, repaint it.
-		appt.groupIDProperty().addListener(change -> AVC.setColor(cg.getColor()));
+		appt.groupIDProperty().addListener(change -> {
+			AVC.setColor(mGroupMap.get(appt.getGroupID()).getColor());
+		});
 		
 		if(mMainApp != null)
 			widget.setOnMouseClicked(action -> mMainApp.displayAppointmentDialog(AVC.getID()));
 		
-		manageWidgetSize(widget, appt);
+		decideWidgetSize(widget, appt);
 		
 		mMainPane.getChildren().add(widget);
 	}
@@ -107,7 +111,7 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 	 * @param widget
 	 * @param appt
 	 */
-	private void manageWidgetSize(Node widget, Appointment appt){
+	private void decideWidgetSize(Node widget, Appointment appt){
 		Calendar init, end;
 		Recurrence rec = appt.getRecurrence();
 		int minute1, hour1, day1;

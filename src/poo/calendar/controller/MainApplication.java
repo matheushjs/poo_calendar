@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.fxml.FXMLLoader;
@@ -113,6 +114,22 @@ public class MainApplication extends Application {
 		mTasks = FXCollections.observableArrayList();
 		mGroups = FXCollections.observableHashMap();
 		mGroups.put(CalendarGroup.DEFAULT_ID, CalendarGroup.DEFAULT_GROUP);
+		
+		//TODO: The code below is a temporary workaround. Put it inside CalendarDataModel class later.
+		mGroups.addListener((MapChangeListener.Change<? extends UUID, ? extends CalendarGroup> change) -> {
+			if(change.wasRemoved()){
+				UUID id = change.getValueRemoved().getID();
+				mAppointments.forEach(appointment ->{
+					if(appointment.getGroupID().compareTo(id) == 0){
+						appointment.setGroupID(CalendarGroup.DEFAULT_ID);
+					}
+				});
+				mTasks.forEach(task -> {
+					if(task.getGroupID().compareTo(id) == 0)
+						task.setGroupID(CalendarGroup.DEFAULT_ID);
+				});
+			}
+		});
 		
 		createMainParent();
 		mMainScene = new Scene(mMainParent);

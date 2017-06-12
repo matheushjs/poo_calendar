@@ -20,7 +20,6 @@ public class Appointment extends CalendarNodeBase {
 	// Recurrence type
 	private ObjectProperty<Recurrence> mRecurrence;
 	
-	
 	/**
 	 * Appointment's default constructor.
 	 *
