@@ -116,6 +116,7 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 		init = (Calendar) appt.getInitDate();
 		end = (Calendar) appt.getEndDate();
 		
+		// Get all comparison keys needed
 		minute1 = init.get(Calendar.MINUTE);
 		hour1 = init.get(Calendar.HOUR_OF_DAY);
 		day1 = init.get(Calendar.DAY_OF_MONTH);
@@ -124,7 +125,8 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 		day2 = end.get(Calendar.DAY_OF_MONTH);
 		
 		if(rec == Recurrence.DAILY){
-			int delta = day2 - day1;
+			//If recurrence is daily, change the day comparison keys to match the current day.
+			int delta = day2 - day1; //TODO: Solve problem when appointment spans for more than 1 day
 			
 			Calendar newInit = (Calendar) mAssignedDay.clone();
 			Calendar newEnd = (Calendar) mAssignedDay.clone();
@@ -134,9 +136,11 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 			end = newEnd;
 			day1 = init.get(Calendar.DAY_OF_MONTH);
 			day2 = end.get(Calendar.DAY_OF_MONTH);
-			
+		
 		} else if(rec == Recurrence.WEEKLY){
-			int delta = day2 - day1;
+			//If recurrence is weekly, change the day comparison keys to match the current week's corresponding weekday
+			
+			int delta = day2 - day1; //TODO: Solve problem when appointment spans for more than 1 month.
 			int weekday = init.get(Calendar.DAY_OF_WEEK);
 			
 			Calendar newInit = (Calendar) mAssignedDay.clone();
@@ -144,12 +148,13 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 			
 			Calendar newEnd = (Calendar) newInit.clone();
 			newEnd.add(Calendar.DAY_OF_MONTH, delta);
-			
+
 			init = newInit;
 			end = newEnd;
+			day1 = newInit.get(Calendar.DAY_OF_MONTH);
+			day2 = newEnd.get(Calendar.DAY_OF_MONTH);
 			
-			day1 = init.get(Calendar.DAY_OF_MONTH);
-			day2 = end.get(Calendar.DAY_OF_MONTH);
+			//TODO: This loops is also present in AppointmentWindowController. Find a way to abstract this out.
 		}
 		
 		int offset1 = 60 * hour1 + minute1;
@@ -159,10 +164,16 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 		offset1 -= offset1%15; //Rounds to lower 15 minutes
 		offset2 += offset2%15 == 0 ? 0 : 15 - offset2%15; //Rounds to upper 15 minutes
 		
+		// If beginning day of the appointment is before the current day, the new
+		// appointment will span from 00:00
+		//TODO: If recurrence is daily, the above behavior is ignore for an appointment that
+		// spans, for example, from 23:45 - 00:15. Fix this.
 		if(day1 < mAssignedDay.get(Calendar.DAY_OF_MONTH)){
 			offset1 = 0;
 		}
 		
+		// If the end day of the appointment is after current day, the new
+		// appointment will span up to 23:59
 		if(day2 > mAssignedDay.get(Calendar.DAY_OF_MONTH)){
 			offset2 = whole;
 		}

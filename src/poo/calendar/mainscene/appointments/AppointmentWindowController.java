@@ -142,45 +142,58 @@ public class AppointmentWindowController {
 		endOfWeek.add(Calendar.DAY_OF_WEEK, 6);
 		
 		int base1, base2;
-		int low = 0, high = 0;
+		int low, high;
 		
-		// Verify year intersection
-		if(rec != Recurrence.YEARLY){
-			base1 = mAssignedWeek.get(Calendar.YEAR);
-			base2 = endOfWeek.get(Calendar.YEAR);
-			low = init.get(Calendar.YEAR);
-			high = end.get(Calendar.YEAR);
+		/*
+		 * Verifies if given appointment should be displayed anywhere in the current week
+		 * being displayed.
+		 */
+		if(rec != Recurrence.DAILY && rec != Recurrence.WEEKLY){
+			// Verify week intersection
+			base1 = mAssignedWeek.get(Calendar.DATE);
+			base2 = endOfWeek.get(Calendar.DATE);
+			low = init.get(Calendar.DATE);
+			high = end.get(Calendar.DATE);
 			if(low > base2 || high < base1) return;
-		}
-		
-		// Verify month intersection
-		if(rec != Recurrence.MONTHLY){
-			base1 = mAssignedWeek.get(Calendar.MONTH);
-			base2 = endOfWeek.get(Calendar.MONTH);
-			low = init.get(Calendar.MONTH);
-			high = end.get(Calendar.MONTH);
-			if(low > base2 || high < base1) return;
-		}
-		
-		// Verify week intersection
-		base1 = mAssignedWeek.get(Calendar.DATE);
-		base2 = endOfWeek.get(Calendar.DATE);
-		low = init.get(Calendar.DATE);
-		high = end.get(Calendar.DATE);
-		if(rec != Recurrence.WEEKLY && rec != Recurrence.DAILY){
-			if(low > base2 || high < base1) return;
+			
+			// If recurrence is not daily nor weekly, we need to check month intersection
+			if(rec != Recurrence.MONTHLY){
+				// Verify month intersection
+				base1 = mAssignedWeek.get(Calendar.MONTH);
+				base2 = endOfWeek.get(Calendar.MONTH);
+				low = init.get(Calendar.MONTH);
+				high = end.get(Calendar.MONTH);
+				if(low > base2 || high < base1) return;
+				
+				// If recurrence is not daily/weekly/monthly, we need to check year intersection
+				if(rec != Recurrence.YEARLY){
+					// Verify year intersection
+					base1 = mAssignedWeek.get(Calendar.YEAR);
+					base2 = endOfWeek.get(Calendar.YEAR);
+					low = init.get(Calendar.YEAR);
+					high = end.get(Calendar.YEAR);
+					if(low > base2 || high < base1) return;
+				}
+			}
 		}
 		
 		// Get comparison keys for each edge date of the appointment
 		int day1 = init.get(Calendar.DATE);
 		int day2 = end.get(Calendar.DATE);
 		
-		// If recurrence is weekly, shift the comparison keys to current week
+		// If recurrence is weekly, shift the comparison keys to the corresponding weekday of the week being displayed
 		if(rec == Recurrence.WEEKLY){
-			while(day1 < base1){
-				day1+=7;
-				day2+=7;
-			}
+			int delta = day2 - day1; //TODO: Solve problem when appointment spans for more than 1 month.
+			int weekday = init.get(Calendar.DAY_OF_WEEK);
+			
+			Calendar newInit = (Calendar) mAssignedWeek.clone();
+			newInit.set(Calendar.DAY_OF_WEEK, weekday);
+			
+			Calendar newEnd = (Calendar) newInit.clone();
+			newEnd.add(Calendar.DAY_OF_MONTH, delta);
+
+			day1 = newInit.get(Calendar.DAY_OF_MONTH);
+			day2 = newEnd.get(Calendar.DAY_OF_MONTH);
 		}
 		
 		boolean control = false;
