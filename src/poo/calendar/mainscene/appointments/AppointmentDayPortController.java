@@ -2,6 +2,7 @@ package poo.calendar.mainscene.appointments;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,6 +14,7 @@ import poo.calendar.DateUtil;
 import poo.calendar.controller.MainApplication;
 import poo.calendar.model.Appointment;
 import poo.calendar.model.CalendarGroup;
+import poo.calendar.model.Recurrence;
 
 /**
  * Class for controlling the appointment day port, where all appointments for a given day are displayed.
@@ -23,7 +25,7 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 	private static int PORT_HEIGHT = 2016; //Divisible by 96
 	
 	//96 intervals of 15 minutes each
-	private List<List<UUID>> mIntervalInfo = new ArrayList<List<UUID>>(96);
+	private List<List<UUID>> mIntervalInfo;
 	
 	private MainApplication mMainApp;
 	private ArrayList<AppointmentViewController> mAppointmentControllers;
@@ -42,8 +44,10 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 		mAssignedDay = (Calendar) day.clone();
 		DateUtil.resetToDate(mAssignedDay);
 		
+		mIntervalInfo = new ArrayList<List<UUID>>(96);
 		for(int i = 0; i < 96; i++)
-			mIntervalInfo.add(new ArrayList<UUID>());
+			mIntervalInfo.add(new LinkedList<UUID>());
+		
 		mAppointmentControllers = new ArrayList<>();
 	}
 	
@@ -105,11 +109,12 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 	 */
 	private void manageWidgetSize(Node widget, Appointment appt){
 		Calendar init, end;
+		Recurrence rec = appt.getRecurrence();
 		int minute1, hour1, day1;
 		int minute2, hour2, day2;
 		
-		init = appt.getInitDate();
-		end = appt.getEndDate();
+		init = (Calendar) appt.getInitDate();
+		end = (Calendar) appt.getEndDate();
 		
 		minute1 = init.get(Calendar.MINUTE);
 		hour1 = init.get(Calendar.HOUR_OF_DAY);
@@ -118,9 +123,38 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 		hour2 = end.get(Calendar.HOUR_OF_DAY);
 		day2 = end.get(Calendar.DAY_OF_MONTH);
 		
-		double offset1 = 60 * hour1 + minute1;
-		double offset2 = 60 * hour2 + minute2;
-		double whole = 60 * 24;
+		if(rec == Recurrence.DAILY){
+			int delta = day2 - day1;
+			
+			Calendar newInit = (Calendar) mAssignedDay.clone();
+			Calendar newEnd = (Calendar) mAssignedDay.clone();
+			newEnd.add(Calendar.DAY_OF_MONTH, delta);
+			
+			init = newInit;
+			end = newEnd;
+			day1 = init.get(Calendar.DAY_OF_MONTH);
+			day2 = end.get(Calendar.DAY_OF_MONTH);
+			
+		} else if(rec == Recurrence.WEEKLY){
+			int delta = day2 - day1;
+			int weekday = init.get(Calendar.DAY_OF_WEEK);
+			
+			Calendar newInit = (Calendar) mAssignedDay.clone();
+			newInit.set(Calendar.DAY_OF_WEEK, weekday);
+			
+			Calendar newEnd = (Calendar) newInit.clone();
+			newEnd.add(Calendar.DAY_OF_MONTH, delta);
+			
+			init = newInit;
+			end = newEnd;
+			
+			day1 = init.get(Calendar.DAY_OF_MONTH);
+			day2 = end.get(Calendar.DAY_OF_MONTH);
+		}
+		
+		int offset1 = 60 * hour1 + minute1;
+		int offset2 = 60 * hour2 + minute2;
+		int whole = 60 * 24;
 		
 		offset1 -= offset1%15; //Rounds to lower 15 minutes
 		offset2 += offset2%15 == 0 ? 0 : 15 - offset2%15; //Rounds to upper 15 minutes
@@ -133,8 +167,13 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 			offset2 = whole;
 		}
 		
-		double topAnchor = PORT_HEIGHT * offset1 / whole ;
-		double bottomAnchor = PORT_HEIGHT * (whole - offset2) / whole;
+		double topAnchor = PORT_HEIGHT * offset1 / (double) whole ;
+		double bottomAnchor = PORT_HEIGHT * (whole - offset2) / (double) whole;
+		
+		// Fills the intervals that the new appointment uses
+		for(int i = (int) offset1/15, j = (int) offset2/15; i < j; i++){
+			mIntervalInfo.get(i).add(appt.getID());
+		}
 		
 		//TODO: Resize other appointments whenever needed
 		
@@ -144,9 +183,23 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 		AnchorPane.setRightAnchor(widget, 0.0);
 	}
 	
-	public void removeAppointment(UUID id){
-		//Find and remove view
-		//reallocate all affected views
+	/**
+	 * Removes an appointment view from this DayPort
+	 * @param id
+	 */
+	public void removeAppointmentView(UUID id){
+		for(AppointmentViewController adpc: mAppointmentControllers){
+			if(adpc.getID().compareTo(id) == 0){
+				mAppointmentControllers.remove(adpc);
+				
+				AnchorPane widget = adpc.getWidget();
+				mMainPane.getChildren().remove(widget);
+				
+				return;
+			}
+		}
+		
+		//TODO: reallocate all affected views
 	}
 	
 	/**

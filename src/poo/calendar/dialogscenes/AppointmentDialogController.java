@@ -78,7 +78,7 @@ public class AppointmentDialogController {
 	 */
 	@FXML
 	private void initialize(){
-		mRecurrenceChoice.getItems().addAll("None", "Hourly", "Daily", "Weekly", "Monthly", "Yearly");
+		mRecurrenceChoice.getItems().addAll("None", "Daily", "Weekly", "Monthly", "Yearly");
 		mRecurrenceChoice.setValue("None");
 		
 		Calendar calendar = Calendar.getInstance();

@@ -16,6 +16,7 @@ import poo.calendar.DateUtil;
 import poo.calendar.controller.MainApplication;
 import poo.calendar.model.Appointment;
 import poo.calendar.model.CalendarGroup;
+import poo.calendar.model.Recurrence;
 
 
 /**
@@ -131,42 +132,63 @@ public class AppointmentWindowController {
 	 */
 	private void addAppointmentView(Appointment appointment){
 		Calendar init, end;
+		Recurrence rec = appointment.getRecurrence();
+		
 		init = appointment.getInitDate();
 		end = appointment.getEndDate();
 		
-		int base = mAssignedWeek.get(Calendar.YEAR);
-		int low = init.get(Calendar.YEAR);
-		int high = end.get(Calendar.YEAR);
-		if(low > base || high < base) return;
-		
-		base = mAssignedWeek.get(Calendar.MONTH);
-		low = init.get(Calendar.MONTH);
-		if(low > base) return;
-
 		//Gets calendar for last day of the week being displayed.
 		Calendar endOfWeek = (Calendar) mAssignedWeek.clone();
 		endOfWeek.add(Calendar.DAY_OF_WEEK, 6);
 		
-		base = endOfWeek.get(Calendar.MONTH);
-		high = end.get(Calendar.MONTH);
-		if(high < base) return;
-
-		base = mAssignedWeek.get(Calendar.DATE);
-		high = end.get(Calendar.DATE);
-		if(high < base) return;
-
-		base = endOfWeek.get(Calendar.DATE);
+		int base1, base2;
+		int low = 0, high = 0;
+		
+		// Verify year intersection
+		if(rec != Recurrence.YEARLY){
+			base1 = mAssignedWeek.get(Calendar.YEAR);
+			base2 = endOfWeek.get(Calendar.YEAR);
+			low = init.get(Calendar.YEAR);
+			high = end.get(Calendar.YEAR);
+			if(low > base2 || high < base1) return;
+		}
+		
+		// Verify month intersection
+		if(rec != Recurrence.MONTHLY){
+			base1 = mAssignedWeek.get(Calendar.MONTH);
+			base2 = endOfWeek.get(Calendar.MONTH);
+			low = init.get(Calendar.MONTH);
+			high = end.get(Calendar.MONTH);
+			if(low > base2 || high < base1) return;
+		}
+		
+		// Verify week intersection
+		base1 = mAssignedWeek.get(Calendar.DATE);
+		base2 = endOfWeek.get(Calendar.DATE);
 		low = init.get(Calendar.DATE);
-		if(low > base) return;
-
-		int day1 = low;
-		int day2 = high;
+		high = end.get(Calendar.DATE);
+		if(rec != Recurrence.WEEKLY && rec != Recurrence.DAILY){
+			if(low > base2 || high < base1) return;
+		}
+		
+		// Get comparison keys for each edge date of the appointment
+		int day1 = init.get(Calendar.DATE);
+		int day2 = end.get(Calendar.DATE);
+		
+		// If recurrence is weekly, shift the comparison keys to current week
+		if(rec == Recurrence.WEEKLY){
+			while(day1 < base1){
+				day1+=7;
+				day2+=7;
+			}
+		}
+		
 		boolean control = false;
 		for(AppointmentDayPortController adpc: mDayPort){
 			if(day1 == adpc.getAssignedDay())
 				control = true;
 			
-			if(control)
+			if(control || rec == Recurrence.DAILY)
 				adpc.addAppointment(appointment, mGroupMap.get(appointment.getGroupID()));
 			
 			if(day2 == adpc.getAssignedDay())
@@ -174,34 +196,17 @@ public class AppointmentWindowController {
 		}
 		
 		//TODO: add listeners to Appointment calendar properties
-	}
-	
-	/**
-	 * Removes an appointment from the UI.
-	 * @param id ID of the appointment to remove.
-	 */
-	private void removeAppointmentView(UUID id){
-		/*
-		nodes.removeIf(view -> {
-			return ((AppointmentView)view).getID().compareTo(id) == 0;
-		});
-		*/
+		//TODO: Check Appointment Recurrence
 	}
 	
 	/**
 	 * Removes an appointment from the list of appointments
 	 * @param id the ID of the appointment to be removed
 	 */
-	private void removeAppointment(UUID id){
-		/*
-		//Maybe make a model class that should handle remove/add operations
-		for(Appointment a: mAppointmentList){
-			if(a.getID().compareTo(id) == 0){
-				mAppointmentList.remove(a);
-				break;
-			}
+	private void removeAppointmentView(UUID id){
+		for(AppointmentDayPortController adpc: mDayPort){
+			adpc.removeAppointmentView(id);
 		}
-		*/
 	}
 	
 	/**

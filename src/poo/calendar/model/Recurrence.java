@@ -5,7 +5,6 @@ package poo.calendar.model;
  */
 public enum Recurrence {
 	NONE,
-	HOURLY,
 	DAILY,
 	WEEKLY,
 	MONTHLY,
