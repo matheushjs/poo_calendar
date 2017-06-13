@@ -29,6 +29,9 @@ public class AppointmentWindowController {
 	private ScrollPane mInnerScrollPane;
 	
 	@FXML
+	private AnchorPane mInnerPane;
+	
+	@FXML
 	private HBox mInnerBox;
 	
 	@FXML
