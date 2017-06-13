@@ -6,13 +6,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
-import javafx.collections.ObservableMap;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 import poo.calendar.ControlledWidget;
 import poo.calendar.DateUtil;
 import poo.calendar.controller.MainApplication;
 import poo.calendar.model.Appointment;
+import poo.calendar.model.CalendarDataModel;
 import poo.calendar.model.CalendarGroup;
 import poo.calendar.model.Recurrence;
 
@@ -42,7 +42,7 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 	private Calendar mAssignedDay;
 	
 	// Model data
-	private ObservableMap<UUID, CalendarGroup> mGroupMap;
+	private CalendarDataModel mModel;
 	
 	/**
 	 * Default constructor
@@ -77,8 +77,8 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 		return mMainPane;
 	}
 	
-	public void initializeModel(ObservableMap<UUID, CalendarGroup> map){
-		mGroupMap = map;
+	public void initializeModel(CalendarDataModel model){
+		mModel = model;
 	}
 	
 	/**
@@ -86,7 +86,7 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 	 * @param appt An appointment whose day correspond to that of this DayPort
 	 */
 	public void addAppointment(Appointment appt, CalendarGroup cg){
-		if(mGroupMap == null){
+		if(mModel == null){
 			System.err.println("Must initialize model for AppointmentDayPortController");
 			System.exit(1);
 		}
@@ -101,7 +101,7 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 		
 		// If appointment changes Calendar Group, repaint it.
 		appt.groupIDProperty().addListener(change -> {
-			AVC.setColor(mGroupMap.get(appt.getGroupID()).getColor());
+			AVC.setColor(mModel.getRefGroup(appt).getColor());
 		});
 		
 		if(mMainApp != null)

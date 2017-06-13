@@ -2,8 +2,6 @@ package poo.calendar.dialogscenes;
 
 import java.util.UUID;
 
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -14,9 +12,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import poo.calendar.controller.MainApplication;
-import poo.calendar.model.Appointment;
+import poo.calendar.model.CalendarDataModel;
 import poo.calendar.model.CalendarGroup;
-import poo.calendar.model.Task;
 
 /**
  * Class for controlling the dialog for managing a calendar group.
@@ -51,10 +48,8 @@ public class GroupDialogController {
 	private MainApplication mMainApp;
 	
 	// Model Data
-	public ObservableMap<UUID, CalendarGroup> mGroupMap;
-	public ObservableList<Task> mTasks;
-	public ObservableList<Appointment> mAppointments;
-	public CalendarGroup mGroup;
+	private CalendarDataModel mModel;
+	private CalendarGroup mGroup;
 	
 	/**
 	 * Default constructor
@@ -76,12 +71,8 @@ public class GroupDialogController {
 	/**
 	 * Receives the map of groups to which the new group will be added.
 	 */
-	public void initializeModel(ObservableMap<UUID, CalendarGroup> map, ObservableList<Task> tasks, ObservableList<Appointment> appts){
-		mGroupMap = map;
-		
-		// To manipulate when a group is deleted. If it's deleted, tasks/appointments of that group will be set to default group.
-		mTasks = tasks;
-		mAppointments = appts;
+	public void initializeModel(CalendarDataModel model){
+		mModel = model;
 	}
 	
 	/**
@@ -100,7 +91,7 @@ public class GroupDialogController {
 	 * @param id
 	 */
 	public void setGroupID(UUID id) throws IllegalArgumentException {
-		mGroup = mGroupMap.get(id);
+		mGroup = mModel.getGroup(id);
 		if(mGroup == null)
 			throw new IllegalArgumentException("Received UUID for an inexistent group.");
 		
@@ -122,7 +113,7 @@ public class GroupDialogController {
 		
 		if(mGroup == null){
 			CalendarGroup cg = new CalendarGroup(title, color);
-			mGroupMap.put(cg.getID(), cg);
+			mModel.addGroup(cg);
 		} else {
 			mGroup.nameProperty().set(title);
 			mGroup.colorProperty().set(color);
@@ -149,7 +140,8 @@ public class GroupDialogController {
 	 */
 	private void onDeleteClick(){
 		//TODO: Request confirmation
-		mGroupMap.remove(mGroup.getID());
+		if(mGroup != null)
+			mModel.removeGroup(mGroup.getID());
 		mMainApp.displayMainRoot();
 	}
 }

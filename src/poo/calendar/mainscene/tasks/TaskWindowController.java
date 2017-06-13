@@ -2,7 +2,7 @@ package poo.calendar.mainscene.tasks;
 
 import java.util.UUID;
 
-import javafx.collections.ListChangeListener;
+import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -12,6 +12,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import poo.calendar.controller.MainApplication;
+import poo.calendar.model.CalendarDataModel;
 import poo.calendar.model.Task;
 
 /**
@@ -49,7 +50,7 @@ public class TaskWindowController {
 	private MainApplication mMainApp;
 	
 	//Model data
-	private ObservableList<Task> mTaskList = null;
+	private CalendarDataModel mModel;
 	
 	/**
 	 * Default constructor.
@@ -70,31 +71,25 @@ public class TaskWindowController {
 	 * 
 	 * @param list List of tasks that should be controlled by this Class
 	 */
-	public void initializeModel(ObservableList<Task> list){
-		if(mTaskList != null){
+	public void initializeModel(CalendarDataModel model){
+		if(mModel != null){
 			//TODO: Verify logging / exception
 			System.err.println(this.getClass().getName() + ": Can only initialize model once.");
 			System.exit(1);
 		}
 			 
-		mTaskList = list;
+		mModel = model;
 
-		for(Task t: mTaskList){
-			this.addTaskView(t);
-		}
+		mModel.getTasks().forEach((uuid, task) -> {
+			this.addTaskView(task);
+		});
 		
-		mTaskList.addListener((ListChangeListener.Change<? extends Task> change) -> {
-			while(change.next()){
-				//TODO: Handle updated/permuted appointments
-				
-				for(Object a: change.getRemoved()){
-					this.removeTaskView(((Task)a).getID());
-				}
-				for(Object a: change.getAddedSubList()){
-					System.out.println( ((Task) a).getTitle());
-					
-					this.addTaskView((Task) a);
-				}
+		mModel.getTasks().addListener((MapChangeListener.Change<? extends UUID, ? extends Task> change) -> {
+			if(change.wasRemoved()){
+				this.removeTaskView(change.getKey());
+			}
+			if(change.wasAdded()){
+				this.addTaskView(change.getValueAdded());
 			}
 		});
 	}
@@ -110,7 +105,7 @@ public class TaskWindowController {
 		view.setOnMouseClicked(click -> {
 			TaskView source = (TaskView) click.getSource();
 			if(click.getButton() == MouseButton.PRIMARY){
-				this.removeTask(source.getID());
+				mModel.removeTask(source.getID());
 			}
 		});
 		nodes.add(view);
@@ -125,19 +120,6 @@ public class TaskWindowController {
 		nodes.removeIf(view -> {
 			return 0 == ((TaskView)view).getID().compareTo(id);
 		});
-	}
-	
-	/**
-	 * Removes a task from the task list
-	 * @param id
-	 */
-	private void removeTask(UUID id){
-		for(Task a: mTaskList){
-			if(a.getID().compareTo(id) == 0){
-				mTaskList.remove(a);
-				break;
-			}
-		}
 	}
 	
 	/**

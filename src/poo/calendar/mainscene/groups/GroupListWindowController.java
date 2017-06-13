@@ -3,7 +3,6 @@ package poo.calendar.mainscene.groups;
 import java.util.UUID;
 
 import javafx.collections.MapChangeListener;
-import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -13,6 +12,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import poo.calendar.controller.MainApplication;
+import poo.calendar.model.CalendarDataModel;
 import poo.calendar.model.CalendarGroup;
 
 public class GroupListWindowController {
@@ -37,7 +37,7 @@ public class GroupListWindowController {
 	private MainApplication mMainApp;
 	
 	// Model data
-	private ObservableMap<UUID, CalendarGroup> mGroupMap;
+	private CalendarDataModel mModel;
 	
 	/**
 	 * Default constructor
@@ -57,20 +57,17 @@ public class GroupListWindowController {
 	 * Receive the map of calendar groups that this widget should control
 	 * @param map
 	 */
-	public void initializeModel(ObservableMap<UUID, CalendarGroup> map){
-		mGroupMap = map;
+	public void initializeModel(CalendarDataModel model){
+		mModel = model;
 		
-		for(CalendarGroup cg: mGroupMap.values()){
-			addGroupView(cg);
-		}
+		mModel.getGroups().forEach((uuid, group) -> addGroupView(group));
 		
-		map.addListener((MapChangeListener.Change<? extends UUID, ? extends CalendarGroup> change) -> {
-			if(change.wasAdded()){
-				CalendarGroup cg = change.getValueAdded();
-				addGroupView(cg);
-			}
+		mModel.getGroups().addListener((MapChangeListener.Change<? extends UUID, ? extends CalendarGroup> change) -> {
+			if(change.wasAdded())
+				addGroupView(change.getValueAdded());
+			
 			if(change.wasRemoved()){
-				UUID id = change.getValueRemoved().getID();
+				UUID id = change.getKey();
 				mMainPane.getChildren().removeIf(view -> {
 					return ((GroupView) view).getID().compareTo(id) == 0;
 				});

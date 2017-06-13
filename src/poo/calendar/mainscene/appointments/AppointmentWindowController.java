@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.UUID;
 
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
+import javafx.collections.MapChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -15,7 +13,7 @@ import javafx.scene.layout.HBox;
 import poo.calendar.DateUtil;
 import poo.calendar.controller.MainApplication;
 import poo.calendar.model.Appointment;
-import poo.calendar.model.CalendarGroup;
+import poo.calendar.model.CalendarDataModel;
 import poo.calendar.model.Recurrence;
 
 
@@ -47,8 +45,7 @@ public class AppointmentWindowController {
 	private Calendar mAssignedWeek;
 	
 	//Model data
-	private ObservableList<Appointment> mAppointmentList;
-	private ObservableMap<UUID, CalendarGroup> mGroupMap;
+	private CalendarDataModel mModel;
 	
 	/**
 	 * Default constructor
@@ -90,40 +87,32 @@ public class AppointmentWindowController {
 	 * 
 	 * @param list List of appointments that should be controlled by this Class
 	 */
-	public void initializeModel(ObservableList<Appointment> list, ObservableMap<UUID, CalendarGroup> map){
-		if(mAppointmentList != null){
+	public void initializeModel(CalendarDataModel model){
+		if(mModel != null){
 			//TODO: Verify logging / exception
 			System.err.println(this.getClass().getName() + ": Can only initialize model once.");
 			System.exit(1);
 		}
 		
-		mAppointmentList = list;
-		mGroupMap = map;
-
+		mModel = model;
+		
 		// Initialize model for each DayPort
 		for(AppointmentDayPortController adpc: mDayPorts)
-			adpc.initializeModel(mGroupMap);
+			adpc.initializeModel(mModel);
 		
-		for(Appointment a: mAppointmentList){
-			this.addAppointmentView(a);
-			a.initDateProperty().addListener(change -> {
-				this.removeAppointmentView(a.getID());
-				this.addAppointmentView(a);
-			});
-		}
+		mModel.getAppointments().forEach((uuid, appt) -> {
+			this.addAppointmentView(appt);
+			//TODO: Register listeners to the appointment's calendar properties
+		});
 		
-		mAppointmentList.addListener((ListChangeListener.Change<? extends Appointment> change) -> {
-			while(change.next()){
-				//TODO: Handle updated/permuted appointments
-				
-				for(Object a: change.getRemoved()){
-					this.removeAppointmentView(((Appointment)a).getID());
-				}
-				for(Object a: change.getAddedSubList()){
-					Appointment appt = (Appointment) a;
-					this.addAppointmentView(appt);
-					//TODO: Register listeners to the appointment's calendar properties
-				}
+		mModel.getAppointments().addListener((MapChangeListener.Change<? extends UUID, ? extends Appointment> change) -> {
+			if(change.wasRemoved()){
+				removeAppointmentView(change.getKey());
+			}
+			
+			if(change.wasAdded()){
+				this.addAppointmentView(change.getValueAdded());
+				//TODO: Register listeners to the appointment's calendar properties
 			}
 		});
 	}
@@ -206,7 +195,7 @@ public class AppointmentWindowController {
 				control = true;
 			
 			if(control || rec == Recurrence.DAILY)
-				adpc.addAppointment(appointment, mGroupMap.get(appointment.getGroupID()));
+				adpc.addAppointment(appointment, mModel.getRefGroup(appointment));
 			
 			if(day2 == adpc.getAssignedDay())
 				control = false;

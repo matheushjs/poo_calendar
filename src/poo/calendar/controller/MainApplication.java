@@ -4,10 +4,6 @@ import java.io.IOException;
 import java.util.UUID;
 
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.MapChangeListener;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -20,18 +16,14 @@ import poo.calendar.mainscene.MainSceneController;
 import poo.calendar.mainscene.appointments.AppointmentWindowController;
 import poo.calendar.mainscene.groups.GroupListWindowController;
 import poo.calendar.mainscene.tasks.TaskWindowController;
-import poo.calendar.model.Appointment;
-import poo.calendar.model.CalendarGroup;
-import poo.calendar.model.Task;
+import poo.calendar.model.CalendarDataModel;
 
 public class MainApplication extends Application {
 	private Stage mStage;
 	private Scene mMainScene;
 	private Parent mMainParent;
 	
-	private ObservableList<Appointment> mAppointments;
-	private ObservableList<Task> mTasks;
-	private ObservableMap<UUID, CalendarGroup> mGroups;
+	private CalendarDataModel mModel;
 	
 	/**
 	 * Creates the main root for the scene graph.
@@ -49,7 +41,7 @@ public class MainApplication extends Application {
 			System.exit(1);
 		}
 		AppointmentWindowController appointmentsController = loader.getController();
-		appointmentsController.initializeModel(mAppointments, mGroups);
+		appointmentsController.initializeModel(mModel);
 		appointmentsController.setMainApp(this);
 		
 		// Load TaskWindow
@@ -63,7 +55,7 @@ public class MainApplication extends Application {
 			System.exit(1);
 		}
 		TaskWindowController tasksController = loader.getController();
-		tasksController.initializeModel(mTasks);
+		tasksController.initializeModel(mModel);
 		tasksController.setMainApp(this);
 		
 		// Load GroupsWindow
@@ -77,7 +69,7 @@ public class MainApplication extends Application {
 			System.exit(1);
 		}
 		GroupListWindowController groupsController = loader.getController();
-		groupsController.initializeModel(mGroups);
+		groupsController.initializeModel(mModel);
 		groupsController.setMainApp(this);
 		
 		// Load MainScene
@@ -105,39 +97,6 @@ public class MainApplication extends Application {
 		mMainScene.setRoot(mMainParent);
 	}
 	
-	@Override
-	public void start(Stage stage) {
-		this.mStage = stage;
-		
-		// TODO: read application data from a persistent storage.
-		mAppointments = FXCollections.observableArrayList();
-		mTasks = FXCollections.observableArrayList();
-		mGroups = FXCollections.observableHashMap();
-		mGroups.put(CalendarGroup.DEFAULT_ID, CalendarGroup.DEFAULT_GROUP);
-		
-		//TODO: The code below is a temporary workaround. Put it inside CalendarDataModel class later.
-		mGroups.addListener((MapChangeListener.Change<? extends UUID, ? extends CalendarGroup> change) -> {
-			if(change.wasRemoved()){
-				UUID id = change.getValueRemoved().getID();
-				mAppointments.forEach(appointment ->{
-					if(appointment.getGroupID().compareTo(id) == 0){
-						appointment.setGroupID(CalendarGroup.DEFAULT_ID);
-					}
-				});
-				mTasks.forEach(task -> {
-					if(task.getGroupID().compareTo(id) == 0)
-						task.setGroupID(CalendarGroup.DEFAULT_ID);
-				});
-			}
-		});
-		
-		createMainParent();
-		mMainScene = new Scene(mMainParent);
-		mStage.setTitle("Calendar");
-		mStage.setScene(mMainScene);
-		mStage.show();
-	}
-	
 	/**
 	 * Changes current scene to the group creation dialog.
 	 * Creates a dialog on EDIT mode if ID is provided.
@@ -157,7 +116,7 @@ public class MainApplication extends Application {
 			System.exit(1);
 		}
 		GroupDialogController controller = loader.getController();
-		controller.initializeModel(mGroups, mTasks, mAppointments);
+		controller.initializeModel(mModel);
 		controller.setMainApp(this);
 		
 		if(id != null)
@@ -192,7 +151,7 @@ public class MainApplication extends Application {
 			System.exit(1);
 		}
 		AppointmentDialogController controller = loader.getController();
-		controller.initializeModel(mGroups, mTasks, mAppointments);
+		controller.initializeModel(mModel);
 		controller.setMainApp(this);
 		
 		if(id != null)
@@ -227,7 +186,7 @@ public class MainApplication extends Application {
 			System.exit(1);
 		}
 		TaskDialogController controller = loader.getController();
-		controller.initializeModel(mGroups, mTasks, mAppointments);
+		controller.initializeModel(mModel);
 		controller.setMainApp(this);
 		
 		if(id != null)
@@ -241,6 +200,22 @@ public class MainApplication extends Application {
 	 */
 	public void displayTaskDialog(){
 		displayTaskDialog(null);
+	}
+	
+	
+	@Override
+	public void start(Stage stage) {
+		this.mStage = stage;
+		
+		mModel = new CalendarDataModel();
+
+		createMainParent();
+		mMainScene = new Scene(mMainParent);
+		mStage.setTitle("Calendar");
+		mStage.setScene(mMainScene);
+		mStage.show();
+
+		mModel.load();
 	}
 	
 	public static void main(String[] args) {

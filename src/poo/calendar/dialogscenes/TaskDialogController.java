@@ -3,8 +3,6 @@ package poo.calendar.dialogscenes;
 import java.util.Calendar;
 import java.util.UUID;
 
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -16,7 +14,7 @@ import javafx.scene.text.Text;
 import poo.calendar.DateUtil;
 import poo.calendar.controller.MainApplication;
 import poo.calendar.dialogscenes.utils.GroupComboBoxUtil;
-import poo.calendar.model.Appointment;
+import poo.calendar.model.CalendarDataModel;
 import poo.calendar.model.CalendarGroup;
 import poo.calendar.model.Task;
 
@@ -65,10 +63,8 @@ public class TaskDialogController {
 	private MainApplication mMainApp;
 	
 	// Model data
-	public ObservableMap<UUID, CalendarGroup> mGroupMap;
-	public ObservableList<Task> mTasks;
-	public ObservableList<Appointment> mAppointments;
-	public Task mTask;
+	private CalendarDataModel mModel;
+	private Task mTask;
 	
 	/**
 	 * Default constructor
@@ -93,12 +89,10 @@ public class TaskDialogController {
 	/**
 	 * Receives the map of groups to which the new group will be added.
 	 */
-	public void initializeModel(ObservableMap<UUID, CalendarGroup> map, ObservableList<Task> tasks, ObservableList<Appointment> appts){
-		mGroupMap = map;
-		mTasks = tasks;
-		mAppointments = appts;
+	public void initializeModel(CalendarDataModel model){
+		mModel = model;
 		
-		mGroupCombo.getItems().addAll(mGroupMap.values());
+		mGroupCombo.getItems().addAll(mModel.getGroups().values());
 		mGroupCombo.setCellFactory(GroupComboBoxUtil.getAddCallback());
 		mGroupCombo.setValue(CalendarGroup.DEFAULT_GROUP);
 	}
@@ -119,10 +113,7 @@ public class TaskDialogController {
 	 * @param id
 	 */
 	public void setTaskID(UUID id){
-		for(Task t: mTasks){
-			if(t.getID().compareTo(id) == 0)
-				mTask = t;
-		}
+		mTask = mModel.getTask(id);
 		
 		mButtonBox.getChildren().add(mDeleteButton);
 		
@@ -134,7 +125,7 @@ public class TaskDialogController {
 			mHourField.setText(DateUtil.hourString(mTask.getDeadlineDate()));
 		}
 		
-		mGroupCombo.setValue(mGroupMap.get(mTask.getID()));
+		mGroupCombo.setValue(mModel.getRefGroup(mTask));
 	}
 	
 	/**
@@ -157,7 +148,7 @@ public class TaskDialogController {
 		CalendarGroup cg = mGroupCombo.getValue();
 		
 		Task task = new Task(title, description, calendar, cg.getID());
-		mTasks.add(task);
+		mModel.addTask(task);
 		
 		mMainApp.displayMainRoot();
 	}
@@ -210,7 +201,7 @@ public class TaskDialogController {
 	private void onDeleteClick(){
 		//TODO: Request confirmation
 		if(mTask != null)
-			mTasks.remove(mTask);
+			mModel.removeTask(mTask.getID());
 		mMainApp.displayMainRoot();
 	}
 }

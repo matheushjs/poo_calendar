@@ -3,8 +3,6 @@ package poo.calendar.dialogscenes;
 import java.util.Calendar;
 import java.util.UUID;
 
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -18,9 +16,9 @@ import poo.calendar.DateUtil;
 import poo.calendar.controller.MainApplication;
 import poo.calendar.dialogscenes.utils.GroupComboBoxUtil;
 import poo.calendar.model.Appointment;
+import poo.calendar.model.CalendarDataModel;
 import poo.calendar.model.CalendarGroup;
 import poo.calendar.model.Recurrence;
-import poo.calendar.model.Task;
 
 
 /**
@@ -74,10 +72,8 @@ public class AppointmentDialogController {
 	private MainApplication mMainApp;
 	
 	// Model data
-	public ObservableMap<UUID, CalendarGroup> mGroupMap;
-	public ObservableList<Task> mTasks;
-	public ObservableList<Appointment> mAppointments;
-	public Appointment mAppointment;
+	private CalendarDataModel mModel;
+	private Appointment mAppointment;
 	
 	/**
 	 * Default constructor
@@ -108,12 +104,10 @@ public class AppointmentDialogController {
 	/**
 	 * Receives the map of groups to which the new group will be added.
 	 */
-	public void initializeModel(ObservableMap<UUID, CalendarGroup> map, ObservableList<Task> tasks, ObservableList<Appointment> appts){
-		mGroupMap = map;
-		mTasks = tasks;
-		mAppointments = appts;
+	public void initializeModel(CalendarDataModel model){
+		mModel = model;
 		
-		mGroupCombo.getItems().addAll(mGroupMap.values());
+		mGroupCombo.getItems().addAll(mModel.getGroups().values());
 		mGroupCombo.setCellFactory(GroupComboBoxUtil.getAddCallback());
 		mGroupCombo.setValue(CalendarGroup.DEFAULT_GROUP);
 	}
@@ -134,13 +128,7 @@ public class AppointmentDialogController {
 	 * @param id
 	 */
 	public void setAppointmentID(UUID id){
-		for(Appointment a: mAppointments){
-			if(a.getID().compareTo(id) == 0){
-				mAppointment = a;
-				break;
-			}
-		}
-		
+		mAppointment = mModel.getAppointment(id);
 
 		mButtonBox.getChildren().add(mDeleteButton);
 		
@@ -151,7 +139,7 @@ public class AppointmentDialogController {
 		mHourField1.setText(DateUtil.hourString(mAppointment.getInitDate()));
 		mHourField2.setText(DateUtil.hourString(mAppointment.getEndDate()));
 		
-		mGroupCombo.setValue(mGroupMap.get(mAppointment.getGroupID()));
+		mGroupCombo.setValue(mModel.getRefGroup(mAppointment));
 		
 		String recString = mAppointment.getRecurrence().toString().toLowerCase();
 		recString = recString.substring(0, 1).toUpperCase() + recString.substring(1);
@@ -180,7 +168,8 @@ public class AppointmentDialogController {
 		
 		Appointment appointment = new Appointment(title, description, initDate, endDate, cg.getID());
 		appointment.setRecurrence(rc);
-		mAppointments.add(appointment);
+		
+		mModel.addAppointment(appointment);
 		
 		mMainApp.displayMainRoot();
 	}
@@ -233,7 +222,7 @@ public class AppointmentDialogController {
 	private void onDeleteClick(){
 		//TODO: Request confirmation
 		if(mAppointment != null){
-			mAppointments.remove(mAppointment);
+			mModel.removeAppointment(mAppointment.getID());
 		}
 		mMainApp.displayMainRoot();
 	}
