@@ -130,17 +130,23 @@ public class TaskDialogController {
 		String title = mTitleField.getText().trim();
 		String description = mDescriptionField.getText();
 		
-		String date = mDateField.getText();
-		String hour = mHourField.getText();
+		String date = mDateField.getText().trim();
+		String hour = mHourField.getText().trim();
 		Calendar calendar = null;
 		if(date.length() != 0 && hour.length() != 0){
 			calendar = DateUtil.parseFields(date, hour);
 		}
 		
 		CalendarGroup cg = mGroupCombo.getValue();
-		
-		Task task = new Task(title, description, calendar, cg.getID());
-		mModel.addTask(task);
+		if(mTask == null){
+			Task task = new Task(title, description, calendar, cg.getID());
+			mModel.addTask(task);
+		} else {
+			mTask.setTitle(title);
+			mTask.setDescription(description);
+			mTask.setDeadlineDate(calendar);
+			mTask.setGroupID(cg.getID());
+		}
 		
 		mMainApp.displayMainRoot();
 	}

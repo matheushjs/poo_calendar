@@ -1,18 +1,18 @@
 package poo.calendar.mainscene.tasks;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import javafx.collections.MapChangeListener;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import poo.calendar.controller.MainApplication;
 import poo.calendar.model.CalendarDataModel;
+import poo.calendar.model.CalendarGroup;
 import poo.calendar.model.Task;
 
 /**
@@ -52,10 +52,13 @@ public class TaskWindowController {
 	//Model data
 	private CalendarDataModel mModel;
 	
+	private Map<UUID, TaskViewController> mControllers;
+	
 	/**
 	 * Default constructor.
 	 */
 	public TaskWindowController(){
+		mControllers = new HashMap<>();
 	}
 	
 	/**
@@ -86,8 +89,17 @@ public class TaskWindowController {
 			if(change.wasRemoved()){
 				this.removeTaskView(change.getKey());
 			}
+			System.out.println("Teste!");
 			if(change.wasAdded()){
 				this.addTaskView(change.getValueAdded());
+			}
+		});
+		
+		mModel.getGroups().addListener((MapChangeListener.Change<? extends UUID, ? extends CalendarGroup> change) -> {
+			if(change.wasRemoved()){
+				for(TaskViewController TVC: mControllers.values()){
+					TVC.setColor(CalendarGroup.DEFAULT_GROUP.getColor());
+				}
 			}
 		});
 		
@@ -102,16 +114,36 @@ public class TaskWindowController {
 	 * @param task Task to be added.
 	 */
 	private void addTaskView(Task task){
-		ObservableList<Node> nodes = mLowerBox.getChildren();
-
-		TaskView view = new TaskView(task.getTitle(), task.getDeadlineDate(), task.getID());
-		view.setOnMouseClicked(click -> {
-			TaskView source = (TaskView) click.getSource();
-			if(click.getButton() == MouseButton.PRIMARY){
-				mModel.removeTask(source.getID());
-			}
+		CalendarGroup cg = mModel.getRefGroup(task);
+		TaskViewController TVC = new TaskViewController(task, cg);
+		
+		TVC.getWidget().setOnMouseClicked(action -> mMainApp.displayTaskDialog(task.getID()));
+		mControllers.put(TVC.getID(), TVC);
+		
+		addWidgetToView(task, TVC);
+		
+		cg.colorProperty().addListener(change -> {
+			CalendarGroup cg2 = mModel.getRefGroup(task);
+			TVC.setColor(cg2.getColor());
 		});
-		nodes.add(view);
+		
+		task.deadlineDateProperty().addListener(change -> {
+			removeWidgetFromView(TVC);
+			addWidgetToView(task, TVC);
+		});
+	}
+	
+	private void addWidgetToView(Task task, TaskViewController TVC){
+		if(task.getDeadlineDate() != null){
+			mUpperBox.getChildren().add(TVC.getWidget());
+		} else {
+			mLowerBox.getChildren().add(TVC.getWidget());
+		}
+	}
+	
+	private void removeWidgetFromView(TaskViewController TVC){
+		mUpperBox.getChildren().remove(TVC.getWidget());
+		mLowerBox.getChildren().remove(TVC.getWidget());
 	}
 	
 	/**
@@ -119,9 +151,8 @@ public class TaskWindowController {
 	 * @param id ID of the task to remove
 	 */
 	private void removeTaskView(UUID id){
-		ObservableList<Node> nodes = mLowerBox.getChildren();
-		nodes.removeIf(view -> {
-			return 0 == ((TaskView)view).getID().compareTo(id);
-		});
+		TaskViewController TVC = mControllers.get(id);
+		removeWidgetFromView(TVC);
+		mControllers.remove(id);
 	}
 }
