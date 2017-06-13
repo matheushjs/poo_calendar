@@ -7,11 +7,10 @@ import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.ColorPicker;
-import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import poo.calendar.controller.MainApplication;
@@ -26,16 +25,22 @@ import poo.calendar.model.Task;
  */
 public class GroupDialogController {
 	@FXML
-	private DialogPane mMainPane;
+	private AnchorPane mMainPane;
+	
+	@FXML
+	private HBox mButtonBox;
+	
+	@FXML
+	private Button mApplyButton;
+	
+	@FXML
+	private Button mCancelButton;
 	
 	@FXML
 	private Button mDeleteButton;
 	
 	@FXML
 	private Text mHeaderText;
-	
-	@FXML
-	private VBox mFormBox;
 	
 	@FXML
 	private TextField mNameField;
@@ -64,7 +69,7 @@ public class GroupDialogController {
 	private void initialize(){
 		//TODO: Connect due signals
 		//TODO: Wisely choose a default color
-		mFormBox.getChildren().remove(mDeleteButton);
+		mButtonBox.getChildren().remove(mDeleteButton);
 		mDeleteButton.setOnAction(action -> onDeleteClick());
 	}
 	
@@ -85,12 +90,9 @@ public class GroupDialogController {
 	 */
 	public void setMainApp(MainApplication app){
 		mMainApp = app;
-		
-		Button bt = (Button) mMainPane.lookupButton(ButtonType.APPLY);
-		bt.setOnAction(action -> this.onApplyClick(action));
-		
-		Button bt2 = (Button) mMainPane.lookupButton(ButtonType.CANCEL);
-		bt2.setOnAction(action -> mMainApp.displayMainRoot());
+
+		mApplyButton.setOnAction(action -> this.onApplyClick(action));
+		mCancelButton.setOnAction(action -> mMainApp.displayMainRoot());
 	}
 	
 	/**
@@ -103,12 +105,7 @@ public class GroupDialogController {
 			throw new IllegalArgumentException("Received UUID for an inexistent group.");
 		
 		//Add the delete button.
-		try {
-			mFormBox.getChildren().add(0, mDeleteButton);
-		} catch(IndexOutOfBoundsException e){
-			//Not an expected situation, but could happen if the dialog happens to be modified.
-			mFormBox.getChildren().add(mDeleteButton);
-		}
+		mButtonBox.getChildren().add(mDeleteButton);
 		
 		mNameField.setText(mGroup.getName());
 		mColorPicker.setValue(mGroup.getColor());

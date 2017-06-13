@@ -106,6 +106,10 @@ public class AppointmentWindowController {
 		
 		for(Appointment a: mAppointmentList){
 			this.addAppointmentView(a);
+			a.initDateProperty().addListener(change -> {
+				this.removeAppointmentView(a.getID());
+				this.addAppointmentView(a);
+			});
 		}
 		
 		mAppointmentList.addListener((ListChangeListener.Change<? extends Appointment> change) -> {
@@ -113,23 +117,21 @@ public class AppointmentWindowController {
 				//TODO: Handle updated/permuted appointments
 				
 				for(Object a: change.getRemoved()){
-					System.out.println("Removed:");
-					System.out.println( ((Appointment) a).getTitle());
-					
 					this.removeAppointmentView(((Appointment)a).getID());
 				}
 				for(Object a: change.getAddedSubList()){
-					System.out.println("Added:");
-					System.out.println( ((Appointment) a).getTitle());
-					 
-					this.addAppointmentView((Appointment) a);
+					Appointment appt = (Appointment) a;
+					this.addAppointmentView(appt);
+					//TODO: Register listeners to the appointment's calendar properties
 				}
 			}
 		});
 	}
 	
 	/**
-	 * Adds an appointment to the UI.
+	 * Adds an appointment to the UI. The appointment can be any appointment,
+	 * with any initDate or endDate. This method only those that belong to the
+	 * current week being displayed.
 	 * @param appointment Appointment to be added.
 	 */
 	private void addAppointmentView(Appointment appointment){
@@ -209,9 +211,6 @@ public class AppointmentWindowController {
 			if(day2 == adpc.getAssignedDay())
 				control = false;
 		}
-		
-		//TODO: add listeners to Appointment calendar properties
-		//TODO: Check Appointment Recurrence
 	}
 	
 	/**

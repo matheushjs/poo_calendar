@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ButtonType?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DialogPane?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -13,68 +11,57 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="poo.calendar.dialogscenes.AppointmentDialogController">
+<AnchorPane fx:id="mMainPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="poo.calendar.dialogscenes.AppointmentDialogController">
    <children>
-      <DialogPane fx:id="mMainPane" expanded="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="800.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-          <header>
-            <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0">
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Text fx:id="mHeaderText" strokeType="OUTSIDE" strokeWidth="0.0" text="Appointment Dialog">
+               <font>
+                  <Font name="Liberation Sans Bold Italic" size="20.0" />
+               </font>
+            </Text>
+            <HBox fx:id="mButtonBox">
                <children>
-                  <Text fx:id="mHeaderText" strokeType="OUTSIDE" strokeWidth="0.0" text="Appointment Dialog" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <font>
-                        <Font name="Liberation Sans Bold Italic" size="20.0" />
-                     </font>
-                  </Text>
+                  <Button fx:id="mApplyButton" mnemonicParsing="false" text="Apply" />
+                  <Button fx:id="mCancelButton" mnemonicParsing="false" text="Cancel" />
+                  <Button fx:id="mDeleteButton" mnemonicParsing="false" text="Delete" />
                </children>
-            </AnchorPane>
-          </header>
-          <content>
-            <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0">
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <VBox fx:id="mFormBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <children>
-                        <Button fx:id="mDeleteButton" mnemonicParsing="false" text="Delete" />
-                        <HBox prefHeight="100.0" prefWidth="200.0">
-                           <children>
-                              <Label text="Title" />
-                              <TextField fx:id="mTitleField" />
-                           </children>
-                        </HBox>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
-                           <children>
-                              <Label text="From" />
-                              <TextField fx:id="mDateField1" />
-                              <TextField fx:id="mHourField1" />
-                              <Label text="To" />
-                              <TextField fx:id="mDateField2" />
-                              <TextField fx:id="mHourField2" />
-                           </children>
-                        </HBox>
-                        <HBox>
-                           <children>
-                              <Label text="Description" />
-                              <TextField fx:id="mDescriptionField" />
-                           </children>
-                        </HBox>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
-                           <children>
-                              <Label text="Group" />
-                              <ComboBox fx:id="mGroupCombo" prefWidth="150.0" />
-                           </children>
-                        </HBox>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
-                           <children>
-                              <Label text="Recurrence" />
-                              <ChoiceBox fx:id="mRecurrenceChoice" prefWidth="150.0" />
-                           </children>
-                        </HBox>
-                     </children>
-                  </VBox>
-               </children></AnchorPane>
-          </content>
-         <buttonTypes>
-            <ButtonType fx:constant="APPLY" />
-            <ButtonType fx:constant="CANCEL" />
-         </buttonTypes>
-      </DialogPane>
+                  <Label text="Title" />
+                  <TextField fx:id="mTitleField" />
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="From" />
+                  <TextField fx:id="mDateField1" />
+                  <TextField fx:id="mHourField1" />
+                  <Label text="To" />
+                  <TextField fx:id="mDateField2" />
+                  <TextField fx:id="mHourField2" />
+               </children>
+            </HBox>
+            <HBox>
+               <children>
+                  <Label text="Description" />
+                  <TextField fx:id="mDescriptionField" />
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="Group" />
+                  <ComboBox fx:id="mGroupCombo" prefWidth="150.0" />
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="Recurrence" />
+                  <ChoiceBox fx:id="mRecurrenceChoice" prefWidth="150.0" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
    </children>
 </AnchorPane>

@@ -8,12 +8,11 @@ import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import poo.calendar.DateUtil;
 import poo.calendar.controller.MainApplication;
@@ -31,10 +30,16 @@ import poo.calendar.model.Task;
  */
 public class AppointmentDialogController {
 	@FXML
-	private DialogPane mMainPane;
+	private AnchorPane mMainPane;
 	
 	@FXML
-	private VBox mFormBox;
+	private HBox mButtonBox;
+	
+	@FXML
+	private Button mApplyButton;
+	
+	@FXML
+	private Button mCancelButton;
 	
 	@FXML
 	private Button mDeleteButton;
@@ -88,7 +93,7 @@ public class AppointmentDialogController {
 		mRecurrenceChoice.getItems().addAll("None", "Daily", "Weekly", "Monthly", "Yearly");
 		mRecurrenceChoice.setValue("None");
 		
-		mFormBox.getChildren().remove(mDeleteButton);
+		mButtonBox.getChildren().remove(mDeleteButton);
 		mDeleteButton.setOnAction(action -> onDeleteClick());
 		
 		Calendar calendar = Calendar.getInstance();
@@ -119,12 +124,9 @@ public class AppointmentDialogController {
 	 */
 	public void setMainApp(MainApplication app){
 		mMainApp = app;
-		
-		Button bt = (Button) mMainPane.lookupButton(ButtonType.CANCEL);
-		bt.setOnAction(action -> mMainApp.displayMainRoot());
-		
-		bt = (Button) mMainPane.lookupButton(ButtonType.APPLY);
-		bt.setOnAction(action -> onApplyClick(action));
+
+		mCancelButton.setOnAction(action -> mMainApp.displayMainRoot());
+		mApplyButton.setOnAction(action -> onApplyClick(action));
 	}
 	
 	/**
@@ -139,11 +141,8 @@ public class AppointmentDialogController {
 			}
 		}
 		
-		try {
-			mFormBox.getChildren().add(0, mDeleteButton);
-		} catch(IndexOutOfBoundsException e){
-			mFormBox.getChildren().add(mDeleteButton);
-		}
+
+		mButtonBox.getChildren().add(mDeleteButton);
 		
 		mTitleField.setText(mAppointment.getTitle());
 		mDescriptionField.setText(mAppointment.getDescription());

@@ -20,17 +20,25 @@ import poo.calendar.model.Recurrence;
  * Class for controlling the appointment day port, where all appointments for a given day are displayed.
  */
 public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
-	private AnchorPane mMainPane;
-	
+	// Height of the widget. The widget will have this size as a strong limit,
+	// meaning it won't expand nor shrink.
 	private static int PORT_HEIGHT = 2016; //Divisible by 96
 	
-	//96 intervals of 15 minutes each
+	// Main Node
+	private AnchorPane mMainPane;
+	
+	// List containing 96 other lists.
+	// Each of the 96 lists represent an interval of 15 minutes within the DayPort.
+	// Each interval list contains UUIDs of the Appointments being displayed there.
 	private List<List<UUID>> mIntervalInfo;
 	
+	// Link to the main application
 	private MainApplication mMainApp;
+	
+	// Array of controllers of AppointmentViews summoned by this DayPort.
 	private ArrayList<AppointmentViewController> mAppointmentControllers;
 	
-	// Calendar storing the day this DayPort represents
+	// Calendar storing the date this DayPort represents
 	private Calendar mAssignedDay;
 	
 	// Model data
@@ -83,7 +91,6 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 			System.exit(1);
 		}
 		
-		System.out.println("Control3");
 		AppointmentViewController AVC = new AppointmentViewController();
 		AnchorPane widget = AVC.getWidget();
 		
@@ -203,16 +210,17 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 	 * @param id
 	 */
 	public void removeAppointmentView(UUID id){
-		for(AppointmentViewController adpc: mAppointmentControllers){
-			if(adpc.getID().compareTo(id) == 0){
-				mAppointmentControllers.remove(adpc);
-				
-				AnchorPane widget = adpc.getWidget();
-				mMainPane.getChildren().remove(widget);
-				
-				return;
-			}
-		}
+		List<AppointmentViewController> list = new LinkedList<>();
+		
+		mAppointmentControllers.forEach(AC -> {
+			if(AC.getID().compareTo(id) == 0)
+				list.add(AC);
+		});
+		
+		list.forEach(AC -> {
+			mAppointmentControllers.remove(AC);
+			mMainPane.getChildren().remove(AC.getWidget());
+		});
 		
 		//TODO: reallocate all affected views
 	}
