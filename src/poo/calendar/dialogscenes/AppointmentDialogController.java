@@ -102,23 +102,15 @@ public class AppointmentDialogController {
 	}
 	
 	/**
-	 * Receives the map of groups to which the new group will be added.
+	 * Receives the structures needed for working.
 	 */
-	public void initializeModel(CalendarDataModel model){
+	public void initializeStructures(MainApplication app, CalendarDataModel model){
 		mModel = model;
-		
 		mGroupCombo.getItems().addAll(mModel.getGroups().values());
 		mGroupCombo.setCellFactory(GroupComboBoxUtil.getAddCallback());
 		mGroupCombo.setValue(CalendarGroup.DEFAULT_GROUP);
-	}
 	
-	/**
-	 * Sets the main application from which this dialog will later request a scene change;
-	 * @param app
-	 */
-	public void setMainApp(MainApplication app){
 		mMainApp = app;
-
 		mCancelButton.setOnAction(action -> mMainApp.displayMainRoot());
 		mApplyButton.setOnAction(action -> onApplyClick(action));
 	}

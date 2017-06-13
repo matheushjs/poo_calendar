@@ -41,8 +41,7 @@ public class MainApplication extends Application {
 			System.exit(1);
 		}
 		AppointmentWindowController appointmentsController = loader.getController();
-		appointmentsController.initializeModel(mModel);
-		appointmentsController.setMainApp(this);
+		appointmentsController.initializeStructures(this, mModel);
 		
 		// Load TaskWindow
 		loader = new FXMLLoader();
@@ -55,8 +54,7 @@ public class MainApplication extends Application {
 			System.exit(1);
 		}
 		TaskWindowController tasksController = loader.getController();
-		tasksController.initializeModel(mModel);
-		tasksController.setMainApp(this);
+		tasksController.initializeStructures(this, mModel);
 		
 		// Load GroupsWindow
 		loader = new FXMLLoader();
@@ -69,8 +67,7 @@ public class MainApplication extends Application {
 			System.exit(1);
 		}
 		GroupListWindowController groupsController = loader.getController();
-		groupsController.initializeModel(mModel);
-		groupsController.setMainApp(this);
+		groupsController.initializeStructures(this, mModel);
 		
 		// Load MainScene
 		loader = new FXMLLoader();
@@ -116,8 +113,7 @@ public class MainApplication extends Application {
 			System.exit(1);
 		}
 		GroupDialogController controller = loader.getController();
-		controller.initializeModel(mModel);
-		controller.setMainApp(this);
+		controller.initializeStructures(this, mModel);
 		
 		if(id != null)
 			controller.setGroupID(id);
@@ -151,8 +147,7 @@ public class MainApplication extends Application {
 			System.exit(1);
 		}
 		AppointmentDialogController controller = loader.getController();
-		controller.initializeModel(mModel);
-		controller.setMainApp(this);
+		controller.initializeStructures(this, mModel);
 		
 		if(id != null)
 			controller.setAppointmentID(id);
@@ -186,8 +181,7 @@ public class MainApplication extends Application {
 			System.exit(1);
 		}
 		TaskDialogController controller = loader.getController();
-		controller.initializeModel(mModel);
-		controller.setMainApp(this);
+		controller.initializeStructures(this, mModel);
 		
 		if(id != null)
 			controller.setTaskID(id);

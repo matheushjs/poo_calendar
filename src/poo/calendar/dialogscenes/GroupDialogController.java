@@ -69,19 +69,12 @@ public class GroupDialogController {
 	}
 	
 	/**
-	 * Receives the map of groups to which the new group will be added.
+	 * Receives the structures needed for working.
 	 */
-	public void initializeModel(CalendarDataModel model){
+	public void initializeStructures(MainApplication app, CalendarDataModel model){
 		mModel = model;
-	}
-	
-	/**
-	 * Sets the main application from which this dialog will later request a scene change;
-	 * @param app
-	 */
-	public void setMainApp(MainApplication app){
+		
 		mMainApp = app;
-
 		mApplyButton.setOnAction(action -> this.onApplyClick(action));
 		mCancelButton.setOnAction(action -> mMainApp.displayMainRoot());
 	}

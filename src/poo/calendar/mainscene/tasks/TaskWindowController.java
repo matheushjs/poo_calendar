@@ -66,12 +66,10 @@ public class TaskWindowController {
 	}
 	
 	/**
-	 * Connects listeners for modifications on the the data model, so that the UI is updated
-	 * accordingly.
-	 * 
+	 * Receives the structures needed for working.
 	 * @param list List of tasks that should be controlled by this Class
 	 */
-	public void initializeModel(CalendarDataModel model){
+	public void initializeStructures(MainApplication app, CalendarDataModel model){
 		if(mModel != null){
 			//TODO: Verify logging / exception
 			System.err.println(this.getClass().getName() + ": Can only initialize model once.");
@@ -91,6 +89,11 @@ public class TaskWindowController {
 			if(change.wasAdded()){
 				this.addTaskView(change.getValueAdded());
 			}
+		});
+		
+		mMainApp = app;
+		mAddButton.setOnAction(action -> {
+			mMainApp.displayTaskDialog();
 		});
 	}
 	
@@ -119,18 +122,6 @@ public class TaskWindowController {
 		ObservableList<Node> nodes = mLowerBox.getChildren();
 		nodes.removeIf(view -> {
 			return 0 == ((TaskView)view).getID().compareTo(id);
-		});
-	}
-	
-	/**
-	 * Sets the main application from which this widget will later request a scene change;
-	 * @param app
-	 */
-	public void setMainApp(MainApplication app){
-		mMainApp = app;
-		
-		mAddButton.setOnAction(action -> {
-			mMainApp.displayTaskDialog();
 		});
 	}
 }

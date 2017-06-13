@@ -54,10 +54,10 @@ public class GroupListWindowController {
 	}
 	
 	/**
-	 * Receive the map of calendar groups that this widget should control
+	 * Receives the structures needed for working.
 	 * @param map
 	 */
-	public void initializeModel(CalendarDataModel model){
+	public void initializeStructures(MainApplication app, CalendarDataModel model){
 		mModel = model;
 		
 		mModel.getGroups().forEach((uuid, group) -> addGroupView(group));
@@ -73,15 +73,8 @@ public class GroupListWindowController {
 				});
 			}
 		});
-	}
-	
-	/**
-	 * Sets the main application from which this widget will later request a scene change;
-	 * @param app
-	 */
-	public void setMainApp(MainApplication app){
-		mMainApp = app;
 		
+		mMainApp = app;
 		mAddButton.setOnAction(action -> {
 			mMainApp.displayGroupDialog();
 		});

@@ -85,12 +85,9 @@ public class AppointmentWindowController {
 	}
 	
 	/**
-	 * Connects listeners for modifications on the the data model, so that the UI is updated
-	 * accordingly.
-	 * 
-	 * @param list List of appointments that should be controlled by this Class
+	 * Receives the structures needed for working.
 	 */
-	public void initializeModel(CalendarDataModel model){
+	public void initializeStructures(MainApplication app, CalendarDataModel model){
 		if(mModel != null){
 			//TODO: Verify logging / exception
 			System.err.println(this.getClass().getName() + ": Can only initialize model once.");
@@ -118,6 +115,13 @@ public class AppointmentWindowController {
 				//TODO: Register listeners to the appointment's calendar properties
 			}
 		});
+		
+		mMainApp = app;	
+		mAddButton.setOnAction(action -> {
+			mMainApp.displayAppointmentDialog();
+		});
+		for(AppointmentDayPortController adpc: mDayPorts)
+			adpc.setMainApp(mMainApp);
 	}
 	
 	/**
@@ -213,20 +217,5 @@ public class AppointmentWindowController {
 		for(AppointmentDayPortController adpc: mDayPorts){
 			adpc.removeAppointmentView(id);
 		}
-	}
-	
-	/**
-	 * Sets the main application from which this widget will later request a scene change;
-	 * @param app
-	 */
-	public void setMainApp(MainApplication app){
-		mMainApp = app;
-		
-		mAddButton.setOnAction(action -> {
-			mMainApp.displayAppointmentDialog();
-		});
-		
-		for(AppointmentDayPortController adpc: mDayPorts)
-			adpc.setMainApp(mMainApp);
 	}
 }
