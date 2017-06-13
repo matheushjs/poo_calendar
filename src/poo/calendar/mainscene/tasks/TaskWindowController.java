@@ -89,7 +89,6 @@ public class TaskWindowController {
 			if(change.wasRemoved()){
 				this.removeTaskView(change.getKey());
 			}
-			System.out.println("Teste!");
 			if(change.wasAdded()){
 				this.addTaskView(change.getValueAdded());
 			}
@@ -122,7 +121,7 @@ public class TaskWindowController {
 		
 		addWidgetToView(task, TVC);
 		
-		cg.colorProperty().addListener(change -> {
+		task.groupIDProperty().addListener(change -> {
 			CalendarGroup cg2 = mModel.getRefGroup(task);
 			TVC.setColor(cg2.getColor());
 		});

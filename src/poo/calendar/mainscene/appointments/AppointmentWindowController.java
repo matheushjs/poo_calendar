@@ -96,10 +96,6 @@ public class AppointmentWindowController {
 		
 		mModel = model;
 		
-		// Initialize model for each DayPort
-		for(AppointmentDayPortController adpc: mDayPorts)
-			adpc.initializeModel(mModel);
-		
 		mModel.getAppointments().forEach((uuid, appt) -> {
 			this.addAppointmentView(appt);
 			//TODO: Register listeners to the appointment's calendar properties
@@ -120,8 +116,9 @@ public class AppointmentWindowController {
 		mAddButton.setOnAction(action -> {
 			mMainApp.displayAppointmentDialog();
 		});
-		for(AppointmentDayPortController adpc: mDayPorts)
-			adpc.setMainApp(mMainApp);
+		for(AppointmentDayPortController adpc: mDayPorts){
+			adpc.initializeStructures(mMainApp, mModel);
+		}
 	}
 	
 	/**

@@ -77,8 +77,18 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 		return mMainPane;
 	}
 	
-	public void initializeModel(CalendarDataModel model){
+	/**
+	 * Receives the structures needed for working.
+	 * @param app
+	 * @param model
+	 */
+	public void initializeStructures(MainApplication app, CalendarDataModel model){
 		mModel = model;
+
+		mMainApp = app;
+		for(AppointmentViewController AVC: mAppointmentControllers){
+			AVC.getWidget().setOnMouseClicked(action -> mMainApp.displayAppointmentDialog(AVC.getID()));
+		}
 	}
 	
 	/**
@@ -223,18 +233,6 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 		});
 		
 		//TODO: reallocate all affected views
-	}
-	
-	/**
-	 * Sets the main application from which this widget will later request a scene change;
-	 * @param app
-	 */
-	public void setMainApp(MainApplication app){
-		mMainApp = app;
-
-		for(AppointmentViewController AVC: mAppointmentControllers){
-			AVC.getWidget().setOnMouseClicked(action -> mMainApp.displayAppointmentDialog(AVC.getID()));
-		}
 	}
 	
 	/**
