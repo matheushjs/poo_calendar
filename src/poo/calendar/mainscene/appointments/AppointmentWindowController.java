@@ -94,8 +94,8 @@ public class AppointmentWindowController {
 			System.exit(1);
 		}
 		
+		//TODO: Prevent listening to all appointments. Only the ones being displayed should be observed.
 		mModel = model;
-		
 		mModel.getAppointments().forEach((uuid, appt) -> {
 			this.addAppointmentView(appt);
 			this.prepareAppointment(appt);
@@ -120,6 +120,9 @@ public class AppointmentWindowController {
 		for(AppointmentDayPortController adpc: mDayPorts){
 			adpc.initializeStructures(mMainApp, mModel);
 		}
+		
+		mRightButton.setOnMouseClicked(action -> changeWeek(1));
+		mLeftButton.setOnMouseClicked(action -> changeWeek(-1));
 	}
 	
 	/**
@@ -250,5 +253,17 @@ public class AppointmentWindowController {
 			removeAppointmentView(appt.getID());
 			addAppointmentView(appt);
 		});
+	}
+	
+	private void changeWeek(int offsetWeek){
+		clearDayPorts();
+		mAssignedWeek.add(Calendar.DATE, 7*offsetWeek);
+		mModel.getAppointments().forEach((uuid, appt) -> addAppointmentView(appt));
+	}
+	
+	private void clearDayPorts(){
+		for(AppointmentDayPortController adpc: mDayPorts){
+			adpc.removeAll();
+		}
 	}
 }

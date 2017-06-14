@@ -111,6 +111,9 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 	 * @param appt
 	 */
 	private void decideWidgetAnchors(int initOffset, int endOffset, Node widget){
+		initOffset = initOffset - (initOffset % 15);
+		endOffset = endOffset + (endOffset % 15 == 0 ? 0 : 15 - (endOffset % 15));
+		
 		double topAnchor = PORT_HEIGHT * initOffset / (double) DateUtil.MINUTES_IN_DAY ;
 		double bottomAnchor = PORT_HEIGHT * (1 - (endOffset / (double) DateUtil.MINUTES_IN_DAY));
 		
@@ -145,5 +148,13 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 	 */
 	public int getAssignedDay(){
 		return mAssignedDay.get(Calendar.DATE);
+	}
+	
+	/**
+	 * Removes all appointments in the Port.
+	 */
+	public void removeAll(){
+		mMainPane.getChildren().clear();
+		mAppointmentControllers.clear();
 	}
 }
