@@ -223,7 +223,7 @@ public class AppointmentWindowController {
 					offset2 = DateUtil.minuteCount(end);
 				}
 				
-				mDayPorts.get(i).addAppointment(offset1, offset2, appointment, mModel.getRefGroup(appointment));
+				mDayPorts.get(i).addAppointment(offset1, offset2, appointment.getID());
 			}
 		
 			subjectDay.add(Calendar.DATE, 1);

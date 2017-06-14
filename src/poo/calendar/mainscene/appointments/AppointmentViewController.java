@@ -18,6 +18,11 @@ import poo.calendar.model.CalendarGroup;
 
 /**
  * Class for controlling a single appointment view.
+ * 
+ * Each appointment view observes:
+ * 	- source appointment's Title
+ *  - source appointment's Group ID
+ *  - source calendar group's Color
  */
 public class AppointmentViewController extends ControlledWidget<AnchorPane> {
 	private AnchorPane mMainPane;
@@ -80,12 +85,14 @@ public class AppointmentViewController extends ControlledWidget<AnchorPane> {
 	 * 
 	 * @param app
 	 * @param model
-	 * @param appt
+	 * @param appointmentID
 	 * @throws NullPointerException if any argument is null
 	 */
-	public void initializeStructures(MainApplication app, CalendarDataModel model, Appointment appt) throws NullPointerException {	
-		if(app == null || model == null || appt == null)
+	public void initializeStructures(MainApplication app, CalendarDataModel model, UUID appointmentID) throws NullPointerException {	
+		if(app == null || model == null || appointmentID == null)
 			throw new NullPointerException();
+		
+		Appointment appt = model.getAppointment(appointmentID);
 		
 		mMainApp = app;
 		mModel = model;
