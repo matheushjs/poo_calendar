@@ -82,7 +82,7 @@ public class DateUtil {
 	 */
 	public static String hourString(int minutes){
 		Calendar c = Calendar.getInstance();
-		c.set(Calendar.HOUR, minutes / 60);
+		c.set(Calendar.HOUR_OF_DAY, minutes / 60);
 		c.set(Calendar.MINUTE, minutes % 60);
 		return hourString(c);
 	}
@@ -229,7 +229,7 @@ public class DateUtil {
 	 * @return 60 * HOUR + MINUTES   of the given calendar.
 	 */
 	public static int minuteCount(Calendar calendar){
-		return 60*calendar.get(Calendar.HOUR) + calendar.get(Calendar.MINUTE);
+		return 60*calendar.get(Calendar.HOUR_OF_DAY) + calendar.get(Calendar.MINUTE);
 	}
 	
 	/**
