@@ -158,10 +158,17 @@ public class AppointmentDialogController {
 		CalendarGroup cg = mGroupCombo.getValue();
 		Recurrence rc = Recurrence.valueOf(mRecurrenceChoice.getValue().toUpperCase());
 		
-		Appointment appointment = new Appointment(title, description, initDate, endDate, cg.getID());
-		appointment.setRecurrence(rc);
-		
-		mModel.addAppointment(appointment);
+		if(mAppointment == null){
+			Appointment appointment = new Appointment(title, description, initDate, endDate, cg.getID());
+			appointment.setRecurrence(rc);
+			mModel.addAppointment(appointment);
+		} else {
+			mAppointment.setTitle(title);
+			mAppointment.setDescription(description);
+			mAppointment.setDates(initDate, endDate);
+			mAppointment.setGroupID(cg.getID());
+			mAppointment.setRecurrence(rc);
+		}
 		
 		mMainApp.displayMainRoot();
 	}

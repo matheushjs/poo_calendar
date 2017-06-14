@@ -11,7 +11,9 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import poo.calendar.ControlledWidget;
+import poo.calendar.controller.MainApplication;
 import poo.calendar.model.Appointment;
+import poo.calendar.model.CalendarDataModel;
 import poo.calendar.model.CalendarGroup;
 
 /**
@@ -23,6 +25,8 @@ public class AppointmentViewController extends ControlledWidget<AnchorPane> {
 	private Label mHourRange;
 	private Label mIDLabel;
 	
+	private MainApplication mMainApp;
+	private CalendarDataModel mModel;
 	private UUID mID;
 	
 	/**
@@ -72,27 +76,33 @@ public class AppointmentViewController extends ControlledWidget<AnchorPane> {
 	}
 	
 	/**
-	 * Sets up the AppointmentView to display the information given as parameter.
-	 * This widget obverve's the source Appointment's title, and the CalendarGroup's color.
-	 * The dates are not observed.
+	 * Receives structures needed for working.
 	 * 
-	 * @param appt Appointment that is displayed
-	 * @param cg Group of the appointment displayed
+	 * @param app
+	 * @param model
+	 * @param appt
 	 * @throws NullPointerException if any argument is null
 	 */
-	public void initializeModel(Appointment appt, CalendarGroup cg, String hourRange) throws NullPointerException {	
-		if(appt == null || cg == null)
+	public void initializeStructures(MainApplication app, CalendarDataModel model, Appointment appt) throws NullPointerException {	
+		if(app == null || model == null || appt == null)
 			throw new NullPointerException();
+		
+		mMainApp = app;
+		mModel = model;
 		
 		mID = appt.getID();
 		mIDLabel.setText(mID.toString());
-
+		
+		mMainPane.setOnMouseClicked(action -> mMainApp.displayAppointmentDialog(mID));
+		
 		appt.titleProperty().addListener(change -> setTitle(appt.getTitle()));
+		appt.groupIDProperty().addListener(change -> setColor(mModel.getRefGroup(appt).getColor()));
+		
+		CalendarGroup cg = mModel.getRefGroup(appt);
 		cg.colorProperty().addListener(change -> setColor(cg.getColor()));
 		
-		setTitle(appt.getTitle());
 		setColor(cg.getColor());
-		setHourRange(hourRange);
+		setTitle(appt.getTitle());
 	}
 	
 	/**

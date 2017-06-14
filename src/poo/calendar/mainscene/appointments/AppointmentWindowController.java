@@ -98,7 +98,7 @@ public class AppointmentWindowController {
 		
 		mModel.getAppointments().forEach((uuid, appt) -> {
 			this.addAppointmentView(appt);
-			//TODO: Register listeners to the appointment's calendar properties
+			this.prepareAppointment(appt);
 		});
 		
 		mModel.getAppointments().addListener((MapChangeListener.Change<? extends UUID, ? extends Appointment> change) -> {
@@ -108,7 +108,7 @@ public class AppointmentWindowController {
 			
 			if(change.wasAdded()){
 				this.addAppointmentView(change.getValueAdded());
-				//TODO: Register listeners to the appointment's calendar properties
+				this.prepareAppointment(change.getValueAdded());
 			}
 		});
 		
@@ -116,6 +116,7 @@ public class AppointmentWindowController {
 		mAddButton.setOnAction(action -> {
 			mMainApp.displayAppointmentDialog();
 		});
+		
 		for(AppointmentDayPortController adpc: mDayPorts){
 			adpc.initializeStructures(mMainApp, mModel);
 		}
@@ -131,78 +132,98 @@ public class AppointmentWindowController {
 		Calendar init, end;
 		Recurrence rec = appointment.getRecurrence();
 		
-		init = appointment.getInitDate();
-		end = appointment.getEndDate();
+		init = (Calendar) appointment.getInitDate().clone();
+		end = (Calendar) appointment.getEndDate().clone();
 		
-		//Gets calendar for last day of the week being displayed.
+		// Gets the interval being displayed.
+		Calendar begOfWeek = (Calendar) mAssignedWeek.clone();
 		Calendar endOfWeek = (Calendar) mAssignedWeek.clone();
 		endOfWeek.add(Calendar.DAY_OF_WEEK, 6);
 		
-		int base1, base2;
-		int low, high;
+		// Assumes Appointment does not belong to the current week.
+		boolean shouldDisplay = false;
 		
 		/*
-		 * Verifies if given appointment should be displayed anywhere in the current week
-		 * being displayed.
+		 * Decide if should display or not.
 		 */
-		if(rec != Recurrence.DAILY && rec != Recurrence.WEEKLY){
-			// Verify week intersection
-			base1 = mAssignedWeek.get(Calendar.DATE);
-			base2 = endOfWeek.get(Calendar.DATE);
-			low = init.get(Calendar.DATE);
-			high = end.get(Calendar.DATE);
-			if(low > base2 || high < base1) return;
+		if(rec == Recurrence.DAILY || rec == Recurrence.WEEKLY || rec == Recurrence.NONE) {
+			shouldDisplay = true;
 			
-			// If recurrence is not daily nor weekly, we need to check month intersection
-			if(rec != Recurrence.MONTHLY){
-				// Verify month intersection
-				base1 = mAssignedWeek.get(Calendar.MONTH);
-				base2 = endOfWeek.get(Calendar.MONTH);
-				low = init.get(Calendar.MONTH);
-				high = end.get(Calendar.MONTH);
-				if(low > base2 || high < base1) return;
+		} else if(rec == Recurrence.MONTHLY) {
+			DateUtil.translateInterval(Calendar.MONTH, begOfWeek, init, end);
+			shouldDisplay = DateUtil.hasDayIntersection(begOfWeek, endOfWeek, init, end);
+			
+		} else if(rec == Recurrence.YEARLY) {
+			DateUtil.translateInterval(Calendar.YEAR, begOfWeek, init, endOfWeek);
+			shouldDisplay = DateUtil.hasDayIntersection(begOfWeek, endOfWeek, init, end);
+		}
+		
+		if(!shouldDisplay) return; // Nothing else to do.
+		
+		/*
+		 * If should display, add the appointment to all due ports.
+		 */
+		if(rec == Recurrence.DAILY) {
+			 // Generate all 7 intervals and display each of them
+			Calendar subjectDay = (Calendar) begOfWeek.clone();
+			for(int i = 0; i < 7; i++){
+				DateUtil.translateInterval(Calendar.DATE, subjectDay, init, end);
 				
-				// If recurrence is not daily/weekly/monthly, we need to check year intersection
-				if(rec != Recurrence.YEARLY){
-					// Verify year intersection
-					base1 = mAssignedWeek.get(Calendar.YEAR);
-					base2 = endOfWeek.get(Calendar.YEAR);
-					low = init.get(Calendar.YEAR);
-					high = end.get(Calendar.YEAR);
-					if(low > base2 || high < base1) return;
-				}
+				addIntervalToPorts(appointment, init, end);
+				
+				subjectDay.add(Calendar.DATE, 1);
 			}
+			
+		} else if(rec == Recurrence.WEEKLY) {
+			DateUtil.translateInterval(Calendar.DAY_OF_WEEK, begOfWeek, init, end);
+			addIntervalToPorts(appointment, init, end);
+			
+		} else {
+			addIntervalToPorts(appointment, init, end);
 		}
+	}
+	
+	private void addIntervalToPorts(Appointment appointment, Calendar init, Calendar end){
+		/*
+		 * If should display, add the appointment to all due ports.
+		 */
+		Calendar subjectDay = (Calendar) mAssignedWeek.clone();
+		for(int i = 0; i < 7; i++){
+			/* FOR EACH DAY IN CURRENT WEEK */
+			
+			/* CALCULATE THE OFFSETS OF THE APPOINTMENT IN THE DAY BEING ANALYZED */
+			if(DateUtil.hasDayIntersection(subjectDay, init, end)){
+				int offset1, offset2;
+				boolean containsInit, containsEnd;
+				
+				containsInit = DateUtil.isDayOffset(subjectDay, init, 0);
+				containsEnd = DateUtil.isDayOffset(subjectDay, end, 0);
+				
+				/* CASE 1: subjectDay is entirely contained in [init, end] */
+				if( !containsInit && !containsEnd ){
+					offset1 = 0;
+					offset2 = DateUtil.MINUTES_IN_DAY;
+				}
+				/* CASE 2: subjectDay contains 'init', but not 'end'. */
+				else if( containsInit && !containsEnd ){
+					offset1 = DateUtil.minuteCount(init);
+					offset2 = DateUtil.MINUTES_IN_DAY;
+				}
+				/* CASE 3: subjectDay contains 'end', but not 'init'. */
+				else if( !containsInit && containsEnd ){
+					offset1 = 0;
+					offset2 = DateUtil.minuteCount(end);
+				}
+				/* CASE 4: subjectDay contains the whole interval [init, end] */
+				else {
+					offset1 = DateUtil.minuteCount(init);
+					offset2 = DateUtil.minuteCount(end);
+				}
+				
+				mDayPorts.get(i).addAppointment(offset1, offset2, appointment, mModel.getRefGroup(appointment));
+			}
 		
-		// Get comparison keys for each edge date of the appointment
-		int day1 = init.get(Calendar.DATE);
-		int day2 = end.get(Calendar.DATE);
-		
-		// If recurrence is weekly, shift the comparison keys to the corresponding weekday of the week being displayed
-		if(rec == Recurrence.WEEKLY){
-			int delta = day2 - day1; //TODO: Solve problem when appointment spans for more than 1 month.
-			int weekday = init.get(Calendar.DAY_OF_WEEK);
-			
-			Calendar newInit = (Calendar) mAssignedWeek.clone();
-			newInit.set(Calendar.DAY_OF_WEEK, weekday);
-			
-			Calendar newEnd = (Calendar) newInit.clone();
-			newEnd.add(Calendar.DAY_OF_MONTH, delta);
-
-			day1 = newInit.get(Calendar.DAY_OF_MONTH);
-			day2 = newEnd.get(Calendar.DAY_OF_MONTH);
-		}
-		
-		boolean control = false;
-		for(AppointmentDayPortController adpc: mDayPorts){
-			if(day1 == adpc.getAssignedDay())
-				control = true;
-			
-			if(control || rec == Recurrence.DAILY)
-				adpc.addAppointment(appointment, mModel.getRefGroup(appointment));
-			
-			if(day2 == adpc.getAssignedDay())
-				control = false;
+			subjectDay.add(Calendar.DATE, 1);
 		}
 	}
 	
@@ -214,5 +235,20 @@ public class AppointmentWindowController {
 		for(AppointmentDayPortController adpc: mDayPorts){
 			adpc.removeAppointmentView(id);
 		}
+	}
+	
+	private void prepareAppointment(Appointment appt){
+		appt.initDateProperty().addListener(action -> {
+			removeAppointmentView(appt.getID());
+			addAppointmentView(appt);
+		});
+		appt.endDateProperty().addListener(action -> {
+			removeAppointmentView(appt.getID());
+			addAppointmentView(appt);
+		});
+		appt.recurrenceProperty().addListener(action -> {
+			removeAppointmentView(appt.getID());
+			addAppointmentView(appt);
+		});
 	}
 }
