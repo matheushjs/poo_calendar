@@ -2,12 +2,12 @@ package poo.calendar.mainscene.tasks;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.UUID;
 
 import javafx.collections.MapChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import poo.calendar.controller.MainApplication;
@@ -22,25 +22,10 @@ import poo.calendar.model.Task;
 public class TaskWindowController {
 	@FXML
 	private AnchorPane mMainPane;
-	
-	@FXML
-	private VBox mOuterBox;
-	
-	@FXML
-	private ScrollPane mUpperScrollPane;
-	
-	@FXML
-	private AnchorPane mUpperAnchorPane;
-	
+
 	@FXML
 	private VBox mUpperBox;
-	
-	@FXML
-	private ScrollPane mLowerScrollPane;
-	
-	@FXML
-	private AnchorPane mLowerAnchorPane;
-	
+
 	@FXML
 	private VBox mLowerBox;
 	
@@ -134,7 +119,7 @@ public class TaskWindowController {
 	
 	private void addWidgetToView(Task task, TaskViewController TVC){
 		if(task.getDeadlineDate() != null){
-			mUpperBox.getChildren().add(TVC.getWidget());
+			regenerateUpperBox();
 		} else {
 			mLowerBox.getChildren().add(TVC.getWidget());
 		}
@@ -143,6 +128,21 @@ public class TaskWindowController {
 	private void removeWidgetFromView(TaskViewController TVC){
 		mUpperBox.getChildren().remove(TVC.getWidget());
 		mLowerBox.getChildren().remove(TVC.getWidget());
+	}
+	
+	private void regenerateUpperBox(){
+		mUpperBox.getChildren().clear();
+		
+		PriorityQueue<TaskViewController> queue = new PriorityQueue<>();
+		
+		mControllers.forEach((uuid, TVC) -> {
+			if(TVC.hasDeadline())
+				queue.add(TVC);
+		});
+		
+		while(!queue.isEmpty()){
+			mUpperBox.getChildren().add(queue.poll().getWidget());
+		}
 	}
 	
 	/**

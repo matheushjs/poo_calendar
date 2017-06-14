@@ -25,10 +25,11 @@ import poo.calendar.model.Task;
  *   - Title
  *   - Deadline
  */
-public class TaskViewController extends ControlledWidget<HBox> {
+public class TaskViewController extends ControlledWidget<HBox> implements Comparable<TaskViewController> {
 	private HBox mWidget;
 	private Label mTitle;
-	private Label mDeadline;
+	private Label mDeadlineLabel;
+	private Calendar mDeadline;
 	private boolean hasDeadline;
 	private UUID mID;
 	
@@ -54,17 +55,17 @@ public class TaskViewController extends ControlledWidget<HBox> {
 	protected void initializeWidget(){
 		mWidget = new HBox();
 		mTitle = new Label();
-		mDeadline = new Label();
+		mDeadlineLabel = new Label();
 		
-		mDeadline.setAlignment(Pos.CENTER);
+		mDeadlineLabel.setAlignment(Pos.CENTER);
 		mTitle.setAlignment(Pos.CENTER);
 		mWidget.setAlignment(Pos.CENTER);
 		
 		HBox.setHgrow(mTitle, Priority.ALWAYS);
-		HBox.setHgrow(mDeadline, Priority.ALWAYS);
+		HBox.setHgrow(mDeadlineLabel, Priority.ALWAYS);
 		
 		mTitle.setMaxWidth(Double.MAX_VALUE);
-		mDeadline.setMaxWidth(Double.MAX_VALUE);
+		mDeadlineLabel.setMaxWidth(Double.MAX_VALUE);
 		mWidget.setPrefWidth(Double.MAX_VALUE);
 		
 		mWidget.getChildren().add(mTitle);
@@ -75,18 +76,23 @@ public class TaskViewController extends ControlledWidget<HBox> {
 	}
 	
 	private void setDeadline(Calendar deadline){
+		mDeadline = deadline;
+		
 		if(deadline != null){
-			mDeadline.setText(
+			mDeadlineLabel.setText(
 					DateUtil.dateString(deadline) +
 					" " + 
 					DateUtil.hourString(deadline));
 			
-			mWidget.getChildren().add(mDeadline);
+			// Check if widget isn't already inside mWidget
+			if(!hasDeadline)
+				mWidget.getChildren().add(mDeadlineLabel);
+			
 			hasDeadline = true;
 			
 		} else {
-			mDeadline.setText("");
-			mWidget.getChildren().remove(mDeadline);
+			mDeadlineLabel.setText("");
+			mWidget.getChildren().remove(mDeadlineLabel);
 			hasDeadline = false;
 		}
 	}
@@ -106,5 +112,17 @@ public class TaskViewController extends ControlledWidget<HBox> {
 	
 	public UUID getID(){
 		return mID;
+	}
+	
+	public int compareTo(TaskViewController other){
+		int cmp;
+		
+		if(this.hasDeadline && !other.hasDeadline) return -1;
+		else if(!this.hasDeadline && other.hasDeadline) return 1;
+		else {
+			cmp = this.mDeadline.compareTo(other.mDeadline);
+			if(cmp != 0) return cmp;
+			else return this.mID.compareTo(other.mID);
+		}
 	}
 }

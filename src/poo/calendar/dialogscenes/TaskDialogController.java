@@ -182,7 +182,7 @@ public class TaskDialogController {
 	 * On first click, will fill the deadline fields with some valid values.
 	 */
 	private void onDeadlineFieldClick(){
-		if(mDeadlineWasClicked) return;
+		if(mDeadlineWasClicked || mTask != null) return;
 		mDeadlineWasClicked = true;
 		
 		//TODO: Make fields start greyish, then make them white upon clicking
