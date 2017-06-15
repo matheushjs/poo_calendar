@@ -4,13 +4,20 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.UUID;
 
+import com.sun.glass.ui.Application;
+
 import javafx.animation.FadeTransition;
 import javafx.collections.MapChangeListener;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import poo.calendar.DateUtil;
 import poo.calendar.controller.MainApplication;
@@ -36,6 +43,9 @@ public class AppointmentWindowController {
 	
 	@FXML
 	private AnchorPane mInnerPane;
+	
+	@FXML
+	private VBox mLabelsBox;
 	
 	@FXML
 	private HBox mInnerBox;
@@ -95,14 +105,22 @@ public class AppointmentWindowController {
 	 */
 	@FXML
 	private void initialize(){
+		mLabelsBox.setAlignment(Pos.CENTER);
+		for(int i = 0, n = 24; i < n; i++){
+			Label lbl = new Label(i + "h");
+			lbl.minHeightProperty().bind(mLabelsBox.heightProperty().divide(24.0));
+			mLabelsBox.getChildren().add(lbl);
+		}
+		
 		for(AppointmentDayPortController adpc: mDayPorts){
 			AnchorPane widget = adpc.getWidget();
 			widget.prefWidthProperty().bind(mInnerBox.widthProperty().divide(7.0));
-			widget.maxWidthProperty().bind(mInnerBox.widthProperty().divide(7.0));
+			widget.maxWidthProperty().bind(widget.prefWidthProperty());
 			mInnerBox.getChildren().add(widget);
 		}
-		mInnerBox.prefWidthProperty().bind(mInnerScrollPane.widthProperty());
-		mInnerBox.maxWidthProperty().bind(mInnerScrollPane.widthProperty());
+		mInnerPane.setMinWidth(800.0);
+		mInnerBox.prefWidthProperty().bind(mInnerPane.widthProperty().subtract(mLabelsBox.widthProperty().add(5))); //Add a spacing of 5
+		mInnerBox.maxWidthProperty().bind(mInnerBox.prefWidthProperty());
 		
 		mAddButton.setOpacity(0.3);
 		mLeftButton.setOpacity(0.3);
