@@ -104,8 +104,12 @@ public class AppointmentViewController extends ControlledWidget<AnchorPane> {
 		
 		mMainPane.setOnMouseClicked(action -> mMainApp.displayAppointmentDialog(mID));
 		
+		// Observe source appointment's title
 		appt.titleProperty().addListener((obs, oldval, newval) -> setTitle(newval));
+		
+		// Observe source appointment's group ID
 		appt.groupIDProperty().addListener((obs, oldval, newval) -> {
+			// Must observe new group, and drop the reference to the old lambda function.
 			CalendarGroup group = mModel.getGroup(newval);
 			mGroupListener = (obs2, oldval2, newval2) -> setColor(newval2);
 			group.colorProperty().addListener(new WeakChangeListener<Color>(mGroupListener));
@@ -113,6 +117,7 @@ public class AppointmentViewController extends ControlledWidget<AnchorPane> {
 			setColor(mModel.getRefGroup(appt).getColor());
 		});
 		
+		// Observe the source group's color
 		CalendarGroup cg = mModel.getRefGroup(appt);
 		mGroupListener = (obs, oldval, newval) -> setColor(newval);
 		cg.colorProperty().addListener(new WeakChangeListener<Color>(mGroupListener));

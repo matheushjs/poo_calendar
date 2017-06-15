@@ -3,6 +3,8 @@ package poo.calendar.mainscene.tasks;
 import java.util.Calendar;
 import java.util.UUID;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.WeakChangeListener;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
@@ -15,6 +17,8 @@ import javafx.scene.paint.Paint;
 import poo.calendar.ColorUtil;
 import poo.calendar.ControlledWidget;
 import poo.calendar.DateUtil;
+import poo.calendar.controller.MainApplication;
+import poo.calendar.model.CalendarDataModel;
 import poo.calendar.model.CalendarGroup;
 import poo.calendar.model.Task;
 
@@ -23,35 +27,33 @@ import poo.calendar.model.Task;
  * If the task has a deadline, the title is placed to the left, and the date to the right of the HBox.
  * If the task does not have a deadline, the title is centered.
  * 
- * TaskView will observe the source Task's:
- *   - Title
- *   - Deadline
+ * TaskView will observe:
+ * 	- source task's Title
+ *  - source task's group ID
+ *  - source task's deadline data
+ *  - source group's color
  */
 public class TaskViewController extends ControlledWidget<HBox> implements Comparable<TaskViewController> {
-	private HBox mWidget;
-	private Label mTitle;
-	private Label mDeadlineLabel;
+	// Attributes
 	private Calendar mDeadline;
 	private boolean hasDeadline;
 	private UUID mID;
+	private ChangeListener<Color> mGroupListener;
+	
+	// View Structures
+	private HBox mWidget;
+	private Label mTitle;
+	private Label mDeadlineLabel;
+	
+	// Foreign structures
+	private MainApplication mMainApp;
+	private CalendarDataModel mModel;
 	
 	/**
 	 * Default constructor
+	 * Initializes the widget to a valid state
 	 */
-	public TaskViewController(Task task, CalendarGroup cg){
-		super();
-		
-		mID = task.getID();
-		
-		mTitle.setText(task.getTitle());
-		mTitle.textProperty().bind(task.titleProperty());
-		
-		setDeadline(task.getDeadlineDate());
-		task.deadlineDateProperty().addListener((obs, oldval, newval) -> {
-			setDeadline(task.getDeadlineDate());
-		});
-		
-		setColor(cg.getColor());
+	public TaskViewController(){
 	}
 	
 	protected void initializeWidget(){
@@ -77,6 +79,43 @@ public class TaskViewController extends ControlledWidget<HBox> implements Compar
 	
 	public HBox getWidget(){
 		return mWidget;
+	}
+	
+	public void initializeStructures(MainApplication app, CalendarDataModel model, UUID taskID){
+		mMainApp = app;
+		mModel = model;
+		mID = taskID;
+		
+		Task task = mModel.getTask(taskID);
+		CalendarGroup cg = mModel.getRefGroup(task);
+		
+		mWidget.setOnMouseClicked(action -> mMainApp.displayTaskDialog(mID));
+		
+		// Observe source group's color
+		mGroupListener = (obs, oldval, newval) -> setColor(newval);
+		cg.colorProperty().addListener(new WeakChangeListener<Color>(mGroupListener));
+		
+		// Observe source task's group ID
+		task.groupIDProperty().addListener((obs, oldval, newval) -> {
+			// Must observe new group, and drop the reference to the old lambda function.
+			CalendarGroup cg2 = mModel.getGroup(newval);
+			mGroupListener = (obs2, oldval2, newval2) -> setColor(newval2);
+			cg2.colorProperty().addListener(new WeakChangeListener<Color>(mGroupListener));
+			setColor(cg2.getColor());
+		});
+		
+		mTitle.setText(task.getTitle());
+		
+		//Observe source task's title
+		mTitle.textProperty().bind(task.titleProperty());
+		
+		//Observe source task's deadline date
+		setDeadline(task.getDeadlineDate());
+		task.deadlineDateProperty().addListener((obs, oldval, newval) -> {
+			setDeadline(task.getDeadlineDate());
+		});
+		
+		setColor(cg.getColor());
 	}
 	
 	private void setDeadline(Calendar deadline){

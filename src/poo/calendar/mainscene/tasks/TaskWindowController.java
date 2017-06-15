@@ -122,18 +122,12 @@ public class TaskWindowController {
 	 * @param task Task to be added.
 	 */
 	private void addTaskView(Task task){
-		CalendarGroup cg = mModel.getRefGroup(task);
-		TaskViewController TVC = new TaskViewController(task, cg);
+		TaskViewController TVC = new TaskViewController();
+		TVC.initializeStructures(mMainApp, mModel, task.getID());
 		
-		TVC.getWidget().setOnMouseClicked(action -> mMainApp.displayTaskDialog(task.getID()));
 		mControllers.put(TVC.getID(), TVC);
 		
 		addWidgetToView(task, TVC);
-		
-		task.groupIDProperty().addListener((obs, oldval, newval) -> {
-			CalendarGroup cg2 = mModel.getRefGroup(task);
-			TVC.setColor(cg2.getColor());
-		});
 		
 		task.deadlineDateProperty().addListener((obs, oldval, newval) -> {
 			removeWidgetFromView(TVC);
