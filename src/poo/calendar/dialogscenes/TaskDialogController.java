@@ -3,13 +3,22 @@ package poo.calendar.dialogscenes;
 import java.util.Calendar;
 import java.util.UUID;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import poo.calendar.DateUtil;
 import poo.calendar.controller.MainApplication;
@@ -43,6 +52,12 @@ public class TaskDialogController {
 	private Text mHeaderText;
 
 	@FXML
+	private HBox mTitleBox;
+	
+	@FXML
+	private HBox mDateBox;
+	
+	@FXML
 	private TextField mTitleField;
 	
 	@FXML
@@ -62,6 +77,10 @@ public class TaskDialogController {
 	
 	private MainApplication mMainApp;
 	
+	private Label mTitleWarningLabel;
+	private Label mDateWarningLabel;
+	private Border mWarningBorder = new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, null, null));
+	
 	// Model data
 	private CalendarDataModel mModel;
 	private Task mTask;
@@ -71,6 +90,16 @@ public class TaskDialogController {
 	 */
 	public TaskDialogController(){
 		mDeadlineWasClicked = false;
+		
+		mTitleWarningLabel = new Label("");
+		mTitleWarningLabel.setFont(Font.font(10));
+		mTitleWarningLabel.setTextFill(Paint.valueOf("red"));
+		mTitleWarningLabel.setWrapText(true);
+		
+		mDateWarningLabel = new Label("");
+		mDateWarningLabel.setFont(Font.font(10));
+		mDateWarningLabel.setTextFill(Paint.valueOf("red"));
+		mDateWarningLabel.setWrapText(true);
 	}
 	
 	/**
@@ -78,7 +107,6 @@ public class TaskDialogController {
 	 */
 	@FXML
 	private void initialize(){
-		//TODO: Connect due signals
 		mButtonBox.getChildren().remove(mDeleteButton);
 		mDeleteButton.setOnAction(action -> onDeleteClick());
 		
@@ -157,9 +185,12 @@ public class TaskDialogController {
 	private boolean validateInput(){
 		boolean allFine = true;
 		
+		clearDateWarning();
+		clearTitleWarning();
+		
 		String title = mTitleField.getText().trim();
 		if(title.length() == 0){
-			//TODO: Add alert
+			addTitleWarning("Title cannot be blank");
 			allFine = false;
 		}
 		
@@ -169,7 +200,7 @@ public class TaskDialogController {
 			try {
 				DateUtil.parseFields(date, hour);
 			} catch(IllegalArgumentException e){
-				//TODO: Add alert
+				addDateWarning("Deadline Date is malformed");
 				allFine = false;
 			}
 		}
@@ -195,6 +226,50 @@ public class TaskDialogController {
 		calendar.add(Calendar.MINUTE, 30);
 		mDateField.setText(DateUtil.dateString(calendar));
 		mHourField.setText(DateUtil.hourString(calendar));
+	}
+	
+	/**
+	 * Adds the given string to the list of warnings that appears beside 
+	 * the Title form Box.
+	 * @param warning
+	 */
+	private void addTitleWarning(String warning){
+		String old = mTitleWarningLabel.getText();
+		mTitleWarningLabel.setText(old + "\n * " + warning);
+		
+		ObservableList<Node> list = mTitleBox.getChildren();
+		if(!list.contains(mTitleWarningLabel)){
+			list.add(mTitleWarningLabel);
+			mTitleBox.setBorder(mWarningBorder);
+		}
+	}
+	
+	private void clearTitleWarning(){
+		mTitleWarningLabel.setText("");
+		mTitleBox.getChildren().remove(mTitleWarningLabel);
+		mTitleBox.setBorder(Border.EMPTY);
+	}
+	
+	/**
+	 * Adds the given string to the list of warnings that appears beside 
+	 * the date form Box.
+	 * @param warning
+	 */
+	private void addDateWarning(String warning){
+		String old = mDateWarningLabel.getText();
+		mDateWarningLabel.setText(old + "\n * " + warning);
+		
+		ObservableList<Node> list = mDateBox.getChildren();
+		if(!list.contains(mDateWarningLabel)){
+			list.add(mDateWarningLabel);
+			mDateBox.setBorder(mWarningBorder);
+		}
+	}
+	
+	private void clearDateWarning(){
+		mDateWarningLabel.setText("");
+		mDateBox.getChildren().remove(mDateWarningLabel);
+		mDateBox.setBorder(Border.EMPTY);
 	}
 	
 	/**

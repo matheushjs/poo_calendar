@@ -27,13 +27,13 @@
                   <Button fx:id="mDeleteButton" mnemonicParsing="false" text="Delete" />
                </children>
             </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0">
+            <HBox fx:id="mTitleBox" prefHeight="100.0" prefWidth="200.0">
                <children>
                   <Label text="Title" />
                   <TextField fx:id="mTitleField" />
                </children>
             </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0">
+            <HBox fx:id="mDateBox" prefHeight="100.0" prefWidth="200.0">
                <children>
                   <Label text="From" />
                   <TextField fx:id="mDateField1" />
