@@ -1,11 +1,16 @@
 package poo.calendar;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DateUtil {
 	public static int MINUTES_IN_DAY = 24 * 60;
+
+	// Maps each integer such as Calendar.JUNE into a representative String.
+	private static Map<Integer, String> sMonthMapping = null;
 	
 	/**
 	 * Creates a calendar from 2 strings 'date' and 'hour'.
@@ -254,16 +259,33 @@ public class DateUtil {
 		return true;
 	}
 	
+	/**
+	 * Given an integer such as Calendar.JUNE, returns a string representative of the month.
+	 * @param month
+	 * @return
+	 */
+	public static String monthString(int month){
+		if(sMonthMapping == null){
+			sMonthMapping = new HashMap<>(12);
+			sMonthMapping.put(Calendar.JANUARY, "January");
+			sMonthMapping.put(Calendar.FEBRUARY, "February");
+			sMonthMapping.put(Calendar.MARCH, "March");
+			sMonthMapping.put(Calendar.APRIL, "April");
+			sMonthMapping.put(Calendar.MAY, "May");
+			sMonthMapping.put(Calendar.JUNE, "June");
+			sMonthMapping.put(Calendar.JULY, "July");
+			sMonthMapping.put(Calendar.AUGUST, "August");
+			sMonthMapping.put(Calendar.SEPTEMBER, "September");
+			sMonthMapping.put(Calendar.OCTOBER, "October");
+			sMonthMapping.put(Calendar.NOVEMBER, "November");
+			sMonthMapping.put(Calendar.DECEMBER, "December");
+		}
+		
+		return sMonthMapping.get(month);
+	}
+	
 	/*
 	public static void main(String[] args){
-		Calendar a = parseFields("26/06/2017", "1:05");
-		Calendar b = parseFields("27/06/2017", "1:35");
-		Calendar c = parseFields("14/06/2017", "00:00");
-
-		DateUtil.translateInterval(Calendar.DAY_OF_WEEK, c, a, b);
-		
-		System.out.println(dateString(a) + " " + hourString(a));
-		System.out.println(dateString(b) + " " + hourString(b));
-		System.out.println(dateString(c) + " " + hourString(c));
+		System.out.println(monthString(Calendar.JANUARY));
 	}*/
 }

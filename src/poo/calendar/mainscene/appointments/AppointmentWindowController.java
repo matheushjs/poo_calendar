@@ -4,20 +4,23 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.UUID;
 
-import com.sun.glass.ui.Application;
-
+import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.collections.MapChangeListener;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 import poo.calendar.DateUtil;
 import poo.calendar.controller.MainApplication;
@@ -39,6 +42,9 @@ public class AppointmentWindowController {
 	private AnchorPane mMainPane;
 	
 	@FXML
+	private Text mWeekText;
+	
+	@FXML
 	private ScrollPane mInnerScrollPane;
 	
 	@FXML
@@ -51,6 +57,9 @@ public class AppointmentWindowController {
 	private HBox mInnerBox;
 	
 	@FXML
+	private HBox mWeekdaysBox;
+	
+	@FXML
 	private Button mAddButton;
 	
 	@FXML
@@ -60,7 +69,10 @@ public class AppointmentWindowController {
 	private Button mRightButton;
 	
 	// Fade transitions for buttons
-	private FadeTransition[] mFadeUp, mFadeDown;
+	private FadeTransition[] mButtonFadeUp, mButtonFadeDown;
+	
+	// Fade transitions for WeekdaysBox and WeekText
+	private FadeTransition[] mWeekFade, mWeekFadeBack;
 	
 	private MainApplication mMainApp;
 	private ArrayList<AppointmentDayPortController> mDayPorts;
@@ -86,18 +98,41 @@ public class AppointmentWindowController {
 			auxCalendar.add(Calendar.DAY_OF_WEEK, 1);
 		}
 		
-		mFadeUp = new FadeTransition[3];
-		mFadeDown = new FadeTransition[3];
+		mButtonFadeUp = new FadeTransition[3];
+		mButtonFadeDown = new FadeTransition[3];
 		
 		for(int i = 0; i < 3; i++){
-			mFadeUp[i] = new FadeTransition(Duration.millis(500));
-			mFadeDown[i] = new FadeTransition(Duration.millis(500));
+			mButtonFadeUp[i] = new FadeTransition(Duration.millis(500));
+			mButtonFadeDown[i] = new FadeTransition(Duration.millis(500));
 			
-			mFadeUp[i].setFromValue(0.3);
-			mFadeUp[i].setToValue(1.0);
-			mFadeDown[i].setFromValue(1.0);
-			mFadeDown[i].setToValue(0.3);
+			mButtonFadeUp[i].setFromValue(0.3);
+			mButtonFadeUp[i].setToValue(1.0);
+			mButtonFadeDown[i].setFromValue(1.0);
+			mButtonFadeDown[i].setToValue(0.3);
 		}
+		
+		mWeekFade = new FadeTransition[2];
+		mWeekFadeBack = new FadeTransition[2];
+		for(int i = 0; i < 2; i++){
+			mWeekFade[i] = new FadeTransition(Duration.millis(1000));
+			mWeekFadeBack[i] = new FadeTransition(Duration.millis(1000));
+			
+			mWeekFade[i].setFromValue(0.0);
+			mWeekFade[i].setToValue(0.7);
+			
+			mWeekFadeBack[i].setFromValue(0.7);
+			mWeekFadeBack[i].setToValue(0.0);
+			
+			final int lambdai = i;
+			mWeekFade[i].setOnFinished(action -> {
+				mWeekFadeBack[lambdai].playFromStart();
+			
+			});
+		}
+		
+		// Weekday animation fades away 3 seconds earlier.
+		mWeekFadeBack[0].setDelay(Duration.seconds(2));
+		mWeekFadeBack[1].setDelay(Duration.seconds(5));
 	}
 	
 	/**
@@ -105,7 +140,6 @@ public class AppointmentWindowController {
 	 */
 	@FXML
 	private void initialize(){
-		mLabelsBox.setAlignment(Pos.CENTER);
 		for(int i = 0, n = 24; i < n; i++){
 			Label lbl = new Label(i + "h");
 			lbl.minHeightProperty().bind(mLabelsBox.heightProperty().divide(24.0));
@@ -122,29 +156,61 @@ public class AppointmentWindowController {
 		mInnerBox.prefWidthProperty().bind(mInnerPane.widthProperty().subtract(mLabelsBox.widthProperty().add(5))); //Add a spacing of 5
 		mInnerBox.maxWidthProperty().bind(mInnerBox.prefWidthProperty());
 		
+		/*
+		 * Setup the WeekdaysBox, which is the box that holds the labels containing each weekday name.
+		 * Each label is positioned right over the corresponding DayPort.
+		 */
+		mInnerPane.widthProperty().addListener((obs, oldval, newval) -> {
+			AnchorPane.setRightAnchor(mWeekdaysBox, mInnerScrollPane.getWidth() - newval.doubleValue());
+		});
+		mWeekdaysBox.setOpacity(0.0);
+		mWeekdaysBox.spacingProperty().bind(mWeekdaysBox.widthProperty().divide(14.0));
+		mWeekdaysBox.setPadding(new Insets(0, 30, 0, 30));
+		mLabelsBox.widthProperty().addListener((obs, oldval, newval) -> AnchorPane.setLeftAnchor(mWeekdaysBox, newval.doubleValue()));
+		String[] weekdays = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
+		Background lblFill = new Background(new BackgroundFill(Paint.valueOf("grey"), null, null));
+		for(int i = 0; i < 7; i++){
+			Label lbl = new Label(weekdays[i]);
+			HBox.setHgrow(lbl, Priority.ALWAYS);
+			lbl.setMaxWidth(Double.MAX_VALUE);
+			lbl.setPrefHeight(30);
+			lbl.setTextFill(Paint.valueOf("white"));
+			lbl.setAlignment(Pos.CENTER);
+			lbl.setBackground(lblFill);
+			mWeekdaysBox.getChildren().add(lbl);
+		}
+		mWeekFade[0].setNode(mWeekdaysBox);
+		mWeekFadeBack[0].setNode(mWeekdaysBox);
+		
+		mWeekText.setOpacity(0.0);
+		mWeekFade[1].setNode(mWeekText);
+		mWeekFadeBack[1].setNode(mWeekText);
+		
 		mAddButton.setOpacity(0.3);
 		mLeftButton.setOpacity(0.3);
 		mRightButton.setOpacity(0.3);
 		
-		mFadeUp[0].setNode(mAddButton);
-		mFadeDown[0].setNode(mAddButton);
-		mFadeUp[1].setNode(mLeftButton);
-		mFadeDown[1].setNode(mLeftButton);
-		mFadeUp[2].setNode(mRightButton);
-		mFadeDown[2].setNode(mRightButton);
+		mButtonFadeUp[0].setNode(mAddButton);
+		mButtonFadeDown[0].setNode(mAddButton);
+		mButtonFadeUp[1].setNode(mLeftButton);
+		mButtonFadeDown[1].setNode(mLeftButton);
+		mButtonFadeUp[2].setNode(mRightButton);
+		mButtonFadeDown[2].setNode(mRightButton);
 		
-		mAddButton.setOnMouseEntered(action -> mFadeUp[0].playFromStart());
-		mAddButton.setOnMouseExited(action -> mFadeDown[0].playFromStart());
-		mLeftButton.setOnMouseEntered(action -> mFadeUp[1].playFromStart());
-		mLeftButton.setOnMouseExited(action -> mFadeDown[1].playFromStart());
-		mRightButton.setOnMouseEntered(action -> mFadeUp[2].playFromStart());
-		mRightButton.setOnMouseExited(action -> mFadeDown[2].playFromStart());
+		mAddButton.setOnMouseEntered(action -> mButtonFadeUp[0].playFromStart());
+		mAddButton.setOnMouseExited(action -> mButtonFadeDown[0].playFromStart());
+		mLeftButton.setOnMouseEntered(action -> mButtonFadeUp[1].playFromStart());
+		mLeftButton.setOnMouseExited(action -> mButtonFadeDown[1].playFromStart());
+		mRightButton.setOnMouseEntered(action -> mButtonFadeUp[2].playFromStart());
+		mRightButton.setOnMouseExited(action -> mButtonFadeDown[2].playFromStart());
 		
 		adjustScroll(Calendar.getInstance());
 		
 		DayIntervalsCanvas DIC = new DayIntervalsCanvas(mInnerPane);
 		mInnerPane.getChildren().add(DIC);
 		DIC.toBack();
+		
+		runWeekAnimations();
 	}
 	
 	/**
@@ -344,11 +410,34 @@ public class AppointmentWindowController {
 		clearDayPorts();
 		mAssignedWeek.add(Calendar.DATE, 7*offsetWeek);
 		mModel.getAppointments().forEach((uuid, appt) -> addAppointmentView(appt, false));
+		runWeekAnimations();
 	}
 	
 	private void clearDayPorts(){
 		for(AppointmentDayPortController adpc: mDayPorts){
 			adpc.removeAll();
+		}
+	}
+	
+	private void runWeekAnimations(){
+		Calendar endOfWeek = (Calendar) mAssignedWeek.clone();
+		endOfWeek.add(Calendar.DATE, 6);
+		
+		StringBuilder displayThis = new StringBuilder("");
+		displayThis.append(DateUtil.monthString(mAssignedWeek.get(Calendar.MONTH)));
+		displayThis.append(" " + mAssignedWeek.get(Calendar.DATE));
+		displayThis.append(" - " + DateUtil.monthString(endOfWeek.get(Calendar.MONTH)));
+		displayThis.append(" " + endOfWeek.get(Calendar.DATE));
+		
+		mWeekText.setText(displayThis.toString());
+		
+		if(mWeekFade[0].getStatus() != Animation.Status.RUNNING){
+			mWeekFade[0].playFromStart();
+		}
+		
+		// The text animation should
+		if(mWeekFade[1].getStatus() != Animation.Status.RUNNING){
+			mWeekFade[1].playFromStart();
 		}
 	}
 }
