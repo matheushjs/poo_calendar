@@ -52,11 +52,11 @@ public class DayIntervalsCanvas extends Canvas {
 	
 	@Override
 	public double prefHeight(double width){
-		return this.getHeight();
+		return -1; //USE_COMPUTED_SIZE
 	}
 	
 	@Override
 	public double prefWidth(double height){
-		return this.getWidth();
+		return -1; //USE_COMPUTED_SIZE
 	}
 }

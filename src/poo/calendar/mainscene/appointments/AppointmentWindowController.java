@@ -95,7 +95,6 @@ public class AppointmentWindowController {
 	 */
 	@FXML
 	private void initialize(){
-		//TODO: Register due listeners
 		for(AppointmentDayPortController adpc: mDayPorts){
 			AnchorPane widget = adpc.getWidget();
 			widget.prefWidthProperty().bind(mInnerBox.widthProperty().divide(7.0));
