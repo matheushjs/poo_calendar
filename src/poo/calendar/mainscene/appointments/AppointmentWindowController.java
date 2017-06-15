@@ -20,6 +20,10 @@ import poo.calendar.model.Recurrence;
 /**
  * Widget class that displays the calendar window.
  * It's a vertical box containing a list of appointments and 2 buttons.
+ * 
+ * This class observes:
+ * 	- The model map of appointments
+ *  - Every appointment's date/title properties.
  */
 public class AppointmentWindowController {
 	@FXML

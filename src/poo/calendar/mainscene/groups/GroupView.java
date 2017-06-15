@@ -12,6 +12,10 @@ import poo.calendar.model.CalendarGroup;
 
 /**
  * Class that represents a widget for displaying a calendar group in the UI.
+ * 
+ * This class observes:
+ * 	- The source group's color
+ *  - The source group's name
  */
 public class GroupView extends HBox {
 	private UUID mID;

@@ -17,7 +17,12 @@ import poo.calendar.model.Task;
 
 /**
  * Widget class that displays the tasks window.
- * It's a vertical box containing a list of tasks and 2 buttons.
+ * It's a vertical box containing 2 list of tasks, one for tasks with deadline,
+ * and other for tasks without deadline.
+ * 
+ * This class observes:
+ *  - The model map of Tasks
+ *  - The model map of Groups
  */
 public class TaskWindowController {
 	@FXML

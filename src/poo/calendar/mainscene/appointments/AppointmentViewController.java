@@ -2,6 +2,8 @@ package poo.calendar.mainscene.appointments;
 
 import java.util.UUID;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.WeakInvalidationListener;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.OverrunStyle;
@@ -33,6 +35,9 @@ public class AppointmentViewController extends ControlledWidget<AnchorPane> {
 	private MainApplication mMainApp;
 	private CalendarDataModel mModel;
 	private UUID mID;
+	
+	// Keep a reference to the weak listener, to prevent garbage collection.
+	private InvalidationListener mGroupListener;
 	
 	/**
 	 * Default constructor. Merely sets up the widget view.
@@ -106,7 +111,8 @@ public class AppointmentViewController extends ControlledWidget<AnchorPane> {
 		appt.groupIDProperty().addListener(change -> setColor(mModel.getRefGroup(appt).getColor()));
 		
 		CalendarGroup cg = mModel.getRefGroup(appt);
-		cg.colorProperty().addListener(change -> setColor(cg.getColor()));
+		mGroupListener = change -> setColor(cg.getColor());
+		cg.colorProperty().addListener(new WeakInvalidationListener(mGroupListener));
 		
 		setColor(cg.getColor());
 		setTitle(appt.getTitle());

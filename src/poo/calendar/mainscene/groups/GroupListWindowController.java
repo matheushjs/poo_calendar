@@ -15,6 +15,12 @@ import poo.calendar.controller.MainApplication;
 import poo.calendar.model.CalendarDataModel;
 import poo.calendar.model.CalendarGroup;
 
+/**
+ * Class for controlling the widget that displays Calendar Groups.
+ * 
+ * This class observes:
+ *  - The model map of calendar groups;
+ */
 public class GroupListWindowController {
 	@FXML
 	private VBox mMainBox;
@@ -50,7 +56,6 @@ public class GroupListWindowController {
 	 */
 	@FXML
 	private void initialize(){
-		//TODO: Connect due signals
 	}
 	
 	/**
