@@ -182,7 +182,11 @@ public class TaskDialogController {
 	 * On first click, will fill the deadline fields with some valid values.
 	 */
 	private void onDeadlineFieldClick(){
-		if(mDeadlineWasClicked || mTask != null) return;
+		if(mDeadlineWasClicked) return;
+		
+		//If we are on edit mode, and Task has a deadline date, we want to disable the auto-completion too.
+		if(mTask != null && mTask.getDeadlineDate() != null) return;
+		
 		mDeadlineWasClicked = true;
 		
 		//TODO: Make fields start greyish, then make them white upon clicking
