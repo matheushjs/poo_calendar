@@ -5,11 +5,13 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.UUID;
 
+import javafx.animation.FadeTransition;
 import javafx.collections.MapChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 import poo.calendar.controller.MainApplication;
 import poo.calendar.model.CalendarDataModel;
 import poo.calendar.model.CalendarGroup;
@@ -37,6 +39,9 @@ public class TaskWindowController {
 	@FXML
 	private Button mAddButton;
 
+	private FadeTransition mFadeUp;
+	private FadeTransition mFadeDown;
+	
 	private MainApplication mMainApp;
 	
 	//Model data
@@ -49,6 +54,14 @@ public class TaskWindowController {
 	 */
 	public TaskWindowController(){
 		mControllers = new HashMap<>();
+		
+		mFadeUp = new FadeTransition(Duration.millis(500));
+		mFadeUp.setFromValue(0.3);
+		mFadeUp.setToValue(1.0);
+		
+		mFadeDown = new FadeTransition(Duration.millis(500));
+		mFadeDown.setFromValue(1.0);
+		mFadeDown.setToValue(0.3);
 	}
 	
 	/**
@@ -56,6 +69,12 @@ public class TaskWindowController {
 	 */
 	@FXML
 	private void initialize(){
+		mAddButton.setOpacity(0.3);
+		
+		mFadeUp.setNode(mAddButton);
+		mFadeDown.setNode(mAddButton);
+		mAddButton.setOnMouseEntered(action -> mFadeUp.playFromStart());
+		mAddButton.setOnMouseExited(action -> mFadeDown.playFromStart());
 	}
 	
 	/**

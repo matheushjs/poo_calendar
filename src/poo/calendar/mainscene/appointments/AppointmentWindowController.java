@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.UUID;
 
+import javafx.animation.FadeTransition;
 import javafx.collections.MapChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.util.Duration;
 import poo.calendar.DateUtil;
 import poo.calendar.controller.MainApplication;
 import poo.calendar.model.Appointment;
@@ -47,6 +49,9 @@ public class AppointmentWindowController {
 	@FXML
 	private Button mRightButton;
 	
+	// Fade transitions for buttons
+	private FadeTransition[] mFadeUp, mFadeDown;
+	
 	private MainApplication mMainApp;
 	private ArrayList<AppointmentDayPortController> mDayPorts;
 	private Calendar mAssignedWeek;
@@ -70,6 +75,19 @@ public class AppointmentWindowController {
 			
 			auxCalendar.add(Calendar.DAY_OF_WEEK, 1);
 		}
+		
+		mFadeUp = new FadeTransition[3];
+		mFadeDown = new FadeTransition[3];
+		
+		for(int i = 0; i < 3; i++){
+			mFadeUp[i] = new FadeTransition(Duration.millis(500));
+			mFadeDown[i] = new FadeTransition(Duration.millis(500));
+			
+			mFadeUp[i].setFromValue(0.3);
+			mFadeUp[i].setToValue(1.0);
+			mFadeDown[i].setFromValue(1.0);
+			mFadeDown[i].setToValue(0.3);
+		}
 	}
 	
 	/**
@@ -86,6 +104,24 @@ public class AppointmentWindowController {
 		}
 		mInnerBox.prefWidthProperty().bind(mInnerScrollPane.widthProperty());
 		mInnerBox.maxWidthProperty().bind(mInnerScrollPane.widthProperty());
+		
+		mAddButton.setOpacity(0.3);
+		mLeftButton.setOpacity(0.3);
+		mRightButton.setOpacity(0.3);
+		
+		mFadeUp[0].setNode(mAddButton);
+		mFadeDown[0].setNode(mAddButton);
+		mFadeUp[1].setNode(mLeftButton);
+		mFadeDown[1].setNode(mLeftButton);
+		mFadeUp[2].setNode(mRightButton);
+		mFadeDown[2].setNode(mRightButton);
+		
+		mAddButton.setOnMouseEntered(action -> mFadeUp[0].playFromStart());
+		mAddButton.setOnMouseExited(action -> mFadeDown[0].playFromStart());
+		mLeftButton.setOnMouseEntered(action -> mFadeUp[1].playFromStart());
+		mLeftButton.setOnMouseExited(action -> mFadeDown[1].playFromStart());
+		mRightButton.setOnMouseEntered(action -> mFadeUp[2].playFromStart());
+		mRightButton.setOnMouseExited(action -> mFadeDown[2].playFromStart());
 		
 		adjustScroll(Calendar.getInstance());
 	}
