@@ -45,7 +45,7 @@ public class TaskViewController extends ControlledWidget<HBox> implements Compar
 		mTitle.textProperty().bind(task.titleProperty());
 		
 		setDeadline(task.getDeadlineDate());
-		task.deadlineDateProperty().addListener(change -> {
+		task.deadlineDateProperty().addListener((obs, oldval, newval) -> {
 			setDeadline(task.getDeadlineDate());
 		});
 		

@@ -111,12 +111,12 @@ public class TaskWindowController {
 		
 		addWidgetToView(task, TVC);
 		
-		task.groupIDProperty().addListener(change -> {
+		task.groupIDProperty().addListener((obs, oldval, newval) -> {
 			CalendarGroup cg2 = mModel.getRefGroup(task);
 			TVC.setColor(cg2.getColor());
 		});
 		
-		task.deadlineDateProperty().addListener(change -> {
+		task.deadlineDateProperty().addListener((obs, oldval, newval) -> {
 			removeWidgetFromView(TVC);
 			addWidgetToView(task, TVC);
 		});

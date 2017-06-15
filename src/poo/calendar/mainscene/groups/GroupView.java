@@ -36,8 +36,8 @@ public class GroupView extends HBox {
 		
 		Circle circle = new Circle(10.0, Paint.valueOf(group.getColor().toString()));
 		circle.setStrokeWidth(2.0);
-		group.colorProperty().addListener(color -> {
-			circle.setFill(Paint.valueOf(group.getColor().toString()));
+		group.colorProperty().addListener((obs, oldval, newval) -> {
+			circle.setFill(Paint.valueOf(newval.toString()));
 		});
 		
 		this.setSpacing(3);

@@ -2,8 +2,8 @@ package poo.calendar.mainscene.appointments;
 
 import java.util.UUID;
 
-import javafx.beans.InvalidationListener;
-import javafx.beans.WeakInvalidationListener;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.WeakChangeListener;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.OverrunStyle;
@@ -37,7 +37,7 @@ public class AppointmentViewController extends ControlledWidget<AnchorPane> {
 	private UUID mID;
 	
 	// Keep a reference to the weak listener, to prevent garbage collection.
-	private InvalidationListener mGroupListener;
+	private ChangeListener<Color> mGroupListener;
 	
 	/**
 	 * Default constructor. Merely sets up the widget view.
@@ -107,12 +107,12 @@ public class AppointmentViewController extends ControlledWidget<AnchorPane> {
 		
 		mMainPane.setOnMouseClicked(action -> mMainApp.displayAppointmentDialog(mID));
 		
-		appt.titleProperty().addListener(change -> setTitle(appt.getTitle()));
-		appt.groupIDProperty().addListener(change -> setColor(mModel.getRefGroup(appt).getColor()));
+		appt.titleProperty().addListener((obs, oldval, newval) -> setTitle(newval));
+		appt.groupIDProperty().addListener((obs, oldval, newval) -> setColor(mModel.getRefGroup(appt).getColor()));
 		
 		CalendarGroup cg = mModel.getRefGroup(appt);
-		mGroupListener = change -> setColor(cg.getColor());
-		cg.colorProperty().addListener(new WeakInvalidationListener(mGroupListener));
+		mGroupListener = (obs, oldval, newval) -> setColor(newval);
+		cg.colorProperty().addListener(new WeakChangeListener<Color>(mGroupListener));
 		
 		setColor(cg.getColor());
 		setTitle(appt.getTitle());

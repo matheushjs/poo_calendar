@@ -269,15 +269,15 @@ public class AppointmentWindowController {
 	}
 	
 	private void prepareAppointment(Appointment appt){
-		appt.initDateProperty().addListener(action -> {
+		appt.initDateProperty().addListener((obs, oldval, newval) -> {
 			removeAppointmentView(appt.getID(), true);
 			addAppointmentView(appt, true);
 		});
-		appt.endDateProperty().addListener(action -> {
+		appt.endDateProperty().addListener((obs, oldval, newval) -> {
 			removeAppointmentView(appt.getID(), true);
 			addAppointmentView(appt, true);
 		});
-		appt.recurrenceProperty().addListener(action -> {
+		appt.recurrenceProperty().addListener((obs, oldval, newval) -> {
 			removeAppointmentView(appt.getID(), true);
 			addAppointmentView(appt, true);
 		});
