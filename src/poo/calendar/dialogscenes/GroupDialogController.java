@@ -2,24 +2,17 @@ package poo.calendar.dialogscenes;
 
 import java.util.UUID;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import poo.calendar.controller.MainApplication;
+import poo.calendar.dialogscenes.utils.WarningHandler;
 import poo.calendar.model.CalendarDataModel;
 import poo.calendar.model.CalendarGroup;
 
@@ -58,8 +51,7 @@ public class GroupDialogController {
 	
 	private MainApplication mMainApp;
 	
-	private Label mNameWarningLabel;
-	private Border mWarningBorder = new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, null, null));
+	private WarningHandler mNameWarning;
 	
 	// Model Data
 	private CalendarDataModel mModel;
@@ -69,10 +61,6 @@ public class GroupDialogController {
 	 * Default constructor
 	 */
 	public GroupDialogController() {
-		mNameWarningLabel = new Label("");
-		mNameWarningLabel.setFont(Font.font(10));
-		mNameWarningLabel.setTextFill(Paint.valueOf("red"));
-		mNameWarningLabel.setWrapText(true);
 	}
 	
 	/**
@@ -84,6 +72,8 @@ public class GroupDialogController {
 		//TODO: Wisely choose a default color
 		mButtonBox.getChildren().remove(mDeleteButton);
 		mDeleteButton.setOnAction(action -> onDeleteClick());
+		
+		mNameWarning = new WarningHandler(mNameBox);
 	}
 	
 	/**
@@ -137,37 +127,15 @@ public class GroupDialogController {
 	 * Returns true if user input is valid.
 	 */
 	private boolean validateInput(){
-		clearNameWarning();
+		mNameWarning.clear();
 		
 		String title = mNameField.getText().trim();
 		if(title.length() == 0){
-			addNameWarning("Name cannot be blank");
+			mNameWarning.addWarning("Name cannot be blank");
 			return false;
 		}
 		
 		return true;
-	}
-	
-	/**
-	 * Adds the given string to the list of warnings that appears beside 
-	 * the Name form Box.
-	 * @param warning
-	 */
-	private void addNameWarning(String warning){
-		String old = mNameWarningLabel.getText();
-		mNameWarningLabel.setText(old + "\n * " + warning);
-		
-		ObservableList<Node> list = mNameBox.getChildren();
-		if(!list.contains(mNameWarningLabel)){
-			list.add(mNameWarningLabel);
-			mNameBox.setBorder(mWarningBorder);
-		}
-	}
-	
-	private void clearNameWarning(){
-		mNameWarningLabel.setText("");
-		mNameBox.getChildren().remove(mNameWarningLabel);
-		mNameBox.setBorder(Border.EMPTY);
 	}
 	
 	/**
