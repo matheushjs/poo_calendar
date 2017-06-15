@@ -245,8 +245,6 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 							
 							@Override
 							public void handle(long now){
-								if(elapsed == 0)
-								
 								AnchorPane.setLeftAnchor(node.getAVC().getWidget(), fromLeft + elapsed*leftIncrement);
 								AnchorPane.setRightAnchor(node.getAVC().getWidget(), fromRight + elapsed*rightIncrement);
 								
