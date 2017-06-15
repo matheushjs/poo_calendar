@@ -124,6 +124,10 @@ public class AppointmentWindowController {
 		mRightButton.setOnMouseExited(action -> mFadeDown[2].playFromStart());
 		
 		adjustScroll(Calendar.getInstance());
+		
+		DayIntervalsCanvas DIC = new DayIntervalsCanvas(mInnerPane);
+		mInnerPane.getChildren().add(DIC);
+		DIC.toBack();
 	}
 	
 	/**
