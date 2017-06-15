@@ -3,6 +3,7 @@ package poo.calendar.mainscene.groups;
 import java.util.UUID;
 
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Paint;
@@ -43,6 +44,8 @@ public class GroupView extends HBox {
 		this.setSpacing(3);
 		this.setAlignment(Pos.CENTER_LEFT);
 		this.getChildren().addAll(circle, label);
+		
+		this.setCursor(Cursor.HAND);
 	}
 	
 	public UUID getID(){

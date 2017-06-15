@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.UUID;
 
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -11,6 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import poo.calendar.ColorUtil;
 import poo.calendar.ControlledWidget;
 import poo.calendar.DateUtil;
 import poo.calendar.model.CalendarGroup;
@@ -57,6 +59,8 @@ public class TaskViewController extends ControlledWidget<HBox> implements Compar
 		mTitle = new Label();
 		mDeadlineLabel = new Label();
 		
+		mWidget.setCursor(Cursor.HAND);
+		
 		mDeadlineLabel.setAlignment(Pos.CENTER);
 		mTitle.setAlignment(Pos.CENTER);
 		mWidget.setAlignment(Pos.CENTER);
@@ -98,12 +102,15 @@ public class TaskViewController extends ControlledWidget<HBox> implements Compar
 	}
 	
 	public void setColor(Color col){
+		Color contrast = ColorUtil.contrastColor(col);
+		
+		mTitle.setTextFill(Paint.valueOf(contrast.toString()));
+		mDeadlineLabel.setTextFill(Paint.valueOf(contrast.toString()));
+		
 		mWidget.setBackground(
 				new Background(
 						new BackgroundFill(
-								Paint.valueOf(col.toString()),
-								null, 
-								null )));
+								Paint.valueOf(col.toString()), null, null)));
 	}
 	
 	public boolean hasDeadline(){

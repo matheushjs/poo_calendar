@@ -5,6 +5,7 @@ import java.util.UUID;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.WeakChangeListener;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.control.OverrunStyle;
 import javafx.scene.layout.AnchorPane;
@@ -12,6 +13,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import poo.calendar.ColorUtil;
 import poo.calendar.ControlledWidget;
 import poo.calendar.controller.MainApplication;
 import poo.calendar.model.Appointment;
@@ -51,6 +53,8 @@ public class AppointmentViewController extends ControlledWidget<AnchorPane> {
 		mMainPane = new AnchorPane();
 		mTitle = new Label();
 		mHourRange = new Label();
+		
+		mMainPane.setCursor(Cursor.HAND);
 		
 		AnchorPane.setTopAnchor(mTitle, 0.0);
 		AnchorPane.setRightAnchor(mTitle, 0.0);
@@ -101,7 +105,13 @@ public class AppointmentViewController extends ControlledWidget<AnchorPane> {
 		mMainPane.setOnMouseClicked(action -> mMainApp.displayAppointmentDialog(mID));
 		
 		appt.titleProperty().addListener((obs, oldval, newval) -> setTitle(newval));
-		appt.groupIDProperty().addListener((obs, oldval, newval) -> setColor(mModel.getRefGroup(appt).getColor()));
+		appt.groupIDProperty().addListener((obs, oldval, newval) -> {
+			CalendarGroup group = mModel.getGroup(newval);
+			mGroupListener = (obs2, oldval2, newval2) -> setColor(newval2);
+			group.colorProperty().addListener(new WeakChangeListener<Color>(mGroupListener));
+			
+			setColor(mModel.getRefGroup(appt).getColor());
+		});
 		
 		CalendarGroup cg = mModel.getRefGroup(appt);
 		mGroupListener = (obs, oldval, newval) -> setColor(newval);
@@ -130,7 +140,11 @@ public class AppointmentViewController extends ControlledWidget<AnchorPane> {
 	 * @param bg
 	 */
 	public void setColor(Color bg){
-		//TODO: Decide the label's font color
+		Color contrast = ColorUtil.contrastColor(bg);
+		
+		mTitle.setTextFill(Paint.valueOf(contrast.toString()));
+		mHourRange.setTextFill(Paint.valueOf(contrast.toString()));
+		
 		mMainPane.setBackground(new Background(new BackgroundFill(Paint.valueOf(bg.toString()), null, null)));
 	}
 	
