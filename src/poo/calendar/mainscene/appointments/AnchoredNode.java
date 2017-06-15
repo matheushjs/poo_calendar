@@ -7,10 +7,17 @@ package poo.calendar.mainscene.appointments;
 public class AnchoredNode implements Comparable<AnchoredNode> {
 	private int topIndex;
 	private int bottomIndex;
+	private double leftAnchor;
+	private double rightAnchor;
+
 	AppointmentViewController AVC;
 	
 	public AnchoredNode(AppointmentViewController AVC_in){
 		this.AVC = AVC_in;
+		leftAnchor = 0.0;
+		rightAnchor = 0.0;
+		topIndex = 0;
+		bottomIndex = 1;
 	}
 	
 	/**
@@ -46,10 +53,26 @@ public class AnchoredNode implements Comparable<AnchoredNode> {
 		return bottomIndex;
 	}
 
+	public double getLeftAnchor() {
+		return leftAnchor;
+	}
+
+	public void setLeftAnchor(double leftAnchor) {
+		this.leftAnchor = leftAnchor;
+	}
+
+	public double getRightAnchor() {
+		return rightAnchor;
+	}
+
+	public void setRightAnchor(double rightAnchor) {
+		this.rightAnchor = rightAnchor;
+	}
+	
 	public void setBottomIndex(int bottomIndex) {
 		this.bottomIndex = bottomIndex;
 	}
-
+	
 	public AppointmentViewController getAVC() {
 		return AVC;
 	}

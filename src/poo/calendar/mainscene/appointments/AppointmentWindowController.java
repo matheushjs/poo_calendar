@@ -82,6 +82,21 @@ public class AppointmentWindowController {
 		}
 		mInnerBox.prefWidthProperty().bind(mInnerScrollPane.widthProperty());
 		mInnerBox.maxWidthProperty().bind(mInnerScrollPane.widthProperty());
+		
+		adjustScroll(Calendar.getInstance());
+	}
+	
+	/**
+	 * Adjusts the ScrollPane to show the time represented by the given calendar.
+	 * @param calendar The calendar whose time should be visible to the user in the scroll pane.
+	 */
+	private void adjustScroll(Calendar calendar){
+		double ratio = DateUtil.minuteCount(calendar) / (double) DateUtil.MINUTES_IN_DAY;
+		
+		if(ratio > 0.6) ratio += (1 - ratio)/2;
+		else if(ratio < 0.4) ratio /= 2;
+		
+		mInnerScrollPane.setVvalue(ratio);
 	}
 	
 	/**
@@ -97,17 +112,17 @@ public class AppointmentWindowController {
 		//TODO: Prevent listening to all appointments. Only the ones being displayed should be observed.
 		mModel = model;
 		mModel.getAppointments().forEach((uuid, appt) -> {
-			this.addAppointmentView(appt);
+			this.addAppointmentView(appt, false);
 			this.prepareAppointment(appt);
 		});
 		
 		mModel.getAppointments().addListener((MapChangeListener.Change<? extends UUID, ? extends Appointment> change) -> {
 			if(change.wasRemoved()){
-				removeAppointmentView(change.getKey());
+				removeAppointmentView(change.getKey(), true);
 			}
 			
 			if(change.wasAdded()){
-				this.addAppointmentView(change.getValueAdded());
+				this.addAppointmentView(change.getValueAdded(), true);
 				this.prepareAppointment(change.getValueAdded());
 			}
 		});
@@ -130,8 +145,9 @@ public class AppointmentWindowController {
 	 * with any initDate or endDate. This method only those that belong to the
 	 * current week being displayed.
 	 * @param appointment Appointment to be added.
+	 * @param doAnimation whether appointment relocation should be animated or not
 	 */
-	private void addAppointmentView(Appointment appointment){
+	private void addAppointmentView(Appointment appointment, boolean doAnimation){
 		Calendar init, end;
 		Recurrence rec = appointment.getRecurrence();
 		
@@ -172,21 +188,28 @@ public class AppointmentWindowController {
 			for(int i = 0; i < 7; i++){
 				DateUtil.translateInterval(Calendar.DATE, subjectDay, init, end);
 				
-				addIntervalToPorts(appointment, init, end);
+				addIntervalToPorts(appointment, init, end, doAnimation);
 				
 				subjectDay.add(Calendar.DATE, 1);
 			}
 			
 		} else if(rec == Recurrence.WEEKLY) {
 			DateUtil.translateInterval(Calendar.DAY_OF_WEEK, begOfWeek, init, end);
-			addIntervalToPorts(appointment, init, end);
+			addIntervalToPorts(appointment, init, end, doAnimation);
 			
 		} else {
-			addIntervalToPorts(appointment, init, end);
+			addIntervalToPorts(appointment, init, end, doAnimation);
 		}
 	}
 	
-	private void addIntervalToPorts(Appointment appointment, Calendar init, Calendar end){
+	/**
+	 * 
+	 * @param appointment
+	 * @param init
+	 * @param end
+	 * @param doAnimation
+	 */
+	private void addIntervalToPorts(Appointment appointment, Calendar init, Calendar end, boolean doAnimation){
 		/*
 		 * If should display, add the appointment to all due ports.
 		 */
@@ -223,7 +246,7 @@ public class AppointmentWindowController {
 					offset2 = DateUtil.minuteCount(end);
 				}
 				
-				mDayPorts.get(i).addAppointment(offset1, offset2, appointment.getID());
+				mDayPorts.get(i).addAppointment(offset1, offset2, appointment.getID(), doAnimation);
 			}
 		
 			subjectDay.add(Calendar.DATE, 1);
@@ -233,32 +256,33 @@ public class AppointmentWindowController {
 	/**
 	 * Removes an appointment from the list of appointments
 	 * @param id the ID of the appointment to be removed
+	 * @param doAnimation whether appointment relocation should be animated or not
 	 */
-	private void removeAppointmentView(UUID id){
+	private void removeAppointmentView(UUID id, boolean doAnimation){
 		for(AppointmentDayPortController adpc: mDayPorts){
-			adpc.removeAppointmentView(id);
+			adpc.removeAppointmentView(id, doAnimation);
 		}
 	}
 	
 	private void prepareAppointment(Appointment appt){
 		appt.initDateProperty().addListener(action -> {
-			removeAppointmentView(appt.getID());
-			addAppointmentView(appt);
+			removeAppointmentView(appt.getID(), true);
+			addAppointmentView(appt, true);
 		});
 		appt.endDateProperty().addListener(action -> {
-			removeAppointmentView(appt.getID());
-			addAppointmentView(appt);
+			removeAppointmentView(appt.getID(), true);
+			addAppointmentView(appt, true);
 		});
 		appt.recurrenceProperty().addListener(action -> {
-			removeAppointmentView(appt.getID());
-			addAppointmentView(appt);
+			removeAppointmentView(appt.getID(), true);
+			addAppointmentView(appt, true);
 		});
 	}
 	
 	private void changeWeek(int offsetWeek){
 		clearDayPorts();
 		mAssignedWeek.add(Calendar.DATE, 7*offsetWeek);
-		mModel.getAppointments().forEach((uuid, appt) -> addAppointmentView(appt));
+		mModel.getAppointments().forEach((uuid, appt) -> addAppointmentView(appt, false));
 	}
 	
 	private void clearDayPorts(){

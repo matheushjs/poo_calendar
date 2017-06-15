@@ -12,6 +12,7 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.UUID;
 
+import javafx.animation.AnimationTimer;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 import poo.calendar.ControlledWidget;
@@ -102,8 +103,9 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 	 * @param initMinutes Number of minutes of the initial time of the appointment
 	 * @param endMinutes Number of minutes of the ending time of the appointment
 	 * @param id ID of the appointment being added
+	 * @param doAnimation whether appointment relocation should be animated or not
 	 */
-	public void addAppointment(int initMinutes, int endMinutes, UUID id){
+	public void addAppointment(int initMinutes, int endMinutes, UUID id, boolean doAnimation){
 		if(mModel == null){
 			System.err.println("Must initialize model for AppointmentDayPortController");
 			System.exit(1);
@@ -141,7 +143,7 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 		
 		/* Calculate the side anchors */
 		decideWidgetVAnchors(AN);
-		decideWidgetHAnchors(AN);
+		decideWidgetHAnchors(AN, doAnimation);
 		mMainPane.getChildren().add(AN.getAVC().getWidget());
 	}
 
@@ -162,13 +164,13 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 	 * Sets the left/right anchors of the widget.
 	 * @param AN
 	 */
-	private void decideWidgetHAnchors(AnchoredNode AN){
+	private void decideWidgetHAnchors(AnchoredNode AN, boolean doAnimation){
 		/* Gets all nodes that will be affected by the addition of AN */
 		Set<AnchoredNode> affectedNodes = new HashSet<>();
 		for(int i = AN.getTopIndex(), n = AN.getBottomIndex(); i < n; i++)
 			affectedNodes.addAll(mIntervalInfo.get(i));
 		
-		relocateAnchoredNodes(affectedNodes);
+		relocateAnchoredNodes(affectedNodes, doAnimation);
 	}
 	
 	/*
@@ -177,7 +179,7 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 	 * In other words, if there is a node outside of the set that shares an interval with any node that
 	 * is inside the set, there will be overlaying of nodes.
 	 */
-	private void relocateAnchoredNodes(Set<AnchoredNode> affectedNodes){
+	private void relocateAnchoredNodes(Set<AnchoredNode> affectedNodes, boolean doAnimation){
 		/* Calculates the bounds of the interval to analyze */
 		int topIndex = Integer.MAX_VALUE;
 		int bottomIndex = Integer.MIN_VALUE;
@@ -229,8 +231,41 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 					double gap = mMainPane.getWidth() / (double) max;
 					double leftAnchor = i * gap;
 					double rightAnchor = (max - i - 1) * gap;
-					AnchorPane.setLeftAnchor(node.getAVC().getWidget(), leftAnchor);
-					AnchorPane.setRightAnchor(node.getAVC().getWidget(), rightAnchor);
+					
+					if(doAnimation){
+						new AnimationTimer() {
+							private final double toLeft = leftAnchor;
+							private final double toRight = rightAnchor;
+							private final double fromLeft = node.getLeftAnchor();
+							private final double fromRight = node.getRightAnchor();
+							private final int frameTime = 120;
+							private final double leftIncrement = (toLeft - fromLeft) / frameTime;
+							private final double rightIncrement = (toRight - fromRight) / frameTime;
+							private int elapsed = 0;
+							
+							@Override
+							public void handle(long now){
+								if(elapsed == 0)
+								
+								AnchorPane.setLeftAnchor(node.getAVC().getWidget(), fromLeft + elapsed*leftIncrement);
+								AnchorPane.setRightAnchor(node.getAVC().getWidget(), fromRight + elapsed*rightIncrement);
+								
+								elapsed++;
+								if(elapsed == frameTime){
+									AnchorPane.setLeftAnchor(node.getAVC().getWidget(), leftAnchor);
+									AnchorPane.setRightAnchor(node.getAVC().getWidget(), rightAnchor);
+									node.setLeftAnchor(leftAnchor);
+									node.setRightAnchor(rightAnchor);
+									this.stop();
+								}
+							}
+						}.start();
+					} else {
+						AnchorPane.setLeftAnchor(node.getAVC().getWidget(), leftAnchor);
+						AnchorPane.setRightAnchor(node.getAVC().getWidget(), rightAnchor);
+						node.setLeftAnchor(leftAnchor);
+						node.setRightAnchor(rightAnchor);
+					}
 					
 					break;
 				}
@@ -243,7 +278,7 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 	 * Relocated remaining widgets if needed.
 	 * @param id
 	 */
-	public void removeAppointmentView(UUID id){
+	public void removeAppointmentView(UUID id, boolean doAnimation){
 		/* Get removed node */
 		AnchoredNode removed = mAnchoredNodes.remove(id);
 		if(removed == null) return;
@@ -258,7 +293,7 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 			}
 		}
 		
-		relocateAnchoredNodes(affected);
+		relocateAnchoredNodes(affected, doAnimation);
 	}
 	
 	/**
