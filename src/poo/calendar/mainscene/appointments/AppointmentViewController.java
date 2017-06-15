@@ -30,7 +30,6 @@ public class AppointmentViewController extends ControlledWidget<AnchorPane> {
 	private AnchorPane mMainPane;
 	private Label mTitle;
 	private Label mHourRange;
-	private Label mIDLabel;
 	
 	private MainApplication mMainApp;
 	private CalendarDataModel mModel;
@@ -52,30 +51,25 @@ public class AppointmentViewController extends ControlledWidget<AnchorPane> {
 		mMainPane = new AnchorPane();
 		mTitle = new Label();
 		mHourRange = new Label();
-		mIDLabel = new Label();
 		
-		AnchorPane.setBottomAnchor(mTitle, 0.0);
 		AnchorPane.setTopAnchor(mTitle, 0.0);
 		AnchorPane.setRightAnchor(mTitle, 0.0);
 		AnchorPane.setLeftAnchor(mTitle, 0.0);
 		mTitle.setTextOverrun(OverrunStyle.ELLIPSIS);
 		mTitle.setAlignment(Pos.TOP_LEFT);
-		//TODO: Clip the title to not override the hour range.
-		//TODO: Either hide the hour range based on this view's height
-		//TODO: Or make 2 labels, one to the top(smaller), other to the center.
+		mTitle.setWrapText(true);
+		mTitle.maxHeightProperty().bind(mMainPane.heightProperty());
 		
-		AnchorPane.setTopAnchor(mHourRange, 0.0);
+		AnchorPane.setBottomAnchor(mHourRange, 0.0);
 		AnchorPane.setRightAnchor(mHourRange, 0.0);
 		AnchorPane.setLeftAnchor(mHourRange, 0.0);
-		mHourRange.setAlignment(Pos.TOP_RIGHT);
+		mTitle.heightProperty().addListener((obs, oldvalue, newvalue) -> {
+			AnchorPane.setTopAnchor(mHourRange, newvalue.doubleValue());
+		});
+		mHourRange.setAlignment(Pos.TOP_CENTER);
+		mHourRange.setTextOverrun(OverrunStyle.ELLIPSIS);
 		
-		AnchorPane.setBottomAnchor(mIDLabel, 0.0);
-		AnchorPane.setRightAnchor(mIDLabel, 0.0);
-		AnchorPane.setLeftAnchor(mIDLabel, 0.0);
-		mIDLabel.setAlignment(Pos.BOTTOM_LEFT);
-		mIDLabel.setTextOverrun(OverrunStyle.ELLIPSIS);
-		
-		mMainPane.getChildren().addAll(mTitle, mHourRange, mIDLabel);
+		mMainPane.getChildren().addAll(mTitle, mHourRange);
 	}
 	
 	/**
@@ -103,7 +97,6 @@ public class AppointmentViewController extends ControlledWidget<AnchorPane> {
 		mModel = model;
 		
 		mID = appt.getID();
-		mIDLabel.setText(mID.toString());
 		
 		mMainPane.setOnMouseClicked(action -> mMainApp.displayAppointmentDialog(mID));
 		

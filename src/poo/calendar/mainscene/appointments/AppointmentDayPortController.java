@@ -113,7 +113,7 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 		
 		AppointmentViewController AVC = new AppointmentViewController();
 		
-		String range = DateUtil.hourString(initMinutes) + " - " + DateUtil.hourString(endMinutes);
+		String range = DateUtil.hourString(initMinutes) + "-" + DateUtil.hourString(endMinutes);
 		AVC.initializeStructures(mMainApp, mModel, id);
 		AVC.setHourRange(range);
 		
