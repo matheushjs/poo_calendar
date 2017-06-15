@@ -1,14 +1,18 @@
 package poo.calendar.dialogscenes;
 
 import java.util.Calendar;
+import java.util.Optional;
 import java.util.UUID;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
@@ -237,10 +241,19 @@ public class AppointmentDialogController {
 	 * Removes appointment being edited from the appointments list.
 	 */
 	private void onDeleteClick(){
-		//TODO: Request confirmation
-		if(mAppointment != null){
-			mModel.removeAppointment(mAppointment.getID());
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Confirmation Request");
+		alert.setHeaderText("Confirm Deletion Request");
+		alert.setContentText("Do you really wish to delete this Appointment?");
+
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK){
+			if(mAppointment != null){
+				mModel.removeAppointment(mAppointment.getID());
+			}
+			mMainApp.displayMainRoot();
+		} else {
+		    return;
 		}
-		mMainApp.displayMainRoot();
 	}
 }

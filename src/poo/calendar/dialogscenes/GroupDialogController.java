@@ -1,12 +1,16 @@
 package poo.calendar.dialogscenes;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -142,9 +146,18 @@ public class GroupDialogController {
 	 * Remove the group being edited from the map of groups.
 	 */
 	private void onDeleteClick(){
-		//TODO: Request confirmation
-		if(mGroup != null)
-			mModel.removeGroup(mGroup.getID());
-		mMainApp.displayMainRoot();
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Confirmation Request");
+		alert.setHeaderText("Confirm Deletion Request");
+		alert.setContentText("Do you really wish to delete this Group?");
+
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK){
+			if(mGroup != null)
+				mModel.removeGroup(mGroup.getID());
+			mMainApp.displayMainRoot();
+		} else {
+		    return;
+		}
 	}
 }

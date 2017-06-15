@@ -1,11 +1,15 @@
 package poo.calendar.dialogscenes;
 
 import java.util.Calendar;
+import java.util.Optional;
 import java.util.UUID;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -216,9 +220,18 @@ public class TaskDialogController {
 	 * Removes the task being edited from the list of tasks.
 	 */
 	private void onDeleteClick(){
-		//TODO: Request confirmation
-		if(mTask != null)
-			mModel.removeTask(mTask.getID());
-		mMainApp.displayMainRoot();
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Confirmation Request");
+		alert.setHeaderText("Confirm Deletion Request");
+		alert.setContentText("Do you really wish to delete this Task?");
+
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK){
+			if(mTask != null)
+				mModel.removeTask(mTask.getID());
+			mMainApp.displayMainRoot();
+		} else {
+		    return;
+		}
 	}
 }
