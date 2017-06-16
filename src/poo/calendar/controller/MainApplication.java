@@ -7,15 +7,23 @@ import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import poo.calendar.dialogscenes.AboutDialogController;
@@ -27,6 +35,7 @@ import poo.calendar.mainscene.appointments.AppointmentWindowController;
 import poo.calendar.mainscene.groups.GroupListWindowController;
 import poo.calendar.mainscene.tasks.TaskWindowController;
 import poo.calendar.model.CalendarDataModel;
+import poo.calendar.widgets.ElfCalendarText;
 
 public class MainApplication extends Application {
 	private Stage mStage;
@@ -245,16 +254,50 @@ public class MainApplication extends Application {
 		// Transition proper
 		FadeTransition fadeUp = new FadeTransition(Duration.millis(500), newroot);
 		FadeTransition fadeDown = new FadeTransition(Duration.millis(500), oldview);
+		
 		fadeUp.setFromValue(0.0);
 		fadeUp.setToValue(oldOpacity);
-		fadeDown.setFromValue(1.0);
-		fadeDown.setToValue(0.0);
 		fadeUp.setOnFinished(action -> {
 			pane.getChildren().remove(newroot);
 			mMainScene.setRoot(newroot);
 		});
+		
+		fadeDown.setFromValue(1.0);
+		fadeDown.setToValue(0.0);
+
 		fadeUp.playFromStart();
 		fadeDown.playFromStart();
+	}
+	
+	/**
+	 * Performs the initial animation, and then creates the mainRoot.
+	 */
+	public void initializeView(){
+		ElfCalendarText ECT = new ElfCalendarText(80);
+		HBox box = new HBox(ECT);
+		box.setAlignment(Pos.CENTER);
+		box.setBackground(new Background(new BackgroundFill(Color.DARKGRAY, null, null)));
+		ECT.setOpacity(0.0);
+		
+		mMainScene.setRoot(box);
+		
+		FadeTransition fadeUp = new FadeTransition(Duration.millis(2000), ECT);
+		FadeTransition fadeNeutral = new FadeTransition(Duration.millis(0), ECT);
+		fadeUp.setFromValue(0.0);
+		fadeUp.setToValue(1.0);
+		fadeUp.setOnFinished(action -> fadeNeutral.playFromStart());
+		
+		// I seriously don't know how any better class for having this 3 second delay,
+		// so for now I'll stick to using FadeTransition.
+		fadeNeutral.setFromValue(1.0);
+		fadeNeutral.setToValue(1.0);
+		fadeNeutral.setDelay(Duration.millis(5000));
+		fadeNeutral.setOnFinished(action -> {
+			createMainParent();
+			displayMainRoot();
+		});
+		
+		fadeUp.playFromStart();
 	}
 	
 	@Override
@@ -264,11 +307,20 @@ public class MainApplication extends Application {
 		mModel = new CalendarDataModel();
 
 		createMainParent();
-		mMainScene = new Scene(mMainParent);
+		mMainScene = new Scene(new HBox(new Rectangle(800, 1400))); //Dummy root
 		mStage.setTitle("Elf Calendar");
 		mStage.setScene(mMainScene);
+		
+		Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+		mStage.setX(primaryScreenBounds.getMinX());
+		mStage.setY(primaryScreenBounds.getMinY());
+		mStage.setWidth(primaryScreenBounds.getWidth());
+		mStage.setHeight(primaryScreenBounds.getHeight());
+		
 		mStage.show();
 		mStage.setOnCloseRequest(event -> terminateApplication());
+		
+		initializeView();
 		
 		mModel.load();
 	}
