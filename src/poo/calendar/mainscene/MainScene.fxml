@@ -7,8 +7,6 @@
 <?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.paint.LinearGradient?>
-<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
@@ -53,20 +51,6 @@
       </MenuBar>
       <HBox fx:id="mTopBox" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
          <children>
-            <Text fx:id="mAppTitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="Calendar" textAlignment="CENTER" textOrigin="CENTER">
-               <font>
-                  <Font name="Liberation Serif Italic" size="40.0" />
-               </font>
-               <fill>
-                  <LinearGradient endX="0.6875" endY="1.0" startX="0.14423076923076922">
-                     <stops>
-                        <Stop color="BLACK" />
-                        <Stop color="#7d7d7d" offset="0.6551851851851851" />
-                        <Stop color="#7d7d7d" offset="1.0" />
-                     </stops>
-                  </LinearGradient>
-               </fill>
-            </Text>
             <Text fx:id="mDateText" strokeType="OUTSIDE" strokeWidth="0.0" text="Date" textAlignment="CENTER">
                <font>
                   <Font name="Liberation Sans Bold" size="30.0" />

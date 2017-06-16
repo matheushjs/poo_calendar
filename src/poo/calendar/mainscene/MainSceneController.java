@@ -4,7 +4,6 @@ package poo.calendar.mainscene;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.MenuBar;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
@@ -13,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import poo.calendar.controller.MainApplication;
+import poo.calendar.widgets.ElfCalendarText;
 
 /**
  * Widget class that represents the main window of the application.
@@ -26,9 +26,6 @@ public class MainSceneController {
 	
 	@FXML
 	private HBox mTopBox;
-	
-	@FXML
-	private Text mAppTitleText;
 	
 	@FXML
 	private Text mDateText;
@@ -54,11 +51,12 @@ public class MainSceneController {
     private void initialize(){
     	mMainBox.setBackground(mainBG);
     	
-    	DropShadow ds = new DropShadow();
-    	ds.setOffsetY(3.0f);
-    	ds.setColor(Color.color(0.4f, 0.4f, 0.4f));
-    	mAppTitleText.setEffect(ds);
-    	mAppTitleText.setCache(true);
+    	ElfCalendarText ECT = new ElfCalendarText(40);
+    	try {
+    		mTopBox.getChildren().add(0, ECT);
+    	} catch(IndexOutOfBoundsException e) {
+    		mTopBox.getChildren().add(ECT);
+    	}
     }
     
     /**
