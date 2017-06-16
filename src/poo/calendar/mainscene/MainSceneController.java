@@ -124,6 +124,6 @@ public class MainSceneController {
     
     @FXML
     private void onAboutItemAction(){
-    	
+    	mMainApp.displayAboutDialog();
     }
 }

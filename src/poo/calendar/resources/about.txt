@@ -1,0 +1,7 @@
+Elf Calendar is an application for managing one's tasks and appointments.
+
+Authors:
+Carlos Andre Martins Neves
+Matheus Henrique Junqueira Saldanha
+Matheus Magalhães Sousa
+Victor Souza Cezario

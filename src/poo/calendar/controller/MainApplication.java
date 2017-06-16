@@ -9,7 +9,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import poo.calendar.dialogscenes.AboutDialogController;
 import poo.calendar.dialogscenes.AppointmentDialogController;
 import poo.calendar.dialogscenes.GroupDialogController;
 import poo.calendar.dialogscenes.TaskDialogController;
@@ -198,6 +201,21 @@ public class MainApplication extends Application {
 		displayTaskDialog(null);
 	}
 	
+	/**
+	 * Displays the About Dialog.
+	 */
+	public void displayAboutDialog(){
+		AboutDialogController ADC = new AboutDialogController();
+		VBox widget = ADC.getWidget();
+		
+		Scene dialogScene = new Scene(widget, 500, 500);
+		
+		Stage dialog = new Stage();
+		dialog.initModality(Modality.WINDOW_MODAL);
+		dialog.initOwner(this.mStage);
+		dialog.setScene(dialogScene);
+		dialog.show();
+	}
 	
 	@Override
 	public void start(Stage stage) {
