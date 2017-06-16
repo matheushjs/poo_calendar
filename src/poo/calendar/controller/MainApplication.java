@@ -120,8 +120,6 @@ public class MainApplication extends Application {
 	 * @param id the ID of the group to edit
 	 */
 	public void displayGroupDialog(UUID id){
-		//TODO: Add switching animation using snapshots
-		
 		// Load dialog
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(this.getClass().getResource("/poo/calendar/dialogscenes/GroupDialog.fxml"));
@@ -154,8 +152,6 @@ public class MainApplication extends Application {
 	 * @param id the ID of the appointment to edit
 	 */
 	public void displayAppointmentDialog(UUID id){
-		//TODO: Add switching animation using snapshots
-		
 		//Load dialog
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(this.getClass().getResource("/poo/calendar/dialogscenes/AppointmentDialog.fxml"));
@@ -188,8 +184,6 @@ public class MainApplication extends Application {
 	 * @param id the ID of the task to edit
 	 */
 	public void displayTaskDialog(UUID id){
-		//TODO: Add switching animation using snapshots
-		
 		//Load dialog
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(this.getClass().getResource("/poo/calendar/dialogscenes/TaskDialog.fxml"));
@@ -206,7 +200,6 @@ public class MainApplication extends Application {
 		if(id != null)
 			controller.setTaskID(id);
 		
-		//mMainScene.setRoot(dialog);
 		switchScenes(dialog);
 	}
 	
@@ -316,6 +309,7 @@ public class MainApplication extends Application {
 		mStage.setY(primaryScreenBounds.getMinY());
 		mStage.setWidth(primaryScreenBounds.getWidth());
 		mStage.setHeight(primaryScreenBounds.getHeight());
+		stage.getIcons().add(new Image(this.getClass().getClassLoader().getResource("icon.png").toString()));
 		
 		mStage.show();
 		mStage.setOnCloseRequest(event -> terminateApplication());
