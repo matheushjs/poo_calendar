@@ -28,7 +28,7 @@ public class AboutDialogController extends ControlledWidget<VBox> {
 	 * Automatically called upon construction.
 	 */
 	protected void initializeWidget(){
-		InputStream is = this.getClass().getResourceAsStream("/poo/calendar/resources/about.txt");
+		InputStream is = this.getClass().getClassLoader().getResourceAsStream("about.txt");
 		StringBuilder builder = new StringBuilder();
 		
 		try(Scanner sc = new Scanner(is)){
