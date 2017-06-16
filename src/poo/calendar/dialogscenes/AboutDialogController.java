@@ -5,13 +5,20 @@ import java.util.Scanner;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import poo.calendar.ControlledWidget;
+import poo.calendar.widgets.ElfCalendarText;
 
 public class AboutDialogController extends ControlledWidget<VBox> {
 	private VBox mWidget;
+	
+	private static final Background mainBG =
+			new Background(new BackgroundFill(Color.DARKGRAY, null, null));
 	
 	public AboutDialogController(){
 	}
@@ -32,14 +39,19 @@ public class AboutDialogController extends ControlledWidget<VBox> {
 			e.printStackTrace();
 		}
 
+		ElfCalendarText text = new ElfCalendarText(60);
+		
 		Label lbl = new Label(builder.toString());
 		lbl.setAlignment(Pos.CENTER);
 		lbl.setWrapText(true);
 		lbl.setTextAlignment(TextAlignment.CENTER);
 		lbl.setFont(Font.font("Liberation Sans", 14));
-		lbl.setPrefSize(300, 300);
-		mWidget = new VBox(lbl);
+		lbl.setPrefSize(Double.MAX_VALUE, 300);
+		
+		mWidget = new VBox(text, lbl);
 		mWidget.setAlignment(Pos.CENTER);
+		mWidget.setSpacing(50);
+		mWidget.setBackground(mainBG);
 	}
 	
 	/**

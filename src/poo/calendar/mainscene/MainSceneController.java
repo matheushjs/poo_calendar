@@ -38,7 +38,7 @@ public class MainSceneController {
 	
 	private MainApplication mMainApp;
 	
-	private Background mainBG =
+	private static final Background mainBG =
 			new Background(new BackgroundFill(Color.DARKGRAY, null, null));
 	
 	/**
