@@ -51,7 +51,7 @@ public class MainApplication extends Application {
 	private void createMainParent(){
 		// Load AppointmentsWindow
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(this.getClass().getResource("/poo/calendar/mainscene/appointments/AppointmentWindow.fxml"));
+		loader.setLocation(this.getClass().getClassLoader().getResource("AppointmentWindow.fxml"));
 		Node appointmentsWidget = null;
 		try {
 			appointmentsWidget = loader.load();
@@ -64,7 +64,7 @@ public class MainApplication extends Application {
 		
 		// Load TaskWindow
 		loader = new FXMLLoader();
-		loader.setLocation(this.getClass().getResource("/poo/calendar/mainscene/tasks/TaskWindow.fxml"));
+		loader.setLocation(this.getClass().getClassLoader().getResource("TaskWindow.fxml"));
 		Node tasksWidget = null;
 		try {
 			tasksWidget = loader.load();
@@ -77,7 +77,7 @@ public class MainApplication extends Application {
 		
 		// Load GroupsWindow
 		loader = new FXMLLoader();
-		loader.setLocation(this.getClass().getResource("/poo/calendar/mainscene/groups/GroupListWindow.fxml"));
+		loader.setLocation(this.getClass().getClassLoader().getResource("GroupListWindow.fxml"));
 		Node groupsWidget = null;
 		try {
 			groupsWidget = loader.load();
@@ -90,7 +90,7 @@ public class MainApplication extends Application {
 		
 		// Load MainScene
 		loader = new FXMLLoader();
-		loader.setLocation(this.getClass().getResource("/poo/calendar/mainscene/MainScene.fxml"));
+		loader.setLocation(this.getClass().getClassLoader().getResource("MainScene.fxml"));
 		Parent mainScene = null;
 		try {
 			mainScene = (Parent) loader.load();
@@ -122,7 +122,7 @@ public class MainApplication extends Application {
 	public void displayGroupDialog(UUID id){
 		// Load dialog
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(this.getClass().getResource("/poo/calendar/dialogscenes/GroupDialog.fxml"));
+		loader.setLocation(this.getClass().getClassLoader().getResource("GroupDialog.fxml"));
 		Parent dialog = null;
 		try {
 			dialog = loader.load();
@@ -154,7 +154,7 @@ public class MainApplication extends Application {
 	public void displayAppointmentDialog(UUID id){
 		//Load dialog
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(this.getClass().getResource("/poo/calendar/dialogscenes/AppointmentDialog.fxml"));
+		loader.setLocation(this.getClass().getClassLoader().getResource("AppointmentDialog.fxml"));
 		Parent dialog = null;
 		try {
 			dialog = loader.load();
@@ -186,7 +186,7 @@ public class MainApplication extends Application {
 	public void displayTaskDialog(UUID id){
 		//Load dialog
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(this.getClass().getResource("/poo/calendar/dialogscenes/TaskDialog.fxml"));
+		loader.setLocation(this.getClass().getClassLoader().getResource("TaskDialog.fxml"));
 		Parent dialog = null;
 		try {
 			dialog = loader.load();
@@ -310,7 +310,7 @@ public class MainApplication extends Application {
 		mStage.setWidth(primaryScreenBounds.getWidth());
 		mStage.setHeight(primaryScreenBounds.getHeight());
 		stage.getIcons().add(new Image(this.getClass().getClassLoader().getResource("icon.png").toString()));
-		
+
 		mStage.show();
 		mStage.setOnCloseRequest(event -> terminateApplication());
 		
