@@ -225,7 +225,7 @@ public class MainApplication extends Application {
 
 		createMainParent();
 		mMainScene = new Scene(mMainParent);
-		mStage.setTitle("Calendar");
+		mStage.setTitle("Elf Calendar");
 		mStage.setScene(mMainScene);
 		mStage.show();
 		mStage.setOnCloseRequest(event -> terminateApplication());
