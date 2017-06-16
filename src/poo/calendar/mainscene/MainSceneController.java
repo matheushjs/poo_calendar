@@ -12,6 +12,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import poo.calendar.controller.MainApplication;
 
 /**
  * Widget class that represents the main window of the application.
@@ -34,8 +35,9 @@ public class MainSceneController {
 	
 	@FXML
 	private HBox mBottomBox;
-
-	//TODO: Use CSS here
+	
+	private MainApplication mMainApp;
+	
 	private Background mainBG =
 			new Background(new BackgroundFill(Color.DARKGRAY, null, null));
 	
@@ -57,6 +59,14 @@ public class MainSceneController {
     	ds.setColor(Color.color(0.4f, 0.4f, 0.4f));
     	mAppTitleText.setEffect(ds);
     	mAppTitleText.setCache(true);
+    }
+    
+    /**
+     * Receives the structures needed for working.
+     * @param app
+     */
+    public void initializeStructures(MainApplication app){
+    	mMainApp = app;
     }
     
     /**
@@ -90,5 +100,30 @@ public class MainSceneController {
     public void addGroupsWidget(Node widget){
     	HBox.setHgrow(widget, Priority.ALWAYS);
     	mTopBox.getChildren().add(widget);
+    }
+    
+    @FXML
+    private void onCloseItemAction(){
+    	mMainApp.terminateApplication();
+    }
+    
+    @FXML
+    private void onAddAppointmentItemAction(){
+    	mMainApp.displayAppointmentDialog();
+    }
+    
+    @FXML
+    private void onAddTaskItemAction(){
+    	mMainApp.displayTaskDialog();
+    }
+    
+    @FXML
+    private void onAddGroupItemAction(){
+    	mMainApp.displayGroupDialog();
+    }
+    
+    @FXML
+    private void onAboutItemAction(){
+    	
     }
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -80,6 +81,7 @@ public class MainApplication extends Application {
 			System.exit(1);
 		}
 		MainSceneController mainSceneController = loader.getController();
+		mainSceneController.initializeStructures(this);
 		mainSceneController.addAppointmentWidget(appointmentsWidget);
 		mainSceneController.addTaskWidget(tasksWidget);
 		mainSceneController.addGroupsWidget(groupsWidget);
@@ -208,8 +210,17 @@ public class MainApplication extends Application {
 		mStage.setTitle("Calendar");
 		mStage.setScene(mMainScene);
 		mStage.show();
-
+		mStage.setOnCloseRequest(event -> terminateApplication());
+		
 		mModel.load();
+	}
+	
+	/**
+	 * Saves what needs to be saved, then closes window.
+	 * @param event
+	 */
+	public void terminateApplication(){
+		Platform.exit();
 	}
 	
 	public static void main(String[] args) {
