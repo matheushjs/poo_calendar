@@ -3,15 +3,21 @@ package poo.calendar.controller;
 import java.io.IOException;
 import java.util.UUID;
 
+import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import poo.calendar.dialogscenes.AboutDialogController;
 import poo.calendar.dialogscenes.AppointmentDialogController;
 import poo.calendar.dialogscenes.GroupDialogController;
@@ -96,7 +102,7 @@ public class MainApplication extends Application {
 	 * Changes stage to the already created main scene
 	 */
 	public void displayMainRoot(){
-		mMainScene.setRoot(mMainParent);
+		switchScenes(mMainParent);
 	}
 	
 	/**
@@ -123,7 +129,7 @@ public class MainApplication extends Application {
 		if(id != null)
 			controller.setGroupID(id);
 		
-		mMainScene.setRoot(dialog);
+		switchScenes(dialog);
 	}
 	
 	/**
@@ -156,8 +162,8 @@ public class MainApplication extends Application {
 		
 		if(id != null)
 			controller.setAppointmentID(id);
-		
-		mMainScene.setRoot(dialog);
+
+		switchScenes(dialog);
 	}
 	
 	/**
@@ -191,7 +197,8 @@ public class MainApplication extends Application {
 		if(id != null)
 			controller.setTaskID(id);
 		
-		mMainScene.setRoot(dialog);
+		//mMainScene.setRoot(dialog);
+		switchScenes(dialog);
 	}
 	
 	/**
@@ -215,6 +222,39 @@ public class MainApplication extends Application {
 		dialog.initOwner(this.mStage);
 		dialog.setScene(dialogScene);
 		dialog.show();
+	}
+	
+	/**
+	 * Switch scenes using a Fade transition.
+	 * The old scene is transitioned as a snapshot image, so there is no danger in the user
+	 * attempting to click the old scene while it's transitioning.
+	 */
+	public void switchScenes(Parent newroot){
+		double oldOpacity = newroot.getOpacity();
+		newroot.setOpacity(0.0);
+
+		// Take a photo of the current scene
+		WritableImage oldi = new WritableImage((int) mMainScene.getWidth(), (int) mMainScene.getHeight());
+		Image oldimg = mMainScene.snapshot(oldi);
+		ImageView oldview = new ImageView(oldimg);
+		
+		// Change the Stage to a "transitionable" Node. A stack pane in this case.
+		StackPane pane = new StackPane(oldview, newroot);
+		mMainScene.setRoot(pane);
+		
+		// Transition proper
+		FadeTransition fadeUp = new FadeTransition(Duration.millis(500), newroot);
+		FadeTransition fadeDown = new FadeTransition(Duration.millis(500), oldview);
+		fadeUp.setFromValue(0.0);
+		fadeUp.setToValue(oldOpacity);
+		fadeDown.setFromValue(1.0);
+		fadeDown.setToValue(0.0);
+		fadeUp.setOnFinished(action -> {
+			pane.getChildren().remove(newroot);
+			mMainScene.setRoot(newroot);
+		});
+		fadeUp.playFromStart();
+		fadeDown.playFromStart();
 	}
 	
 	@Override
