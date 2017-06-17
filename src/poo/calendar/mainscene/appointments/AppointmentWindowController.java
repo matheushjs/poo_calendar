@@ -42,6 +42,9 @@ public class AppointmentWindowController {
 	private AnchorPane mMainPane;
 	
 	@FXML
+	private HBox mWeekTextBox;
+	
+	@FXML
 	private Text mWeekText;
 	
 	@FXML
@@ -210,6 +213,9 @@ public class AppointmentWindowController {
 		mInnerPane.getChildren().add(DIC);
 		DIC.toBack();
 		
+		mWeekFadeBack[1].setOnFinished(action -> mMainPane.getChildren().remove(mWeekTextBox));
+		mWeekFadeBack[0].setOnFinished(action -> mMainPane.getChildren().remove(mWeekdaysBox));
+		
 		runWeekAnimations();
 	}
 	
@@ -343,7 +349,7 @@ public class AppointmentWindowController {
 		Calendar subjectDay = (Calendar) mAssignedWeek.clone();
 		for(int i = 0; i < 7; i++){
 			/* FOR EACH DAY IN CURRENT WEEK */
-			
+
 			/* CALCULATE THE OFFSETS OF THE APPOINTMENT IN THE DAY BEING ANALYZED */
 			if(DateUtil.hasDayIntersection(subjectDay, init, end)){
 				int offset1, offset2;
@@ -430,6 +436,12 @@ public class AppointmentWindowController {
 		displayThis.append(" " + endOfWeek.get(Calendar.DATE));
 		
 		mWeekText.setText(displayThis.toString());
+		
+		if(!mMainPane.getChildren().contains(mWeekTextBox))
+			mMainPane.getChildren().add(mWeekTextBox);
+		
+		if(!mMainPane.getChildren().contains(mWeekdaysBox))
+			mMainPane.getChildren().add(mWeekdaysBox);
 		
 		if(mWeekFade[0].getStatus() != Animation.Status.RUNNING){
 			mWeekFade[0].playFromStart();

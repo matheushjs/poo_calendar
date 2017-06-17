@@ -27,7 +27,7 @@
             <Button fx:id="mRightButton" mnemonicParsing="false" text="&gt;" />
          </children>
       </HBox>
-      <HBox alignment="CENTER" fillHeight="false" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <HBox fx:id="mWeekTextBox" alignment="CENTER" fillHeight="false" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
             <Text fx:id="mWeekText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER">
                <font>
