@@ -252,7 +252,7 @@ public class DateUtil {
 		Calendar key = (Calendar) today.clone();
 		key.add(Calendar.DATE, offset);
 		
-		for(int i = 0; i < 2; i++)
+		for(int i = 0; i < 3; i++)
 			if(key.get(fields[i]) != maybeOffset.get(fields[i]))
 				return false;
 		
