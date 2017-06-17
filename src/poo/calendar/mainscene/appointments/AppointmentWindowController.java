@@ -349,7 +349,7 @@ public class AppointmentWindowController {
 		Calendar subjectDay = (Calendar) mAssignedWeek.clone();
 		for(int i = 0; i < 7; i++){
 			/* FOR EACH DAY IN CURRENT WEEK */
-
+			
 			/* CALCULATE THE OFFSETS OF THE APPOINTMENT IN THE DAY BEING ANALYZED */
 			if(DateUtil.hasDayIntersection(subjectDay, init, end)){
 				int offset1, offset2;
