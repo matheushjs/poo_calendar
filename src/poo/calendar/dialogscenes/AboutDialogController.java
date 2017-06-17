@@ -28,6 +28,7 @@ public class AboutDialogController extends ControlledWidget<VBox> {
 	 * Automatically called upon construction.
 	 */
 	protected void initializeWidget(){
+		//Icon source: https://www.iconfinder.com/icons/1287530/calendar_date_event_month_schedule_time_icon#size=48
 		InputStream is = this.getClass().getClassLoader().getResourceAsStream("about.txt");
 		StringBuilder builder = new StringBuilder();
 		

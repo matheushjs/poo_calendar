@@ -5,13 +5,13 @@ import java.util.UUID;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.WeakChangeListener;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import poo.calendar.ColorUtil;
@@ -61,19 +61,19 @@ public class TaskViewController extends ControlledWidget<HBox> implements Compar
 		mTitle = new Label();
 		mDeadlineLabel = new Label();
 		
-		mWidget.setCursor(Cursor.HAND);
+		mTitle.setAlignment(Pos.CENTER);
+		mTitle.setWrapText(true);
+		mTitle.setMinWidth(100);
 		
 		mDeadlineLabel.setAlignment(Pos.CENTER);
-		mTitle.setAlignment(Pos.CENTER);
+		mDeadlineLabel.setWrapText(true);
+		mDeadlineLabel.setMinWidth(100);
+		mDeadlineLabel.setMaxWidth(100);
+		
 		mWidget.setAlignment(Pos.CENTER);
-		
-		HBox.setHgrow(mTitle, Priority.ALWAYS);
-		HBox.setHgrow(mDeadlineLabel, Priority.ALWAYS);
-		
-		mTitle.setMaxWidth(Double.MAX_VALUE);
-		mDeadlineLabel.setMaxWidth(Double.MAX_VALUE);
 		mWidget.setPrefWidth(Double.MAX_VALUE);
-		
+		mWidget.setSpacing(5);
+		mWidget.setCursor(Cursor.HAND);
 		mWidget.getChildren().add(mTitle);
 	}
 	
