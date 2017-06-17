@@ -1,0 +1,11 @@
+#mMainBox {
+	-fx-border-color: #ccc;
+	-fx-border-width: 1;
+	-fx-border-style: solid;
+}
+
+#mHeaderLabel {
+	-fx-padding: 5%;
+	-fx-font-size: 120%;
+	-fx-font-weight: bold;
+}

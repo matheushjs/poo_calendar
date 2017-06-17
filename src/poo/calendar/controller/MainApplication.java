@@ -41,9 +41,9 @@ public class MainApplication extends Application {
 	private Stage mStage;
 	private Scene mMainScene;
 	private Parent mMainParent;
-	
+
 	private CalendarDataModel mModel;
-	
+
 	/**
 	 * Creates the main root for the scene graph.
 	 * This root should be live during the whole program.
@@ -61,7 +61,7 @@ public class MainApplication extends Application {
 		}
 		AppointmentWindowController appointmentsController = loader.getController();
 		appointmentsController.initializeStructures(this, mModel);
-		
+
 		// Load TaskWindow
 		loader = new FXMLLoader();
 		loader.setLocation(this.getClass().getClassLoader().getResource("TaskWindow.fxml"));
@@ -74,7 +74,7 @@ public class MainApplication extends Application {
 		}
 		TaskWindowController tasksController = loader.getController();
 		tasksController.initializeStructures(this, mModel);
-		
+
 		// Load GroupsWindow
 		loader = new FXMLLoader();
 		loader.setLocation(this.getClass().getClassLoader().getResource("GroupListWindow.fxml"));
@@ -87,14 +87,14 @@ public class MainApplication extends Application {
 		}
 		GroupListWindowController groupsController = loader.getController();
 		groupsController.initializeStructures(this, mModel);
-		
+
 		// Load MainScene
 		loader = new FXMLLoader();
 		loader.setLocation(this.getClass().getClassLoader().getResource("MainScene.fxml"));
 		Parent mainScene = null;
 		try {
 			mainScene = (Parent) loader.load();
-		} catch(IOException e){ 
+		} catch(IOException e){
 			e.printStackTrace();
 			System.exit(1);
 		}
@@ -103,17 +103,17 @@ public class MainApplication extends Application {
 		mainSceneController.addAppointmentWidget(appointmentsWidget);
 		mainSceneController.addTaskWidget(tasksWidget);
 		mainSceneController.addGroupsWidget(groupsWidget);
-		
+
 		mMainParent = mainScene;
 	}
-	
+
 	/**
 	 * Changes stage to the already created main scene
 	 */
 	public void displayMainRoot(){
 		switchScenes(mMainParent);
 	}
-	
+
 	/**
 	 * Changes current scene to the group creation dialog.
 	 * Creates a dialog on EDIT mode if ID is provided.
@@ -132,20 +132,20 @@ public class MainApplication extends Application {
 		}
 		GroupDialogController controller = loader.getController();
 		controller.initializeStructures(this, mModel);
-		
+
 		if(id != null)
 			controller.setGroupID(id);
-		
+
 		switchScenes(dialog);
 	}
-	
+
 	/**
 	 * Creates a dialog on CREATE mode.
 	 */
 	public void displayGroupDialog(){
 		displayGroupDialog(null);
 	}
-	
+
 	/**
 	 * Changes current scene to the appointment creation dialog.
 	 * Creates a dialog on EDIT mode, if ID is provided.
@@ -164,20 +164,20 @@ public class MainApplication extends Application {
 		}
 		AppointmentDialogController controller = loader.getController();
 		controller.initializeStructures(this, mModel);
-		
+
 		if(id != null)
 			controller.setAppointmentID(id);
 
 		switchScenes(dialog);
 	}
-	
+
 	/**
 	 * Creates a dialog on CREATE mode
 	 */
 	public void displayAppointmentDialog(){
 		displayAppointmentDialog(null);
 	}
-	
+
 	/**
 	 * Changes current scene to the task creation dialog.
 	 * Creates a dialog on EDIT mode, if ID is provided.
@@ -196,36 +196,36 @@ public class MainApplication extends Application {
 		}
 		TaskDialogController controller = loader.getController();
 		controller.initializeStructures(this, mModel);
-		
+
 		if(id != null)
 			controller.setTaskID(id);
-		
+
 		switchScenes(dialog);
 	}
-	
+
 	/**
 	 * Creates a dialog on CREATE mode
 	 */
 	public void displayTaskDialog(){
 		displayTaskDialog(null);
 	}
-	
+
 	/**
 	 * Displays the About Dialog.
 	 */
 	public void displayAboutDialog(){
 		AboutDialogController ADC = new AboutDialogController();
 		VBox widget = ADC.getWidget();
-		
+
 		Scene dialogScene = new Scene(widget, 500, 500);
-		
+
 		Stage dialog = new Stage();
 		dialog.initModality(Modality.WINDOW_MODAL);
 		dialog.initOwner(this.mStage);
 		dialog.setScene(dialogScene);
 		dialog.show();
 	}
-	
+
 	/**
 	 * Switch scenes using a Fade transition.
 	 * The old scene is transitioned as a snapshot image, so there is no danger in the user
@@ -239,29 +239,29 @@ public class MainApplication extends Application {
 		WritableImage oldi = new WritableImage((int) mMainScene.getWidth(), (int) mMainScene.getHeight());
 		Image oldimg = mMainScene.snapshot(oldi);
 		ImageView oldview = new ImageView(oldimg);
-		
+
 		// Change the Stage to a "transitionable" Node. A stack pane in this case.
 		StackPane pane = new StackPane(oldview, newroot);
 		mMainScene.setRoot(pane);
-		
+
 		// Transition proper
 		FadeTransition fadeUp = new FadeTransition(Duration.millis(500), newroot);
 		FadeTransition fadeDown = new FadeTransition(Duration.millis(500), oldview);
-		
+
 		fadeUp.setFromValue(0.0);
 		fadeUp.setToValue(oldOpacity);
 		fadeUp.setOnFinished(action -> {
 			pane.getChildren().remove(newroot);
 			mMainScene.setRoot(newroot);
 		});
-		
+
 		fadeDown.setFromValue(1.0);
 		fadeDown.setToValue(0.0);
 
 		fadeUp.playFromStart();
 		fadeDown.playFromStart();
 	}
-	
+
 	/**
 	 * Performs the initial animation, and then creates the mainRoot.
 	 */
@@ -269,17 +269,17 @@ public class MainApplication extends Application {
 		ElfCalendarText ECT = new ElfCalendarText(80);
 		HBox box = new HBox(ECT);
 		box.setAlignment(Pos.CENTER);
-		box.setBackground(new Background(new BackgroundFill(Color.DARKGRAY, null, null)));
+		box.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
 		ECT.setOpacity(0.0);
-		
+
 		mMainScene.setRoot(box);
-		
+
 		FadeTransition fadeUp = new FadeTransition(Duration.millis(2000), ECT);
 		FadeTransition fadeNeutral = new FadeTransition(Duration.millis(0), ECT);
 		fadeUp.setFromValue(0.0);
 		fadeUp.setToValue(1.0);
 		fadeUp.setOnFinished(action -> fadeNeutral.playFromStart());
-		
+
 		// I seriously don't know how any better class for having this 3 second delay,
 		// so for now I'll stick to using FadeTransition.
 		fadeNeutral.setFromValue(1.0);
@@ -289,21 +289,21 @@ public class MainApplication extends Application {
 			createMainParent();
 			displayMainRoot();
 		});
-		
+
 		fadeUp.playFromStart();
 	}
-	
+
 	@Override
 	public void start(Stage stage) {
 		this.mStage = stage;
-		
+
 		mModel = new CalendarDataModel();
 
 		createMainParent();
 		mMainScene = new Scene(new HBox(new Rectangle(800, 1400))); //Dummy root
 		mStage.setTitle("Elf Calendar");
 		mStage.setScene(mMainScene);
-		
+
 		Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
 		mStage.setX(primaryScreenBounds.getMinX());
 		mStage.setY(primaryScreenBounds.getMinY());
@@ -313,12 +313,12 @@ public class MainApplication extends Application {
 
 		mStage.show();
 		mStage.setOnCloseRequest(event -> terminateApplication());
-		
+
 		initializeView();
-		
+
 		mModel.load();
 	}
-	
+
 	/**
 	 * Saves what needs to be saved, then closes window.
 	 * @param event
@@ -326,7 +326,7 @@ public class MainApplication extends Application {
 	public void terminateApplication(){
 		Platform.exit();
 	}
-	
+
 	public static void main(String[] args) {
 		Application.launch(args);
 	}

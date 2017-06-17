@@ -18,7 +18,7 @@ public class ElfCalendarText extends Text {
 		setStyle("-fx-fill: linear-gradient(from 0% 0% to 100% 500%, repeat, black 0%, darkcyan 50%);");
     	setCache(true);
     	this.setFontSmoothingType(FontSmoothingType.LCD);
-    	
+
     	DropShadow ds = new DropShadow();
     	ds.setOffsetY(3.0f);
     	ds.setColor(Color.color(0.6f, 0.6f, 0.6f));
