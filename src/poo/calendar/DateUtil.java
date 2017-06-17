@@ -284,8 +284,28 @@ public class DateUtil {
 		return sMonthMapping.get(month);
 	}
 	
+	/**
+	 * Returns the number of days between 2 calendars.
+	 * @param args
+	 */
+	public static long dayDiff(Calendar c1, Calendar c2){
+		long d1 = c1.getTimeInMillis();
+		long d2 = c2.getTimeInMillis();
+		
+		d1 = d1 - d2;
+		d1 = d1 / 1000; //seconds
+		d1 = d1 / 60 / 60; // hours
+		d1 = d1 / 24; //days
+		
+		return Math.abs(d1);
+	}
+	
 	/*
 	public static void main(String[] args){
-		System.out.println(monthString(Calendar.JANUARY));
-	}*/
+		Calendar c1 = Calendar.getInstance();
+		c1.add(Calendar.DATE, 7);
+		c1.add(Calendar.HOUR, 1);
+		System.out.println(dayDiff(Calendar.getInstance(), c1));
+	}
+	*/
 }

@@ -38,7 +38,7 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 	private List<List<AnchoredNode>> mIntervalInfo;
 	
 	// Array of controllers of AppointmentViews summoned by this DayPort.
-	private Map<UUID, AnchoredNode> mAnchoredNodes;
+	private List<AnchoredNode> mAnchoredNodes;
 	
 	// Link to the main application
 	private MainApplication mMainApp;
@@ -61,7 +61,7 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 		for(int i = 0; i < 96; i++)
 			mIntervalInfo.add(new LinkedList<AnchoredNode>());
 		
-		mAnchoredNodes = new HashMap<>();
+		mAnchoredNodes = new LinkedList<>();
 	}
 	
 	/**
@@ -139,7 +139,7 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 		}
 		
 		/* Add the new AnchoredNode to the map */
-		mAnchoredNodes.put(AVC.getID(), AN);
+		mAnchoredNodes.add(AN);
 		
 		/* Calculate the side anchors */
 		decideWidgetVAnchors(AN);
@@ -277,21 +277,29 @@ public class AppointmentDayPortController extends ControlledWidget<AnchorPane> {
 	 * @param id
 	 */
 	public void removeAppointmentView(UUID id, boolean doAnimation){
-		/* Get removed node */
-		AnchoredNode removed = mAnchoredNodes.remove(id);
-		if(removed == null) return;
-		
-		mMainPane.getChildren().remove(removed.getAVC().getWidget());
-		
-		/* Get affected nodes while removing the node from the list of intervals */
 		Set<AnchoredNode> affected = new HashSet<>();
-		for(int i = 0; i < mIntervalInfo.size(); i++){
-			if(mIntervalInfo.get(i).remove(removed)){
-				affected.addAll(mIntervalInfo.get(i));
+		
+		while(true){ // While there is still an anchored node with ID == id
+			AnchoredNode removed = null;
+			for(AnchoredNode an: mAnchoredNodes){
+				if(an.getAVC().getID().compareTo(id) == 0)
+					removed = an;
+			}
+			if(removed == null) break;
+			mAnchoredNodes.remove(removed);
+			
+			mMainPane.getChildren().remove(removed.getAVC().getWidget());
+			
+			/* Get affected nodes while removing the node from the list of intervals */
+			for(int i = 0; i < mIntervalInfo.size(); i++){
+				if(mIntervalInfo.get(i).remove(removed)){
+					affected.addAll(mIntervalInfo.get(i));
+				}
 			}
 		}
 		
-		relocateAnchoredNodes(affected, doAnimation);
+		if(affected.size() != 0)
+			relocateAnchoredNodes(affected, doAnimation);
 	}
 	
 	/**

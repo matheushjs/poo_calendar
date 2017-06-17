@@ -231,7 +231,6 @@ public class AppointmentWindowController {
 	 */
 	public void initializeStructures(MainApplication app, CalendarDataModel model){
 		if(mModel != null){
-			//TODO: Verify logging / exception
 			System.err.println(this.getClass().getName() + ": Can only initialize model once.");
 			System.exit(1);
 		}
@@ -310,9 +309,10 @@ public class AppointmentWindowController {
 		 * If should display, add the appointment to all due ports.
 		 */
 		if(rec == Recurrence.DAILY) {
-			 // Generate all 7 intervals and display each of them
+			 // Translate the interval to all 7 days of the week, plus last sunday, then add them.
 			Calendar subjectDay = (Calendar) begOfWeek.clone();
-			for(int i = 0; i < 7; i++){
+			subjectDay.add(Calendar.DATE, -1);
+			for(int i = 0; i < 8; i++){
 				DateUtil.translateInterval(Calendar.DATE, subjectDay, init, end);
 				
 				addIntervalToPorts(appointment, init, end, doAnimation);

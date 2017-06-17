@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import poo.calendar.DateUtil;
 
 /**
  * Model class that represents an appointment.
@@ -93,7 +94,19 @@ public class Appointment extends CalendarNodeBase {
 	/**
 	 * @param rec new recurrence type
 	 */
-	public final void setRecurrence(Recurrence rec){
+	public final void setRecurrence(Recurrence rec) throws IllegalArgumentException {
+		long dayDiff = DateUtil.dayDiff(mInitDate.get(), mEndDate.get());
+		
+		if(rec == Recurrence.DAILY){
+			if(dayDiff > 3) throw new IllegalArgumentException("If recurrence is daily, the appointment cannot span more than 3 days.");
+		} else if(rec == Recurrence.WEEKLY) {
+			if(dayDiff > 21) throw new IllegalArgumentException("If recurrence is weekly, the appointment cannot span more than 21 days.");
+		} else if(rec == Recurrence.MONTHLY) {
+			if(dayDiff > 63) throw new IllegalArgumentException("If recurrence is monthly, the appointment cannot span more than 63 days.");
+		} else if(rec == Recurrence.YEARLY) {
+			if(dayDiff > 366*3) throw new IllegalArgumentException("If recurrence is yearly, the appointment cannot span more than " + 366*3 + " days.");
+		}
+		
 		mRecurrence.set(rec);
 	}
 	

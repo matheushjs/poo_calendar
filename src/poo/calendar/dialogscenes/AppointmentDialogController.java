@@ -225,11 +225,21 @@ public class AppointmentDialogController {
 			allFine = false;
 		}
 		
+		Appointment appt = null;
 		if(endDate != null && initDate != null){
 			try {
-				new Appointment("", "", initDate, endDate);
+				appt = new Appointment("", "", initDate, endDate);
 			} catch (IllegalArgumentException e){
 				mDateWarning.addWarning("End Date cannot be earlier than Initial Date");
+				allFine = false;
+			}
+		}
+		
+		if(appt != null){
+			try {
+				appt.setRecurrence(Recurrence.valueOf(mRecurrenceChoice.getValue().toUpperCase()));
+			} catch(IllegalArgumentException e) {
+				mDateWarning.addWarning(e.getMessage());
 				allFine = false;
 			}
 		}
