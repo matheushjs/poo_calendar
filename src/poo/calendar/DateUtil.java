@@ -133,7 +133,7 @@ public class DateUtil {
 		
 		boolean translateWeekday;
 		int savedWeekDay = 0;
-
+		
 		if(field == Calendar.DAY_OF_WEEK){	
 			translateWeekday = true;
 			savedWeekDay = init.get(Calendar.DAY_OF_WEEK);
@@ -151,12 +151,11 @@ public class DateUtil {
 		init.setLenient(true);
 		end.setLenient(true);
 		
-		int[] fields = new int[] { Calendar.YEAR, Calendar.MONTH, Calendar.DATE };
-		int[] deltas = new int[3];
+		int[] fields = new int[] { Calendar.YEAR, Calendar.MONTH, Calendar.DATE, Calendar.HOUR_OF_DAY, Calendar.MINUTE };
+		long delta;
 		
-		// Calculate needed offsets
-		for(int i = 0; i < 3; i++)
-			deltas[i] = end.get(fields[i]) - init.get(fields[i]);
+		// Calculate needed offset
+		delta = end.getTimeInMillis() - init.getTimeInMillis();
 		
 		// Translate initial date
 		for(int i = 0; i < 3; i++){
@@ -165,25 +164,25 @@ public class DateUtil {
 			if(fields[i] == field) break;
 		}
 		
-		// Translate end date by applying offsets in the new init date.
-		// Inverted order to prevent wrong rounding in the day number.
-		for(int i = 2; i >= 0; i--){
+		// Translate end date by applying offset in the new init date.
+		for(int i = 4; i >= 0; i--){
+			//Make end a copy of init
 			end.set(fields[i], init.get(fields[i]));
-			end.add(fields[i], deltas[i]);
 		}
+		end.setTimeInMillis(end.getTimeInMillis() + delta);
 		
 		// Translate to DAY_OF_WEEK if needed
-		int previous, delta;
+		int previous, daydelta;
 		if(translateWeekday){
 			// Set initial date to the correct DAY_OF_WEEK
 			previous = init.get(Calendar.DATE);
 			init.set(Calendar.DAY_OF_WEEK, savedWeekDay);
 			
 			// Calculate the variation
-			delta = init.get(Calendar.DATE) - previous;
+			daydelta = init.get(Calendar.DATE) - previous;
 			
 			// Apply variation to the end date.
-			end.add(Calendar.DATE, delta);
+			end.add(Calendar.DATE, daydelta);
 		}
 		
 		// Restore states
@@ -206,10 +205,19 @@ public class DateUtil {
 		int[] fields = new int[] { Calendar.YEAR, Calendar.MONTH, Calendar.DATE };
 		
 		for(int i = 0; i < 3; i++){
-			if( init.get(fields[i]) > upperBound.get(fields[i]) )
-				return false;
-			if( lowerBound.get(fields[i]) > end.get(fields[i]) )
-				return false;
+			int low = init.get(fields[i]);
+			int hi = upperBound.get(fields[i]);
+			
+			if( low > hi ) return false;
+			else if( low < hi ) break; // For example, if low.month < hi.month we don't need to test .day
+		}
+		
+		for(int i = 0; i < 3; i++){
+			int low = lowerBound.get(fields[i]);
+			int hi = end.get(fields[i]);
+
+			if( low > hi ) return false;
+			else if( low < hi ) break; // For example, if low.month < hi.month we don't need to test .day
 		}
 		
 		return true;
