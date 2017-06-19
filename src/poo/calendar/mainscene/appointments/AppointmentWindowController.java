@@ -86,6 +86,9 @@ public class AppointmentWindowController extends AnimationTimer{
 
 	//Model data
 	private CalendarDataModel mModel;
+	
+	//Timeline
+	private Rectangle timeline;
 
 	/**
 	 * Default constructor
