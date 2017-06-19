@@ -63,6 +63,7 @@ public class TaskViewController extends ControlledWidget<HBox> implements Compar
 		mTitle.setAlignment(Pos.CENTER);
 		mTitle.setWrapText(true);
 		mTitle.setMinWidth(100);
+		mTitle.setStyle("-fx-font-size: 14px;");
 		
 		mDeadlineLabel.setAlignment(Pos.CENTER);
 		mDeadlineLabel.setWrapText(true);
@@ -73,6 +74,11 @@ public class TaskViewController extends ControlledWidget<HBox> implements Compar
 		mWidget.setPrefWidth(Double.MAX_VALUE);
 		mWidget.setSpacing(5);
 		mWidget.setCursor(Cursor.HAND);
+		mWidget.setStyle("-fx-padding: 6px;" +
+				"-fx-border-color: black;" +
+				"-fx-border-width: 1;" +
+				"-fx-border-insets: 0;" +
+				"-fx-border-style: solid;");
 		mWidget.getChildren().add(mTitle);
 	}
 	

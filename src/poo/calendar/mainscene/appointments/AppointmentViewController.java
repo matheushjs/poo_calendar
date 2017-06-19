@@ -55,6 +55,11 @@ public class AppointmentViewController extends ControlledWidget<AnchorPane> {
 		mHourRange = new Label();
 		
 		mMainPane.setCursor(Cursor.HAND);
+		mMainPane.setStyle("-fx-padding: 5px;" +
+				"-fx-border-color: black;" +
+				"-fx-border-width: 1;" +
+				"-fx-border-insets: -1;" +
+				"-fx-border-style: solid;");
 		
 		AnchorPane.setTopAnchor(mTitle, 0.0);
 		AnchorPane.setRightAnchor(mTitle, 0.0);
@@ -63,6 +68,7 @@ public class AppointmentViewController extends ControlledWidget<AnchorPane> {
 		mTitle.setAlignment(Pos.TOP_LEFT);
 		mTitle.setWrapText(true);
 		mTitle.maxHeightProperty().bind(mMainPane.heightProperty());
+		mTitle.setStyle("-fx-font-size: 14px;");
 		
 		AnchorPane.setBottomAnchor(mHourRange, 0.0);
 		AnchorPane.setRightAnchor(mHourRange, 0.0);
