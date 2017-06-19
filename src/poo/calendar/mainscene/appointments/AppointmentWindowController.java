@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.UUID;
 
 import javafx.animation.Animation;
+import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
 import javafx.collections.MapChangeListener;
 import javafx.fxml.FXML;
@@ -19,7 +20,9 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import poo.calendar.DateUtil;
@@ -37,7 +40,7 @@ import poo.calendar.model.Recurrence;
  * 	- The model map of appointments
  *  - Every appointment's date/title properties.
  */
-public class AppointmentWindowController {
+public class AppointmentWindowController extends AnimationTimer{
 	@FXML
 	private AnchorPane mMainPane;
 
@@ -218,6 +221,21 @@ public class AppointmentWindowController {
 		mWeekFadeBack[1].setOnFinished(action -> mMainPane.getChildren().remove(mWeekTextBox));
 		mWeekFadeBack[0].setOnFinished(action -> mMainPane.getChildren().remove(mWeekdaysBox));
 
+		//Initializing timeline properties
+		timeline = new Rectangle();
+		timeline.widthProperty().bind(mInnerPane.widthProperty());
+		timeline.setHeight(3.0);
+		timeline.setFill(Color.RED);
+		timeline.setOpacity(0.5);
+		AnchorPane.setBottomAnchor(timeline, 0.0);
+		AnchorPane.setTopAnchor(timeline, 0.0);
+		AnchorPane.setLeftAnchor(timeline, 0.0);
+		AnchorPane.setRightAnchor(timeline, 0.0);
+		mInnerPane.getChildren().add(timeline);
+		
+		//Starts calling the handle() method to update the timeline every frame
+		start();
+		
 		runWeekAnimations();
 	}
 
@@ -453,5 +471,12 @@ public class AppointmentWindowController {
 		if(mWeekFade[1].getStatus() != Animation.Status.RUNNING){
 			mWeekFade[1].playFromStart();
 		}
+	}
+	
+	//Updates the timeline position according to the time of day
+	@Override
+	public void handle(long now) {
+		Calendar cal = Calendar.getInstance();
+		AnchorPane.setTopAnchor(timeline, 1.4*((cal.get(Calendar.HOUR_OF_DAY)*60)+cal.get(Calendar.MINUTE)));
 	}
 }
