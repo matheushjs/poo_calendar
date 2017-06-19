@@ -40,7 +40,7 @@ import poo.calendar.model.Recurrence;
  * 	- The model map of appointments
  *  - Every appointment's date/title properties.
  */
-public class AppointmentWindowController extends AnimationTimer{
+public class AppointmentWindowController {
 	@FXML
 	private AnchorPane mMainPane;
 
@@ -88,7 +88,7 @@ public class AppointmentWindowController extends AnimationTimer{
 	private CalendarDataModel mModel;
 	
 	//Timeline
-	private Rectangle timeline;
+	private Rectangle mTimeline;
 
 	/**
 	 * Default constructor
@@ -224,20 +224,24 @@ public class AppointmentWindowController extends AnimationTimer{
 		mWeekFadeBack[1].setOnFinished(action -> mMainPane.getChildren().remove(mWeekTextBox));
 		mWeekFadeBack[0].setOnFinished(action -> mMainPane.getChildren().remove(mWeekdaysBox));
 
-		//Initializing timeline properties
-		timeline = new Rectangle();
-		timeline.widthProperty().bind(mInnerPane.widthProperty());
-		timeline.setHeight(3.0);
-		timeline.setFill(Color.RED);
-		timeline.setOpacity(0.5);
-		AnchorPane.setBottomAnchor(timeline, 0.0);
-		AnchorPane.setTopAnchor(timeline, 0.0);
-		AnchorPane.setLeftAnchor(timeline, 0.0);
-		AnchorPane.setRightAnchor(timeline, 0.0);
-		mInnerPane.getChildren().add(timeline);
+		//Initializing mTimeline properties
+		mTimeline = new Rectangle();
+		mTimeline.widthProperty().bind(mInnerPane.widthProperty());
+		mTimeline.setHeight(3.0);
+		mTimeline.setFill(Color.RED);
+		mTimeline.setOpacity(0.5);
+		AnchorPane.setTopAnchor(mTimeline, 0.0);
+		AnchorPane.setLeftAnchor(mTimeline, 0.0);
+		AnchorPane.setRightAnchor(mTimeline, 0.0);
+		mInnerPane.getChildren().add(mTimeline);
 		
-		//Starts calling the handle() method to update the timeline every frame
-		start();
+		new AnimationTimer() {
+			@Override
+			public void handle(long now) {
+				Calendar cal = Calendar.getInstance();
+				AnchorPane.setTopAnchor(mTimeline, 1.4*((cal.get(Calendar.HOUR_OF_DAY)*60)+cal.get(Calendar.MINUTE)));
+			}
+		}.start();
 		
 		runWeekAnimations();
 	}
@@ -474,12 +478,5 @@ public class AppointmentWindowController extends AnimationTimer{
 		if(mWeekFade[1].getStatus() != Animation.Status.RUNNING){
 			mWeekFade[1].playFromStart();
 		}
-	}
-	
-	//Updates the timeline position according to the time of day
-	@Override
-	public void handle(long now) {
-		Calendar cal = Calendar.getInstance();
-		AnchorPane.setTopAnchor(timeline, 1.4*((cal.get(Calendar.HOUR_OF_DAY)*60)+cal.get(Calendar.MINUTE)));
 	}
 }
