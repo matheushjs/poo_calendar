@@ -9,3 +9,39 @@
 	-fx-font-size: 120%;
 	-fx-font-weight: bold;
 }
+
+#mScrollPane > .viewport {
+   -fx-background-color: transparent;
+}
+
+#mMainBox, #mScrollPane {
+	-fx-background-color: white;
+}
+
+#mScrollPane:focused {
+	-fx-border-color: #5bc0de;
+	-fx-border-width: 1;
+	-fx-border-insets: -1;
+	-fx-border-style: solid;
+}
+
+#mAddButton {
+	-fx-cursor: hand;
+	-fx-font-size: 20px;
+	-fx-font-weight: 900;
+	-fx-text-fill: white;
+	-fx-background-color: black;
+	-fx-border-radius: 3px;
+}
+
+#mAddButton:focused	{
+	-fx-cursor: hand;
+	-fx-border-color: #5bc0de;
+	-fx-border-width: 1;
+	-fx-border-insets: -1;
+	-fx-border-style: solid;
+}
+
+#mAddButton:hover {
+	-fx-cursor: hand;
+}

@@ -1,0 +1,29 @@
+#mMainPane {
+	-fx-background-color: white;
+}
+
+#mHeaderText {
+	-fx-font-weight: bold;
+}
+
+#mApplyButton, #mCancelButton, #mDeleteButton {
+	-fx-cursor: hand;
+	-fx-font-size: 15px;
+	-fx-font-weight: 900;
+	-fx-text-fill: white;
+	-fx-background-color: black;
+	-fx-border-radius: 3px;
+}
+
+#mApplyButton:focused, #mCancelButton:focused, #mDeleteButton:focused {
+	-fx-cursor: hand;
+	-fx-border-color: #5bc0de;
+	-fx-border-width: 1;
+	-fx-border-insets: -1;
+	-fx-border-style: solid;
+}
+
+#mApplyButton:hover, #mCancelButton:hover, #mDeleteButton:hover {
+	-fx-cursor: hand;
+	-fx-background-color: rgba(0, 0, 0, 0.75);
+}

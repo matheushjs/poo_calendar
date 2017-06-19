@@ -1,0 +1,24 @@
+#mInnerPane {
+	-fx-background-color: white;
+}
+
+#mAddButton, #mLeftButton, #mRightButton {
+	-fx-cursor: hand;
+	-fx-font-size: 20px;
+	-fx-font-weight: 900;
+	-fx-text-fill: white;
+	-fx-background-color: black;
+	-fx-border-radius: 3px;
+}
+
+#mAddButton:focused, #mLeftButton:focused, #mRightButton:focused {
+	-fx-cursor: hand;
+	-fx-border-color: #5bc0de;
+	-fx-border-width: 1;
+	-fx-border-insets: -1;
+	-fx-border-style: solid;
+}
+
+#mAddButton:hover, #mLeftButton:hover, #mRightButton:hover {
+	-fx-cursor: hand;
+}

@@ -17,8 +17,8 @@ import poo.calendar.widgets.ElfCalendarText;
 public class AboutDialogController extends ControlledWidget<VBox> {
 	private VBox mWidget;
 
-	// private static final Background mainBG =
-	// 		new Background(new BackgroundFill(Color.WHITE, null, null));
+	private static final Background mainBG =
+			new Background(new BackgroundFill(Color.WHITE, null, null));
 
 	public AboutDialogController(){
 	}
@@ -52,7 +52,7 @@ public class AboutDialogController extends ControlledWidget<VBox> {
 		mWidget = new VBox(text, lbl);
 		mWidget.setAlignment(Pos.CENTER);
 		mWidget.setSpacing(50);
-		// mWidget.setBackground(mainBG);
+		mWidget.setBackground(mainBG);
 	}
 
 	/**

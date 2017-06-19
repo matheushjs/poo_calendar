@@ -115,7 +115,7 @@ public class MainApplication extends Application {
 	}
 
 	/**
-	 * Changes current scene to the group creation dialog.
+	 * Changes current scene to the group create/edit/delete dialog.
 	 * Creates a dialog on EDIT mode if ID is provided.
 	 * @param id the ID of the group to edit
 	 */
@@ -147,7 +147,7 @@ public class MainApplication extends Application {
 	}
 
 	/**
-	 * Changes current scene to the appointment creation dialog.
+	 * Changes current scene to the appointment create/edit/delete dialog.
 	 * Creates a dialog on EDIT mode, if ID is provided.
 	 * @param id the ID of the appointment to edit
 	 */
@@ -179,7 +179,7 @@ public class MainApplication extends Application {
 	}
 
 	/**
-	 * Changes current scene to the task creation dialog.
+	 * Changes current scene to the task create/edit/delete dialog.
 	 * Creates a dialog on EDIT mode, if ID is provided.
 	 * @param id the ID of the task to edit
 	 */
@@ -280,7 +280,7 @@ public class MainApplication extends Application {
 		fadeUp.setToValue(1.0);
 		fadeUp.setOnFinished(action -> fadeNeutral.playFromStart());
 
-		// I seriously don't know how any better class for having this 3 second delay,
+		// I seriously don't know of any better class for having this 3 second delay,
 		// so for now I'll stick to using FadeTransition.
 		fadeNeutral.setFromValue(1.0);
 		fadeNeutral.setToValue(1.0);
@@ -309,6 +309,8 @@ public class MainApplication extends Application {
 		mStage.setY(primaryScreenBounds.getMinY());
 		mStage.setWidth(primaryScreenBounds.getWidth());
 		mStage.setHeight(primaryScreenBounds.getHeight());
+		mStage.setMaximized(true);
+
 		stage.getIcons().add(new Image(this.getClass().getClassLoader().getResource("icon.png").toString()));
 
 		mStage.show();

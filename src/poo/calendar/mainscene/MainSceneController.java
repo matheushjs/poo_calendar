@@ -47,7 +47,7 @@ public class MainSceneController {
     	ElfCalendarText ECT = new ElfCalendarText(40);
     	HBox box = new HBox(ECT);
 		box.setAlignment(Pos.CENTER);
-		box.setStyle("-fx-padding: 30px;");
+		box.setStyle("-fx-padding: 30px; -fx-background-color: white;");
     	try {
     		mTopBox.getChildren().add(0, box);
     	} catch(IndexOutOfBoundsException e) {
