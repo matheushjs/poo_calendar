@@ -22,6 +22,9 @@ import poo.calendar.model.CalendarGroup;
 import poo.calendar.model.Recurrence;
 import poo.calendar.model.Task;
 
+/**
+ * Class for saving and loading the Calendar Model data from a XML file.
+ */
 @XmlRootElement(name = "calendar")
 public class ModelXMLHandler {
 	List<AppointmentWrapper> mAppointments;
@@ -55,12 +58,22 @@ public class ModelXMLHandler {
 		this.mGroups = mGroups;
 	}
 
+	/**
+	 * Default constructor, just initialize the lists.
+	 */
 	public ModelXMLHandler(){
 		mAppointments = new LinkedList<>();
 		mTasks = new LinkedList<>();
 		mGroups = new LinkedList<>();
 	}
 	
+	/**
+	 * Transforms all the data within the Calendar Data Model to a suitable List format.
+	 * Then saves all these lists into a XML file.
+	 * 
+	 * @param model the Calendar Data Model to save
+	 * @param file the File where to save the Model
+	 */
 	public static void saveModel(CalendarDataModel model, File file){
 		ModelXMLHandler handler = new ModelXMLHandler();
 		
@@ -86,6 +99,14 @@ public class ModelXMLHandler {
     	}
 	}
 	
+	/**
+	 * Loads the Calendar Data Model with data from the XML file.
+	 * First reads the XML file, getting the lists of Wrapped data.
+	 * Then convert each Wrapped date in the corresponding data, adding them to the Calendar Model.
+	 * 
+	 * @param model the Calendar Data Model object to which we should save the lists read from the XML
+	 * @param file the file from which to read the data.
+	 */
 	public static void loadModel(CalendarDataModel model, File file){
 	    try {
 	        JAXBContext context = JAXBContext.newInstance(ModelXMLHandler.class);
@@ -106,6 +127,9 @@ public class ModelXMLHandler {
 	    }
 	}
 	
+	/**
+	 * Wrapper class for saving Appointments in the XML file.
+	 */
 	static class AppointmentWrapper {
 		private String mTitle;
 		private String mDescription;
@@ -200,6 +224,9 @@ public class ModelXMLHandler {
 		}
 	}
 	
+	/**
+	 * Wrapper class for saving Tasks in the XML file.
+	 */
 	static class TaskWrapper {
 		private String mTitle;
 		private String mDescription;
@@ -278,6 +305,9 @@ public class ModelXMLHandler {
 		
 	}
 	
+	/**
+	 * Wrapper class for saving Calendar Groups in the XML file.
+	 */
 	static class GroupWrapper {
 		private String mName;
 		private Color mColor;

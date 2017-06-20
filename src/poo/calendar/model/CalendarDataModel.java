@@ -26,6 +26,9 @@ public class CalendarDataModel {
 		mGroups.put(CalendarGroup.DEFAULT_ID, CalendarGroup.DEFAULT_GROUP);
 	}
 	
+	/**
+	 * Saves the model to the file.
+	 */
 	public void save(){
 		mGroups.remove(CalendarGroup.DEFAULT_ID);
 		File file = new File("calendar_data_model.xml");
@@ -33,6 +36,9 @@ public class CalendarDataModel {
 		mGroups.put(CalendarGroup.DEFAULT_ID, CalendarGroup.DEFAULT_GROUP);
 	}
 	
+	/**
+	 * Loads the model from the file
+	 */
 	public void load(){
 		File file = new File("calendar_data_model.xml");
 		if(file.exists())
