@@ -120,4 +120,11 @@ public abstract class CalendarNodeBase {
 	public final UUID getID(){
 		return mID;
 	}
+	
+	/**
+	 * @param id new ID for the node
+	 */
+	public final void setID(UUID id){
+		mID = id;
+	}
 }

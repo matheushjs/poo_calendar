@@ -1,9 +1,11 @@
 package poo.calendar.model;
 
+import java.io.File;
 import java.util.UUID;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
+import poo.calendar.model.xmlwrappers.ModelXMLHandler;
 
 /**
  * This class should wrap every interaction with the data model.
@@ -22,16 +24,19 @@ public class CalendarDataModel {
 		mTasks = FXCollections.observableHashMap();
 		mGroups = FXCollections.observableHashMap();
 		mGroups.put(CalendarGroup.DEFAULT_ID, CalendarGroup.DEFAULT_GROUP);
-		
-		//TODO: Load stuff from a file
 	}
 	
 	public void save(){
-		// Remove default group, then save.
+		mGroups.remove(CalendarGroup.DEFAULT_ID);
+		File file = new File("calendar_data_model.xml");
+		ModelXMLHandler.saveModel(this, file);
+		mGroups.put(CalendarGroup.DEFAULT_ID, CalendarGroup.DEFAULT_GROUP);
 	}
 	
 	public void load(){
-		// Load model in another thread, if possible.
+		File file = new File("calendar_data_model.xml");
+		if(file.exists())
+			ModelXMLHandler.loadModel(this, file);
 	}
 	
 	public ObservableMap<UUID, Appointment> getAppointments(){

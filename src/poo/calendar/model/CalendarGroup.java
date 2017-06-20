@@ -103,6 +103,14 @@ public class CalendarGroup {
 		return mID;
 	}
 	
+	/**
+	 * @param new ID for the group
+	 */
+	public void setID(UUID id){
+		mID = id;
+	}
+	
+	
 	@Override
 	public String toString(){
 		return mName.get();

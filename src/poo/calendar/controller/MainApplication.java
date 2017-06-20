@@ -61,7 +61,7 @@ public class MainApplication extends Application {
 		}
 		AppointmentWindowController appointmentsController = loader.getController();
 		appointmentsController.initializeStructures(this, mModel);
-
+		
 		// Load TaskWindow
 		loader = new FXMLLoader();
 		loader.setLocation(this.getClass().getClassLoader().getResource("TaskWindow.fxml"));
@@ -298,7 +298,8 @@ public class MainApplication extends Application {
 		this.mStage = stage;
 
 		mModel = new CalendarDataModel();
-
+		mModel.load();
+		
 		createMainParent();
 		mMainScene = new Scene(new HBox(new Rectangle(800, 1400))); //Dummy root
 		mStage.setTitle("Elf Calendar");
@@ -317,8 +318,6 @@ public class MainApplication extends Application {
 		mStage.setOnCloseRequest(event -> terminateApplication());
 
 		initializeView();
-
-		mModel.load();
 	}
 
 	/**
@@ -326,6 +325,7 @@ public class MainApplication extends Application {
 	 * @param event
 	 */
 	public void terminateApplication(){
+		mModel.save();
 		Platform.exit();
 	}
 

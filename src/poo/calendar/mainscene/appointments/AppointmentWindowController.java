@@ -268,7 +268,10 @@ public class AppointmentWindowController {
 			System.exit(1);
 		}
 
-		//TODO: Prevent listening to all appointments. Only the ones being displayed should be observed.
+		for(AppointmentDayPortController adpc: mDayPorts){
+			adpc.initializeStructures(app, model);
+		}
+		
 		mModel = model;
 		mModel.getAppointments().forEach((uuid, appt) -> {
 			this.addAppointmentView(appt, false);
@@ -290,10 +293,6 @@ public class AppointmentWindowController {
 		mAddButton.setOnAction(action -> {
 			mMainApp.displayAppointmentDialog();
 		});
-
-		for(AppointmentDayPortController adpc: mDayPorts){
-			adpc.initializeStructures(mMainApp, mModel);
-		}
 
 		mRightButton.setOnMouseClicked(action -> changeWeek(1));
 		mLeftButton.setOnMouseClicked(action -> changeWeek(-1));
