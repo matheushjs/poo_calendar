@@ -294,8 +294,11 @@ public class AppointmentWindowController {
 			mMainApp.displayAppointmentDialog();
 		});
 
-		mRightButton.setOnMouseClicked(action -> changeWeek(1));
-		mLeftButton.setOnMouseClicked(action -> changeWeek(-1));
+		mRightButton.setOnMouseClicked(action -> changeWeek(1, true));
+		mLeftButton.setOnMouseClicked(action -> changeWeek(-1, true));
+		
+		//If pane changes width, relocate appointments
+		mMainPane.widthProperty().addListener(change -> changeWeek(0, false));
 	}
 
 	/**
@@ -438,11 +441,12 @@ public class AppointmentWindowController {
 		});
 	}
 
-	private void changeWeek(int offsetWeek){
+	private void changeWeek(int offsetWeek, boolean doWeekAnimation){
 		clearDayPorts();
 		mAssignedWeek.add(Calendar.DATE, 7*offsetWeek);
 		mModel.getAppointments().forEach((uuid, appt) -> addAppointmentView(appt, false));
-		runWeekAnimations();
+		if(doWeekAnimation)
+			runWeekAnimations();
 	}
 
 	private void clearDayPorts(){

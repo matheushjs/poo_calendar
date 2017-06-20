@@ -103,7 +103,7 @@ public class MainApplication extends Application {
 		mainSceneController.addAppointmentWidget(appointmentsWidget);
 		mainSceneController.addTaskWidget(tasksWidget);
 		mainSceneController.addGroupsWidget(groupsWidget);
-
+		
 		mMainParent = mainScene;
 	}
 
@@ -316,7 +316,7 @@ public class MainApplication extends Application {
 
 		mStage.show();
 		mStage.setOnCloseRequest(event -> terminateApplication());
-
+		
 		initializeView();
 	}
 
