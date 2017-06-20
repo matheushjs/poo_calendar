@@ -104,6 +104,11 @@ public class MainApplication extends Application {
 		mainSceneController.addTaskWidget(tasksWidget);
 		mainSceneController.addGroupsWidget(groupsWidget);
 		
+		// Forces the layout of child widgets to be recalculated.
+		// For some reason, the JavaFX isn't recalculating it correctly, making
+		//   some widgets start with their width property set as 0.
+		mStage.setWidth(mStage.getWidth()-1);
+		
 		mMainParent = mainScene;
 	}
 
@@ -310,7 +315,6 @@ public class MainApplication extends Application {
 		mStage.setY(primaryScreenBounds.getMinY());
 		mStage.setWidth(primaryScreenBounds.getWidth());
 		mStage.setHeight(primaryScreenBounds.getHeight());
-		mStage.setMaximized(true);
 
 		stage.getIcons().add(new Image(this.getClass().getClassLoader().getResource("icon.png").toString()));
 
