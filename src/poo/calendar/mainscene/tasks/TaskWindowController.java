@@ -88,7 +88,8 @@ public class TaskWindowController {
 		}
 			 
 		mModel = model;
-
+		mMainApp = app;
+		
 		mModel.getTasks().forEach((uuid, task) -> {
 			this.addTaskView(task);
 		});
@@ -110,7 +111,6 @@ public class TaskWindowController {
 			}
 		});
 		
-		mMainApp = app;
 		mAddButton.setOnAction(action -> {
 			mMainApp.displayTaskDialog();
 		});
