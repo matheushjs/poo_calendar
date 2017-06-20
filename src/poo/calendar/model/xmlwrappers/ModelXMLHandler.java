@@ -93,7 +93,6 @@ public class ModelXMLHandler {
     		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
     		marshaller.marshal(handler, file);
-    		marshaller.marshal(handler, System.out);
     	} catch (JAXBException e) {
     		e.printStackTrace();
     	}
