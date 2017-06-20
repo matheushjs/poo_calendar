@@ -10,7 +10,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import poo.calendar.controller.MainApplication;
-import poo.calendar.widgets.DateAnimation;
+import poo.calendar.widgets.DateText;
 import poo.calendar.widgets.ElfCalendarText;
 
 /**
@@ -55,8 +55,8 @@ public class MainSceneController {
     		mTopBox.getChildren().add(box);
     	}
 	    
-	DateAnimation DT = new DateAnimation(35);
-    	box = new HBox(DT.getDate());
+    	DateText DT = new DateText(35);
+    	box = new HBox(DT);
 		box.setAlignment(Pos.CENTER);
 		box.setStyle("-fx-padding: 30px; -fx-background-color: white;");
     	try {
@@ -64,8 +64,6 @@ public class MainSceneController {
     	} catch(IndexOutOfBoundsException e) {
     		mTopBox.getChildren().add(box);
     	}
-    	
-    	DT.start();
     }
 
     /**

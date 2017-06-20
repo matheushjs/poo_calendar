@@ -6,17 +6,20 @@ import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
 import javafx.util.Duration;
 
-
-public class DateAnimation extends AnimationTimer{
+/**
+ * Class for animating the DateText widget.
+ */
+public class DateTextAnimation extends AnimationTimer{
 	
 	private DateText date;
 	
-	public DateAnimation(int size){
-		date = new DateText(size);
-	}
-	
-	public DateText getDate(){
-		return date;
+	/**
+	 * Default constructor
+	 * @param dateText the text to animate
+	 */
+	public DateTextAnimation(DateText dateText){
+		date = dateText;
+		this.start();
 	}
 
 	@Override
@@ -26,13 +29,13 @@ public class DateAnimation extends AnimationTimer{
 			ft.setFromValue(1.0);
 			ft.setToValue(0.0);
 			ft.setCycleCount(1);
-			ft.play();
+			ft.playFromStart();
 		}else if(fadeIn()){
 			date.update();
 			ft.setFromValue(0.0);
 			ft.setToValue(1.0);
 			ft.setCycleCount(1);
-			ft.play();
+			ft.playFromStart();
 		}
 		
 	}
