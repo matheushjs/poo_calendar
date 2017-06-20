@@ -1,4 +1,4 @@
-package poo.calendar.model.xmlwrappers;
+package poo.calendar.model;
 
 import java.io.File;
 import java.util.Calendar;
@@ -16,11 +16,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import javafx.scene.paint.Color;
 import poo.calendar.DateUtil;
-import poo.calendar.model.Appointment;
-import poo.calendar.model.CalendarDataModel;
-import poo.calendar.model.CalendarGroup;
-import poo.calendar.model.Recurrence;
-import poo.calendar.model.Task;
 
 /**
  * Class for saving and loading the Calendar Model data from a XML file.

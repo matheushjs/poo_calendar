@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
-import poo.calendar.model.xmlwrappers.ModelXMLHandler;
 
 /**
  * This class should wrap every interaction with the data model.
