@@ -72,8 +72,6 @@ public class GroupDialogController {
 	 */
 	@FXML
 	private void initialize(){
-		//TODO: Connect due signals
-		//TODO: Wisely choose a default color
 		mButtonBox.getChildren().remove(mDeleteButton);
 		mDeleteButton.setOnAction(action -> onDeleteClick());
 		

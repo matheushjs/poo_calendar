@@ -30,7 +30,6 @@ public class GroupView extends HBox {
 	public GroupView(CalendarGroup group){
 		mID = group.getID();
 		
-		//TODO: Treat giant labels
 		Label label = new Label();
 		label.textProperty().bind(group.nameProperty());
 		label.setFont(Font.font(14));

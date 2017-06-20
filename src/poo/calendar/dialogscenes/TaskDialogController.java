@@ -207,9 +207,7 @@ public class TaskDialogController {
 		if(mTask != null && mTask.getDeadlineDate() != null) return;
 		
 		mDeadlineWasClicked = true;
-		
-		//TODO: Make fields start greyish, then make them white upon clicking
-		
+
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.MINUTE, 30);
 		mDateField.setText(DateUtil.dateString(calendar));

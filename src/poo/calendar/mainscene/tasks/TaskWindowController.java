@@ -83,7 +83,6 @@ public class TaskWindowController {
 	 */
 	public void initializeStructures(MainApplication app, CalendarDataModel model){
 		if(mModel != null){
-			//TODO: Verify logging / exception
 			System.err.println(this.getClass().getName() + ": Can only initialize model once.");
 			System.exit(1);
 		}
